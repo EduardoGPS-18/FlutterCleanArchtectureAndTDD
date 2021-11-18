@@ -1,5 +1,6 @@
-import 'package:app_curso_manguinho/domain/domain.dart';
 import 'package:meta/meta.dart';
+
+import '../../domain/domain.dart';
 
 import '../http/http.dart';
 
@@ -13,11 +14,15 @@ class RemoteAuthentication {
 
   Future<void> auth({@required AuthenticationParams authParams}) async {
     final body = RemoteAuthenticationParams.fromDomain(authParams).toJson;
-    await httpClient.request(
-      url: this.url,
-      method: 'post',
-      body: body,
-    );
+    try {
+      await httpClient.request(
+        url: this.url,
+        method: 'post',
+        body: body,
+      );
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 

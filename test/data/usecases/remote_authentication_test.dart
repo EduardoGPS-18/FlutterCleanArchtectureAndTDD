@@ -35,4 +35,20 @@ void main() {
       },
     ));
   });
+
+  test('Should throw UnexpectedError if HttpClient returns 400', () async {
+    when(httpClient.request(
+      url: anyNamed('url'),
+      method: anyNamed('method'),
+      body: anyNamed('body'),
+    )).thenThrow(HttpError.badRequest);
+
+    final authParams = AuthenticationParams(
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    );
+    final future = sut.auth(authParams: authParams);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }
