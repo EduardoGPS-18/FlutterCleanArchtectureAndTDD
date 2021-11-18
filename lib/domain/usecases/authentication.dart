@@ -9,8 +9,11 @@ abstract class Authentication {
 class AuthenticationParams {
   final String email;
   final String password;
+
   AuthenticationParams({
     @required this.email,
     @required this.password,
   });
+
+  Map get toJson => {'email': email, 'password': password};
 }
