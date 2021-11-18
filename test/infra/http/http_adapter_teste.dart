@@ -15,7 +15,7 @@ class HttpAdapter {
   }
 }
 
-void main(List<String> args) {
+void main() {
   group('post', () {
     test('Should call post with correct values', () async {
       final client = ClientSpy();
