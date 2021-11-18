@@ -11,7 +11,7 @@ class ClientSpy extends Mock implements Client {}
 
 void main() {
   Client client;
-  HttpAdapter sut;
+  HttpClient sut;
   String url;
 
   setUp(() {
@@ -109,7 +109,7 @@ void main() {
     });
 
     test('Should return ServerError if post returns 500', () async {
-      mockResponse(400);
+      mockResponse(500);
 
       final future = sut.request(url: url, method: 'post');
 
