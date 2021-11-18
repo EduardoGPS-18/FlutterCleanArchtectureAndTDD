@@ -3,6 +3,8 @@ import 'package:mockito/mockito.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 
+import 'package:app_curso_manguinho/data/http/http.dart';
+
 import 'package:app_curso_manguinho/infra/http/http.dart';
 
 class ClientSpy extends Mock implements Client {}
@@ -96,6 +98,14 @@ void main() {
       final response = await sut.request(url: url, method: 'post');
 
       expect(response, null);
+    });
+
+    test('Should return BadRequestError if post returns 400', () async {
+      mockResponse(400);
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.badRequest));
     });
   });
 }
