@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../components/components.dart';
+
 class LoginPage extends StatelessWidget {
   const LoginPage({Key key}) : super(key: key);
   @override
@@ -7,40 +9,54 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              child: Image(
-                image: AssetImage('./lib/ui/assets/logo.png'),
-              ),
+            LoginHeader(),
+            Headline1(
+              text: 'Login',
             ),
-            Text('LOGIN'),
-            Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      icon: Icon(Icons.email),
+            Padding(
+              padding: const EdgeInsets.all(32),
+              child: Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        icon: Icon(
+                          Icons.email,
+                          color: Theme.of(context).primaryColorLight,
+                        ),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Senha',
-                      icon: Icon(Icons.lock),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                        bottom: 32,
+                      ),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Senha',
+                          icon: Icon(
+                            Icons.lock,
+                            color: Theme.of(context).primaryColorLight,
+                          ),
+                        ),
+                        obscureText: true,
+                      ),
                     ),
-                    obscureText: true,
-                  ),
-                  RaisedButton(
-                    onPressed: () {},
-                    child: Text('ENTRAR'),
-                  ),
-                  FlatButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.person),
-                    label: Text('Criar Conta'),
-                  )
-                ],
+                    RaisedButton(
+                      onPressed: () {},
+                      child: Text('ENTRAR'),
+                    ),
+                    FlatButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.person),
+                      label: Text('Criar Conta'),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
