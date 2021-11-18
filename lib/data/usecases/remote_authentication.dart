@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
-import '../../domain/domain.dart';
+import '../../domain/usecases/usecases.dart';
+import '../../domain/helpers/helpers.dart';
 
 import '../http/http.dart';
 
