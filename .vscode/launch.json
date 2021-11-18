@@ -11,15 +11,25 @@
             "program": "./test/"
         },
         {
-            "name": "app_curso_manguinho",
+            "name": "app_curso_manguinho (release mode)",
             "request": "launch",
+            "flutterMode": "release",
+            "program": "lib/main/main.dart",
             "type": "dart"
         },
         {
             "name": "app_curso_manguinho (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
-        }
+            "flutterMode": "profile",
+            "program": "lib/main/main.dart",
+        },
+        {
+            "name": "app_curso_manguinho (debug mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main/main.dart",
+        },
     ]
 }
