@@ -52,6 +52,7 @@ void main() {
     email = faker.internet.email();
     mockValidation();
   });
+
   test('Should emit email error if validation fails', () {
     mockValidation(value: 'error');
     expectLater(sut.emailErrorStream, emits('error'));
