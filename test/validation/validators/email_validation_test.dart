@@ -6,8 +6,10 @@ class EmailValidation implements FieldValidation {
 
   EmailValidation(this.field);
 
-  String validate(String field) {
-    return null;
+  String validate(String value) {
+    final regex = RegExp(r'^[a-zA-Z0-9.a-zA-Z0-9.!#$%&"*+-/=?^_`{ }~]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+    final isValid = value?.isNotEmpty != true || regex.hasMatch(value);
+    return isValid ? null : 'Campo inválido';
   }
 }
 
@@ -25,7 +27,35 @@ void main() {
     expect(sut.validate(null), null);
   });
 
+  test('Should return error if email is invalid', () {
+    expect(sut.validate('testeteste.com'), 'Campo inválido');
+  });
+
+  test('Should return error if email is invalid', () {
+    expect(sut.validate('teste@testecom'), 'Campo inválido');
+  });
+
+  test('Should return error if email is invalid', () {
+    expect(sut.validate('a@a'), 'Campo inválido');
+  });
+
+  test('Should return error if email is invalid', () {
+    expect(sut.validate('teste@teste.'), 'Campo inválido');
+  });
+
+  test('Should return error if email is invalid', () {
+    expect(sut.validate('teste@teste@teste.com'), 'Campo inválido');
+  });
+
+  test('Should return null if email is valid', () {
+    expect(sut.validate('a@a.a'), null);
+  });
+
   test('Should return null if email is valid', () {
     expect(sut.validate('teste@teste.com'), null);
+  });
+
+  test('Should return null if email is valid', () {
+    expect(sut.validate('teste#\$%@teste.com'), null);
   });
 }
