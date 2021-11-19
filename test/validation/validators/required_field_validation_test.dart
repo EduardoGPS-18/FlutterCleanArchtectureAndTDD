@@ -1,20 +1,6 @@
+import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
+import 'package:app_curso_manguinho/validation/validators/validators.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-abstract class FieldValidation {
-  String get field;
-  String validate(String value);
-}
-
-class RequiredFieldValidation implements FieldValidation {
-  @override
-  String field;
-  RequiredFieldValidation(this.field);
-
-  @override
-  String validate(String value) {
-    return value.isNotEmpty ? null : 'Campo obrigatório';
-  }
-}
 
 void main() {
   FieldValidation sut;
@@ -29,5 +15,9 @@ void main() {
 
   test('Should return error if value is empty', () {
     expect(sut.validate(''), 'Campo obrigatório');
+  });
+
+  test('Should return error if value is null', () {
+    expect(sut.validate(null), 'Campo obrigatório');
   });
 }
