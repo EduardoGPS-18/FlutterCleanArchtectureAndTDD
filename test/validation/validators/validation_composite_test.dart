@@ -31,20 +31,24 @@ void main() {
   FieldValidationSpy validation3;
   ValidationComposite sut;
 
-  void mockValidations({String error1, String error2, String error3}) {
+  void mockValidationsResponse({String error1, String error2, String error3}) {
     when(validation1.validate(any)).thenReturn(error1 ?? null);
     when(validation2.validate(any)).thenReturn(error2 ?? '');
     when(validation3.validate(any)).thenReturn(error3 ?? '');
   }
 
+  void mockValidationsField({String field1, String field2, String field3}) {
+    when(validation1.field).thenReturn(field1 ?? 'any_field');
+    when(validation2.field).thenReturn(field2 ?? 'any_field');
+    when(validation2.field).thenReturn(field3 ?? 'other_field');
+  }
+
   setUp(() {
     validation1 = FieldValidationSpy();
-    when(validation1.field).thenReturn('any_field');
     validation2 = FieldValidationSpy();
-    when(validation2.field).thenReturn('any_field');
     validation3 = FieldValidationSpy();
-    when(validation2.field).thenReturn('other_field');
-    mockValidations();
+    mockValidationsResponse();
+    mockValidationsField();
     sut = ValidationComposite([validation1, validation2, validation3]);
   });
 
@@ -55,7 +59,7 @@ void main() {
   });
 
   test('Should return the first error', () {
-    mockValidations(error1: 'error_1', error2: 'error_2', error3: 'error_3');
+    mockValidationsResponse(error1: 'error_1', error2: 'error_2', error3: 'error_3');
 
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
