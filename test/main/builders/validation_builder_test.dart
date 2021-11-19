@@ -15,5 +15,16 @@ void main() {
         EmailValidation('any_field'),
       ]);
     });
+
+    test('Should return two field validators but only one validator', () async {
+      final validations = ValidationComposite([
+        ...ValidationBuilder.field('any_field').required().build(),
+        ...ValidationBuilder.field('other_field').required().build(),
+      ]);
+      expect(validations.validations, <FieldValidation>[
+        RequiredFieldValidation('any_field'),
+        RequiredFieldValidation('other_field'),
+      ]);
+    });
   });
 }
