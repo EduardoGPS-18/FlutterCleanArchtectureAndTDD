@@ -27,8 +27,15 @@ void main() {
     mockValidation();
   });
 
+  test('Should call validation with correct email', () {
+    sut.validateEmail(email);
+
+    verify(validation.validate(field: 'email', value: email)).called(1);
+  });
+
   test('Should emit email error if validation fails', () {
     mockValidation(value: 'error');
+
     expectLater(sut.emailErrorStream, emits('error'));
 
     sut.validateEmail(email);
