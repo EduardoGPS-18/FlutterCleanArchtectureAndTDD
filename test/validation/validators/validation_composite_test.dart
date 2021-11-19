@@ -19,15 +19,29 @@ class ValidationComposite implements Validation {
 class FieldValidationSpy extends Mock implements FieldValidation {}
 
 void main() {
-  test('Should return null if all validation returns null or empty', () {
-    final validation1 = FieldValidationSpy();
-    when(validation1.field).thenReturn('any_field');
-    when(validation1.validate(any)).thenReturn(null);
-    final validation2 = FieldValidationSpy();
-    when(validation2.field).thenReturn('any_field');
-    when(validation2.validate(any)).thenReturn('');
-    final sut = ValidationComposite([validation1, validation2]);
+  FieldValidationSpy validation1;
+  FieldValidationSpy validation2;
+  FieldValidationSpy validation3;
+  ValidationComposite sut;
 
+  void mockValidations({String error1, String error2, String error3}) {
+    when(validation1.validate(any)).thenReturn(error1 ?? null);
+    when(validation2.validate(any)).thenReturn(error2 ?? '');
+    when(validation3.validate(any)).thenReturn(error3 ?? '');
+  }
+
+  setUp(() {
+    validation1 = FieldValidationSpy();
+    when(validation1.field).thenReturn('any_field');
+    validation2 = FieldValidationSpy();
+    when(validation2.field).thenReturn('any_field');
+    validation3 = FieldValidationSpy();
+    when(validation2.field).thenReturn('other_field');
+    mockValidations();
+    sut = ValidationComposite([validation1, validation2]);
+  });
+
+  test('Should return null if all validation returns null or empty', () {
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
     expect(error, null);
