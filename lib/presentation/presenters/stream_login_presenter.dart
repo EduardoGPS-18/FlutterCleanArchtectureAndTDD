@@ -1,4 +1,5 @@
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
+import 'package:app_curso_manguinho/ui/pages/login/login.dart';
 import 'package:meta/meta.dart';
 import 'dart:async';
 
@@ -18,7 +19,7 @@ class LoginState {
   bool get isFormValid => emailError == null && passwordError == null && email != null && password != null;
 }
 
-class StreamLoginPresenter {
+class StreamLoginPresenter implements LoginPresenter {
   final Validation validation;
   final Authentication authenticationUsecase;
 
