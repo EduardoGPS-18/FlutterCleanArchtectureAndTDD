@@ -1,8 +1,8 @@
-import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
 
 class ValidationSpy extends Mock implements Validation {}
@@ -25,7 +25,7 @@ void main() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
-    email = faker.internet.password();
+    password = faker.internet.password();
     mockValidation();
   });
 
@@ -69,11 +69,25 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should emit password error as null if validation succeeds', () {
+  test('Should emit password error if validation fails', () {
+    mockValidation(field: 'email', value: 'error');
+
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(password);
+    sut.validatePassword(password);
+  });
+
+  test('Should turn form valid on email/password error as null', () async {
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
     sut.validatePassword(password);
-    sut.validatePassword(password);
+    await Future.delayed(Duration.zero);
+    sut.validateEmail(email);
   });
 }
