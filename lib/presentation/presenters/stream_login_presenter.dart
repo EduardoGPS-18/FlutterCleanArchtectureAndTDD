@@ -51,7 +51,9 @@ class StreamLoginPresenter {
     _update();
   }
 
-  void _update() => _controller.add(_state);
+  void _update() {
+    if (!_controller.isClosed) _controller.add(_state);
+  }
 
   void validateEmail(String email) {
     _state.email = email;
@@ -63,5 +65,9 @@ class StreamLoginPresenter {
     _state.password = password;
     _state.passwordError = validation.validate(field: 'password', value: password);
     _update();
+  }
+
+  void dispose() {
+    _controller.close();
   }
 }

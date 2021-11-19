@@ -150,4 +150,12 @@ void main() {
 
     await sut.auth();
   });
+
+  test('Should not emit after dispose', () async {
+    expect(sut.emailErrorStream, neverEmits(null));
+
+    sut.dispose();
+
+    sut.validateEmail(email);
+  });
 }
