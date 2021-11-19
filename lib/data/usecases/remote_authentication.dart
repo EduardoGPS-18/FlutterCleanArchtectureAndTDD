@@ -17,9 +17,9 @@ class RemoteAuthentication implements Authentication {
   });
 
   Future<AccountEntity> auth({
-    @required AuthenticationParams authParams,
+    @required AuthenticationParams params,
   }) async {
-    final body = RemoteAuthenticationParams.fromDomain(authParams).toJson;
+    final body = RemoteAuthenticationParams.fromDomain(params).toJson;
     try {
       final httpResponse = await httpClient.request(
         url: this.url,
@@ -29,9 +29,7 @@ class RemoteAuthentication implements Authentication {
 
       return RemoteAccountModel.fromJson(httpResponse).toEntity();
     } on HttpError catch (error) {
-      throw error == HttpError.anauthorized
-          ? DomainError.invalidCredentials
-          : DomainError.unexpected;
+      throw error == HttpError.anauthorized ? DomainError.invalidCredentials : DomainError.unexpected;
     }
   }
 }
@@ -45,8 +43,7 @@ class RemoteAuthenticationParams {
     @required this.password,
   });
 
-  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams params) =>
-      RemoteAuthenticationParams(
+  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams params) => RemoteAuthenticationParams(
         email: params.email,
         password: params.password,
       );
