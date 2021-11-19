@@ -11,19 +11,27 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 void main() {
   LoginPresenter presenter;
+
+  StreamController<String> mainErrorController;
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
+
   StreamController<bool> isFormValidController;
+  StreamController<bool> isLoadinController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
+    mainErrorController = StreamController();
     emailErrorController = StreamController();
     passwordErrorController = StreamController();
     isFormValidController = StreamController();
+    isLoadinController = StreamController();
 
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
     when(presenter.isFormValidController).thenAnswer((_) => isFormValidController.stream);
+    when(presenter.isLoadinController).thenAnswer((_) => isLoadinController.stream);
+    when(presenter.mainErrorController).thenAnswer((_) => mainErrorController.stream);
 
     final loginPage = MaterialApp(
       home: LoginPage(presenter),
@@ -37,6 +45,8 @@ void main() {
     emailErrorController.close();
     passwordErrorController.close();
     isFormValidController.close();
+    isLoadinController.close();
+    mainErrorController.close();
   });
 
   testWidgets('Should load with correct initial state', (WidgetTester tester) async {
@@ -66,6 +76,7 @@ void main() {
 
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, null);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('Should call validate with correct values', (WidgetTester tester) async {
@@ -207,6 +218,45 @@ void main() {
       await tester.tap(find.byType(RaisedButton));
 
       verify(presenter.auth()).called(1);
+    },
+  );
+
+  testWidgets(
+    'Should present loading',
+    (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isLoadinController.add(true);
+      await loadPage(tester);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'Should hide loading',
+    (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isLoadinController.add(true);
+      await loadPage(tester);
+      isLoadinController.add(false);
+      await loadPage(tester);
+
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Should present error message if authentication fails',
+    (WidgetTester tester) async {
+      await loadPage(tester);
+
+      final error = 'main error';
+      mainErrorController.add(error);
+      await loadPage(tester);
+
+      expect(find.text(error), findsOneWidget);
     },
   );
 }

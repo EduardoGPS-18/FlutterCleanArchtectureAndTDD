@@ -11,79 +11,124 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            LoginHeader(),
-            Headline1(
-              text: 'Login',
-            ),
-            Padding(
-              padding: const EdgeInsets.all(32),
-              child: Form(
-                child: Column(
-                  children: [
-                    StreamBuilder<String>(
-                      stream: presenter.emailErrorStream,
-                      builder: (context, snapshot) {
-                        return TextFormField(
-                          onChanged: presenter.validateEmail,
-                          decoration: InputDecoration(
-                            errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                            labelText: 'Email',
-                            icon: Icon(
-                              Icons.email,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
+      body: Builder(
+        builder: (context) {
+          presenter.isLoadinController.listen(
+            (isLoading) {
+              if (isLoading == true) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  child: SimpleDialog(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 10),
+                          Text(
+                            'Aguarde...',
+                            textAlign: TextAlign.center,
                           ),
-                          keyboardType: TextInputType.emailAddress,
-                        );
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                        bottom: 32,
+                        ],
                       ),
-                      child: StreamBuilder<String>(
-                        stream: presenter.passwordErrorStream,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            onChanged: presenter.validatePassword,
-                            decoration: InputDecoration(
-                              errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                              labelText: 'Senha',
-                              icon: Icon(
-                                Icons.lock,
-                                color: Theme.of(context).primaryColorLight,
-                              ),
-                            ),
-                            obscureText: true,
-                          );
-                        },
-                      ),
-                    ),
-                    StreamBuilder<bool>(
-                      stream: presenter.isFormValidController,
-                      builder: (context, snapshot) {
-                        return RaisedButton(
-                          onPressed: snapshot.data == true ? presenter.auth : null,
-                          child: Text('ENTRAR'),
-                        );
-                      },
-                    ),
-                    FlatButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.person),
-                      label: Text('Criar Conta'),
-                    )
-                  ],
+                    ],
+                  ),
+                );
+              } else {
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context);
+                }
+              }
+            },
+          );
+
+          presenter.mainErrorController.listen((error) {
+            if (error != null) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.red[700],
+                  content: Text(error),
                 ),
-              ),
+              );
+            }
+          });
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                LoginHeader(),
+                Headline1(
+                  text: 'Login',
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Form(
+                    child: Column(
+                      children: [
+                        StreamBuilder<String>(
+                          stream: presenter.emailErrorStream,
+                          builder: (context, snapshot) {
+                            return TextFormField(
+                              onChanged: presenter.validateEmail,
+                              decoration: InputDecoration(
+                                errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+                                labelText: 'Email',
+                                icon: Icon(
+                                  Icons.email,
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                            );
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8.0,
+                            bottom: 32,
+                          ),
+                          child: StreamBuilder<String>(
+                            stream: presenter.passwordErrorStream,
+                            builder: (context, snapshot) {
+                              return TextFormField(
+                                onChanged: presenter.validatePassword,
+                                decoration: InputDecoration(
+                                  errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+                                  labelText: 'Senha',
+                                  icon: Icon(
+                                    Icons.lock,
+                                    color: Theme.of(context).primaryColorLight,
+                                  ),
+                                ),
+                                obscureText: true,
+                              );
+                            },
+                          ),
+                        ),
+                        StreamBuilder<bool>(
+                          stream: presenter.isFormValidController,
+                          builder: (context, snapshot) {
+                            return RaisedButton(
+                              onPressed: snapshot.data == true ? presenter.auth : null,
+                              child: Text('ENTRAR'),
+                            );
+                          },
+                        ),
+                        FlatButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.person),
+                          label: Text('Criar Conta'),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
