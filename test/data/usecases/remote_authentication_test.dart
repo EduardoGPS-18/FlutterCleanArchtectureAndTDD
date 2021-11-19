@@ -75,7 +75,7 @@ void main() {
   });
 
   test('Should throw InvalidCredentialsError if HttpClient returns 401', () async {
-    mockHttpError(HttpError.anauthorized);
+    mockHttpError(HttpError.unauthorized);
 
     final future = sut.auth(params: authParams);
 
