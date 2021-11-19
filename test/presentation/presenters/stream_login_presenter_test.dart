@@ -100,7 +100,6 @@ void main() {
 
   test('Should call authentication with correct values', () async {
     sut.validatePassword(password);
-    await Future.delayed(Duration.zero);
     sut.validateEmail(email);
 
     await sut.auth();
