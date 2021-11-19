@@ -5,7 +5,7 @@ abstract class LoginPresenter {
   Stream<bool> get isFormValidController;
   Stream<bool> get isLoadinController;
 
-  void auth();
+  Future<void> auth();
   void dispose();
 
   void validateEmail(String email);
