@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          widget.presenter.isLoadinController.listen(
+          widget.presenter.isLoadingStream.listen(
             (isLoading) {
               if (isLoading == true) {
                 showLoading(context);
@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             },
           );
 
-          widget.presenter.mainErrorController.listen((error) {
+          widget.presenter.mainErrorStream.listen((error) {
             if (error != null) {
               showErrorMessage(context: context, error: error);
             }

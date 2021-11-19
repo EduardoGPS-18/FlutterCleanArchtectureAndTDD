@@ -17,29 +17,29 @@ void main() {
   StreamController<String> passwordErrorController;
 
   StreamController<bool> isFormValidController;
-  StreamController<bool> isLoadinController;
+  StreamController<bool> isLoadingController;
 
   void initStreams() {
     mainErrorController = StreamController();
     emailErrorController = StreamController();
     passwordErrorController = StreamController();
     isFormValidController = StreamController();
-    isLoadinController = StreamController();
+    isLoadingController = StreamController();
   }
 
   void mockStreams() {
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
-    when(presenter.isFormValidController).thenAnswer((_) => isFormValidController.stream);
-    when(presenter.isLoadinController).thenAnswer((_) => isLoadinController.stream);
-    when(presenter.mainErrorController).thenAnswer((_) => mainErrorController.stream);
+    when(presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
+    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
+    when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
   }
 
   void closeStreams() {
     emailErrorController.close();
     passwordErrorController.close();
     isFormValidController.close();
-    isLoadinController.close();
+    isLoadingController.close();
     mainErrorController.close();
   }
 
@@ -234,7 +234,7 @@ void main() {
     (WidgetTester tester) async {
       await loadPage(tester);
 
-      isLoadinController.add(true);
+      isLoadingController.add(true);
       await loadPage(tester);
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -246,9 +246,9 @@ void main() {
     (WidgetTester tester) async {
       await loadPage(tester);
 
-      isLoadinController.add(true);
+      isLoadingController.add(true);
       await loadPage(tester);
-      isLoadinController.add(false);
+      isLoadingController.add(false);
       await loadPage(tester);
 
       expect(find.byType(CircularProgressIndicator), findsNothing);
