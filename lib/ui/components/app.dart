@@ -47,7 +47,7 @@ class App extends StatelessWidget {
         accentColor: primaryColor,
         backgroundColor: Colors.white,
       ),
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 }
