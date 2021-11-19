@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
                           return TextFormField(
                             onChanged: presenter.validatePassword,
                             decoration: InputDecoration(
-                              errorText: snapshot.data,
+                              errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                               labelText: 'Senha',
                               icon: Icon(
                                 Icons.lock,

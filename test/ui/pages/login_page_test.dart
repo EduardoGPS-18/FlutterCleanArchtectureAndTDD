@@ -146,4 +146,22 @@ void main() {
     );
     expect(emailTextChildren, findsOneWidget);
   });
+
+  testWidgets(
+    'Should presents no error if password error text is empty',
+    (WidgetTester tester) async {
+      await loadPage(tester);
+
+      final errorText = '';
+      passwordErrorController.add(errorText);
+
+      await tester.pump();
+
+      final passwordTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Senha'),
+        matching: find.byType(Text),
+      );
+      expect(passwordTextChildren, findsOneWidget);
+    },
+  );
 }
