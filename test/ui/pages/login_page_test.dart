@@ -106,6 +106,21 @@ void main() {
     expect(emailTextChildren, findsOneWidget);
   });
 
+  testWidgets('Should presents no error if email error text is empty', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final errorText = '';
+    emailErrorController.add(errorText);
+
+    await tester.pump();
+
+    final emailTextChildren = find.descendant(
+      of: find.bySemanticsLabel('Email'),
+      matching: find.byType(Text),
+    );
+    expect(emailTextChildren, findsOneWidget);
+  });
+
   testWidgets('Should presents error if password is invalid', (WidgetTester tester) async {
     await loadPage(tester);
 
