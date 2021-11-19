@@ -35,13 +35,15 @@ class StreamLoginPresenter {
     @required this.validation,
   });
 
+  void _update() => _controller.add(_state);
+
   void validateEmail(String email) {
     _state.emailError = validation.validate(field: 'email', value: email);
-    _controller.add(_state);
+    _update();
   }
 
   void validatePassword(String password) {
     _state.passwordError = validation.validate(field: 'password', value: password);
-    _controller.add(_state);
+    _update();
   }
 }
