@@ -1,17 +1,7 @@
-import 'package:app_curso_manguinho/validation/protocols/field_validation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class EmailValidation implements FieldValidation {
-  final String field;
-
-  EmailValidation(this.field);
-
-  String validate(String value) {
-    final regex = RegExp(r'^[a-zA-Z0-9.a-zA-Z0-9.!#$%&"*+-/=?^_`{ }~]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
-    final isValid = value?.isNotEmpty != true || regex.hasMatch(value);
-    return isValid ? null : 'Campo inválido';
-  }
-}
+import 'package:app_curso_manguinho/validation/protocols/field_validation.dart';
+import 'package:app_curso_manguinho/validation/validators/validators.dart';
 
 void main() {
   FieldValidation sut;
