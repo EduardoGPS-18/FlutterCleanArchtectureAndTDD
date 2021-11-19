@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'dart:async';
 
+import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+
 import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
 
 class LoginState {
@@ -13,6 +15,7 @@ class LoginState {
 
 class StreamLoginPresenter {
   final Validation validation;
+  final Authentication authenticationUsecase;
 
   var _state = LoginState();
 
@@ -24,9 +27,14 @@ class StreamLoginPresenter {
 
   StreamLoginPresenter({
     @required this.validation,
+    @required this.authenticationUsecase,
   });
 
-  Future<void> auth() async {}
+  Future<void> auth() async {
+    await authenticationUsecase.auth(
+      params: AuthenticationParams(email: _state.email, password: _state.password),
+    );
+  }
 
   void _update() => _controller.add(_state);
 
