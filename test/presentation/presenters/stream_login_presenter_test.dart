@@ -30,8 +30,8 @@ void main() {
   }
 
   PostExpectation mockAuthenticationCall() => when(authentication.auth(params: anyNamed('params')));
-  void mockAuthentication() => mockValidationCall().thenAnswer(
-        (_) => AccountEntity(token: faker.guid.guid()),
+  void mockAuthentication() => mockAuthenticationCall().thenAnswer(
+        (_) async => AccountEntity(token: faker.guid.guid()),
       );
   void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
 
