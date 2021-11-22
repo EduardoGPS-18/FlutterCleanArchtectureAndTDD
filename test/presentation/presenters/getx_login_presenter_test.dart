@@ -15,11 +15,15 @@ class ValidationSpy extends Mock implements Validation {}
 
 class AuthenticationSpy extends Mock implements Authentication {}
 
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
+
 void main() {
   String email;
+  String token;
   String password;
-  Validation validation;
   LoginPresenter sut;
+  Validation validation;
+  SaveCurrentAccount saveCurrentAccount;
 
   Authentication authentication;
 
@@ -33,14 +37,20 @@ void main() {
 
   PostExpectation mockAuthenticationCall() => when(authentication.auth(params: anyNamed('params')));
   void mockAuthentication() => mockAuthenticationCall().thenAnswer(
-        (_) async => AccountEntity(token: faker.guid.guid()),
+        (_) async => AccountEntity(token: token),
       );
   void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
 
   setUp(() {
-    authentication = AuthenticationSpy();
     validation = ValidationSpy();
-    sut = GetxLoginPresenter(validation: validation, authenticationUsecase: authentication);
+    authentication = AuthenticationSpy();
+    saveCurrentAccount = SaveCurrentAccountSpy();
+    sut = GetxLoginPresenter(
+      validation: validation,
+      authenticationUsecase: authentication,
+      saveCurrentAccount: saveCurrentAccount,
+    );
+    token = faker.guid.guid();
     email = faker.internet.email();
     password = faker.internet.password();
     mockAuthentication();
@@ -116,6 +126,15 @@ void main() {
     await sut.auth();
 
     verify(authentication.auth(params: AuthenticationParams(email: email, password: password))).called(1);
+  });
+
+  test('Should call save current account with correct value', () async {
+    sut.validatePassword(password);
+    sut.validateEmail(email);
+
+    await sut.auth();
+
+    verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
   });
 
   test('Should emit correct events on authentication success', () async {

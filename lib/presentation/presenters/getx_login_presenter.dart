@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-import '../../domain/usecases/usecases.dart';
 import '../../domain/helpers/domain_error.dart';
+import '../../domain/usecases/usecases.dart';
 
 import '../../presentation/protocols/protocols.dart';
 
@@ -11,6 +11,7 @@ import '../../ui/pages/login/login.dart';
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Validation validation;
   final Authentication authenticationUsecase;
+  final SaveCurrentAccount saveCurrentAccount;
 
   String _email;
   String _password;
@@ -29,14 +30,16 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   GetxLoginPresenter({
     @required this.validation,
     @required this.authenticationUsecase,
+    @required this.saveCurrentAccount,
   });
 
   Future<void> auth() async {
     _isLoading.value = true;
     try {
-      await authenticationUsecase.auth(
+      final account = await authenticationUsecase.auth(
         params: AuthenticationParams(email: _email, password: _password),
       );
+      await saveCurrentAccount.save(account);
     } on DomainError catch (error) {
       _mainError.value = error.description;
     }

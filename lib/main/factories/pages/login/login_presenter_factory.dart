@@ -13,4 +13,5 @@ LoginPresenter makeStreamLoginPresenter() => StreamLoginPresenter(
 LoginPresenter makeGetxLoginPresenter() => GetxLoginPresenter(
       validation: makeValidationComposite(),
       authenticationUsecase: makeRemoteAuthentication(),
+      saveCurrentAccount: null,
     );

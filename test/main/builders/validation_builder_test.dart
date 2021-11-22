@@ -6,7 +6,7 @@ import 'package:app_curso_manguinho/validation/validators/validators.dart';
 import 'package:app_curso_manguinho/main/builders/builders.dart';
 
 void main() {
-  test('validation builder ...', () {
+  group('validation builder ...', () {
     test('Should return for a single field but some validator', () async {
       final validations = ValidationComposite([
         ...ValidationBuilder.field('any_field').required().email().build(),
