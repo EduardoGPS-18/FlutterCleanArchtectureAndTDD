@@ -59,13 +59,13 @@ void main() {
     mockValidation();
   });
 
-  test('Should call validation with correct email', () {
+  test('(GETX LOGIN PRESENTER) : Should call validation with correct email', () {
     sut.validateEmail(email);
 
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
 
-  test('Should emit email error if validation fails', () {
+  test('(GETX LOGIN PRESENTER) : Should emit email error if validation fails', () {
     mockValidation(value: 'error');
 
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
@@ -75,7 +75,7 @@ void main() {
     sut.validateEmail(email);
   });
 
-  test('Should emit email error as null if validation succeeds', () {
+  test('(GETX LOGIN PRESENTER) : Should emit email error as null if validation succeeds', () {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
@@ -83,13 +83,13 @@ void main() {
     sut.validateEmail(email);
   });
 
-  test('Should call validation with correct password', () {
+  test('(GETX LOGIN PRESENTER) : Should call validation with correct password', () {
     sut.validatePassword(password);
 
     verify(validation.validate(field: 'password', value: password)).called(1);
   });
 
-  test('Should emit password error if validation fails', () {
+  test('(GETX LOGIN PRESENTER) : Should emit password error if validation fails', () {
     mockValidation(value: 'error');
 
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
@@ -99,7 +99,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should emit password error if validation fails', () {
+  test('(GETX LOGIN PRESENTER) : Should emit email error if validation fails', () {
     mockValidation(field: 'email', value: 'error');
 
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
@@ -110,7 +110,7 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should turn form valid on email/password error as null', () async {
+  test('(GETX LOGIN PRESENTER) : Should turn form valid on email/password error as null', () async {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
 
@@ -121,7 +121,7 @@ void main() {
     sut.validateEmail(email);
   });
 
-  test('Should call authentication with correct values', () async {
+  test('(GETX LOGIN PRESENTER) : Should call authentication with correct values', () async {
     sut.validatePassword(password);
     sut.validateEmail(email);
 
@@ -130,7 +130,7 @@ void main() {
     verify(authentication.auth(params: AuthenticationParams(email: email, password: password))).called(1);
   });
 
-  test('Should call save current account with correct value', () async {
+  test('(GETX LOGIN PRESENTER) : Should call save current account with correct value', () async {
     sut.validatePassword(password);
     sut.validateEmail(email);
 
@@ -139,16 +139,16 @@ void main() {
     verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
   });
 
-  test('Should emit correct events on authentication success', () async {
+  test('(GETX LOGIN PRESENTER) : Should emit correct events on authentication success', () async {
     sut.validatePassword(password);
     sut.validateEmail(email);
 
-    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.isLoadingStream, emits(true));
 
     await sut.auth();
   });
 
-  test('Should emit correct events on InvalidCredentials error', () async {
+  test('(GETX LOGIN PRESENTER) : Should emit correct events on InvalidCredentials error', () async {
     mockAuthenticationError(DomainError.invalidCredentials);
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -161,7 +161,7 @@ void main() {
     await sut.auth();
   });
 
-  test('Should emit correct events on Unexpected error', () async {
+  test('(GETX LOGIN PRESENTER) : Should emit correct events on Unexpected error', () async {
     mockAuthenticationError(DomainError.unexpected);
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -174,7 +174,7 @@ void main() {
     await sut.auth();
   });
 
-  test('Should Unexpected error if SaveCurrentAccount fails', () async {
+  test('(GETX LOGIN PRESENTER) : Should Unexpected error if SaveCurrentAccount fails', () async {
     mockSaveCurrentAccountError(DomainError.unexpected);
     sut.validateEmail(email);
     sut.validatePassword(password);
