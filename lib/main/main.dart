@@ -1,8 +1,9 @@
+import 'package:app_curso_manguinho/main/factories/pages/splash/splash.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:app_curso_manguinho/ui/components/components.dart';
+import '../ui/components/components.dart';
 
 import 'factories/pages/login/login.dart';
 
@@ -19,8 +20,9 @@ class App extends StatelessWidget {
       title: '4Dev',
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
-      initialRoute: '/login',
+      initialRoute: '/',
       getPages: [
+        GetPage(name: '/', page: makeSplashPage),
         GetPage(name: '/login', page: makeLoginPage),
         GetPage(name: '/surveys', page: () => Scaffold(body: Text('Enquetes'))),
       ],
