@@ -45,6 +45,7 @@ void main() {
           secureStorage.read(key: anyNamed('key')),
         );
     void mockFetchSecureSuccess() => mockSecureStorageCall().thenAnswer((_) async => value);
+    void mockFetchSecureError() => mockSecureStorageCall().thenThrow(Exception());
 
     setUp(() {
       mockFetchSecureSuccess();
@@ -60,6 +61,14 @@ void main() {
       final fetchedValue = await sut.fetchSecure(key);
 
       expect(value, fetchedValue);
+    });
+
+    test('Should throw save secure with correct values', () async {
+      mockFetchSecureError();
+
+      final future = sut.fetchSecure(key);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
