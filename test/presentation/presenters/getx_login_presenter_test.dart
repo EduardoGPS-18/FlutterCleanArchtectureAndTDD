@@ -9,6 +9,7 @@ import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
 
+import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 
 class ValidationSpy extends Mock implements Validation {}
@@ -31,7 +32,7 @@ void main() {
         field: field == null ? anyNamed('field') : field,
         value: anyNamed('value'),
       ));
-  void mockValidation({String field, String value}) {
+  void mockValidation({String field, ValidationError value}) {
     mockValidationCall(field).thenReturn(value);
   }
 
@@ -66,9 +67,9 @@ void main() {
   });
 
   test('(GETX LOGIN PRESENTER) : Should emit email error if validation fails', () {
-    mockValidation(value: 'error');
+    mockValidation(value: ValidationError.invalidField);
 
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
@@ -90,9 +91,9 @@ void main() {
   });
 
   test('(GETX LOGIN PRESENTER) : Should emit password error if validation fails', () {
-    mockValidation(value: 'error');
+    mockValidation(value: ValidationError.invalidField);
 
-    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validatePassword(password);
@@ -100,9 +101,20 @@ void main() {
   });
 
   test('(GETX LOGIN PRESENTER) : Should emit email error if validation fails', () {
-    mockValidation(field: 'email', value: 'error');
+    mockValidation(field: 'email', value: ValidationError.invalidField);
 
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(password);
+    sut.validatePassword(password);
+  });
+
+  test('(GETX LOGIN PRESENTER) : Should emit required field error if validation empty', () {
+    mockValidation(field: 'email', value: ValidationError.requiredField);
+
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
 
@@ -166,7 +178,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1(
-      (err) => expect(err, DomainError.invalidCredentials.description),
+      (err) => expect(err, UIError.invalidCredentials),
     ));
 
     await sut.auth();
@@ -179,13 +191,13 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(expectAsync1(
-      (err) => expect(err, DomainError.unexpected.description),
+      (err) => expect(err, UIError.unexpected),
     ));
 
     await sut.auth();
   });
 
-  test('(GETX LOGIN PRESENTER) : Should Unexpected error if SaveCurrentAccount fails', () async {
+  test('(GETX LOGIN PRESENTER) : Should thorws Unexpected error if SaveCurrentAccount fails', () async {
     mockSaveCurrentAccountError(DomainError.unexpected);
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -194,7 +206,7 @@ void main() {
     expectLater(await authentication.auth(params: anyNamed('params')), AccountEntity(token: token));
 
     sut.mainErrorStream.listen(expectAsync1(
-      (err) => expect(err, DomainError.unexpected.description),
+      (err) => expect(err, UIError.unexpected),
     ));
 
     await sut.auth();

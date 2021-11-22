@@ -6,6 +6,8 @@ import 'components/components.dart';
 
 import '../../components/components.dart';
 
+import '../../helpers/errors/errors.dart';
+import '../../../utils/i18n/i18n.dart';
 import '../../../ui/pages/pages.dart';
 
 class LoginPage extends StatelessWidget {
@@ -43,7 +45,7 @@ class LoginPage extends StatelessWidget {
 
           presenter.mainErrorStream.listen((error) {
             if (error != null) {
-              showErrorMessage(context: context, error: error);
+              showErrorMessage(context: context, error: error.description);
             }
           });
 
@@ -55,7 +57,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   LoginHeader(),
                   Headline1(
-                    text: 'Login',
+                    text: R.strings.login,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(32),
@@ -76,7 +78,7 @@ class LoginPage extends StatelessWidget {
                             FlatButton.icon(
                               onPressed: () {},
                               icon: Icon(Icons.person),
-                              label: Text('Criar Conta'),
+                              label: Text(R.strings.addAccount),
                             )
                           ],
                         ),

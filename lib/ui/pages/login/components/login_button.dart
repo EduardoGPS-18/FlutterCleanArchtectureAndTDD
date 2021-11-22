@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../login_presenter.dart';
+import '../login.dart';
+
+import '../../../../utils/i18n/i18n.dart';
 
 class LoginButton extends StatelessWidget {
   @override
@@ -12,7 +14,7 @@ class LoginButton extends StatelessWidget {
       builder: (context, snapshot) {
         return RaisedButton(
           onPressed: snapshot.data == true ? presenter.auth : null,
-          child: Text('ENTRAR'),
+          child: Text(R.strings.login),
         );
       },
     );

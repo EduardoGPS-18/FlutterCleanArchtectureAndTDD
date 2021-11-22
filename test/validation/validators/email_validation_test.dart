@@ -1,5 +1,7 @@
 import 'package:test/test.dart';
 
+import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
+
 import 'package:app_curso_manguinho/validation/protocols/field_validation.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
 
@@ -18,23 +20,23 @@ void main() {
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('testeteste.com'), 'Campo inválido');
+    expect(sut.validate('testeteste.com'), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('teste@testecom'), 'Campo inválido');
+    expect(sut.validate('teste@testecom'), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('a@a'), 'Campo inválido');
+    expect(sut.validate('a@a'), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('teste@teste.'), 'Campo inválido');
+    expect(sut.validate('teste@teste.'), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('teste@teste@teste.com'), 'Campo inválido');
+    expect(sut.validate('teste@teste@teste.com'), ValidationError.invalidField);
   });
 
   test('Should return null if email is valid', () {

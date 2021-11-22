@@ -1,6 +1,8 @@
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
+
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
 import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
 
@@ -12,10 +14,10 @@ void main() {
   FieldValidationSpy validation3;
   ValidationComposite sut;
 
-  void mockValidationsResponse({String error1, String error2, String error3}) {
+  void mockValidationsResponse({ValidationError error1, ValidationError error2, ValidationError error3}) {
     when(validation1.validate(any)).thenReturn(error1 ?? null);
-    when(validation2.validate(any)).thenReturn(error2 ?? '');
-    when(validation3.validate(any)).thenReturn(error3 ?? '');
+    when(validation2.validate(any)).thenReturn(error2 ?? null);
+    when(validation3.validate(any)).thenReturn(error3 ?? null);
   }
 
   void mockValidationsField({String field1, String field2, String field3}) {
@@ -40,19 +42,31 @@ void main() {
   });
 
   test('Should return the first error', () {
-    mockValidationsResponse(error1: 'error_1', error2: 'error_2', error3: 'error_3');
+    mockValidationsResponse(
+      error1: ValidationError.invalidField,
+      error2: ValidationError.requiredField,
+      error3: ValidationError.requiredField,
+    );
 
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
-    expect(error, 'error_1');
+    expect(error, ValidationError.invalidField);
   });
 
   test('Should return the first error of the same field', () {
-    mockValidationsResponse(error1: 'error_1', error2: 'error_2', error3: 'error_3');
-    mockValidationsField(field1: 'any_field', field2: 'other_field', field3: 'other_field');
+    mockValidationsResponse(
+      error1: ValidationError.invalidField,
+      error2: ValidationError.requiredField,
+      error3: ValidationError.invalidField,
+    );
+    mockValidationsField(
+      field1: 'any_field',
+      field2: 'other_field',
+      field3: 'other_field',
+    );
 
     final error = sut.validate(field: 'other_field', value: 'any_value');
 
-    expect(error, 'error_2');
+    expect(error, ValidationError.requiredField);
   });
 }

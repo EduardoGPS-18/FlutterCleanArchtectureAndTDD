@@ -1,8 +1,10 @@
+import '../../../ui/helpers/errors/errors.dart';
+
 abstract class LoginPresenter {
-  Stream<String> get mainErrorStream;
-  Stream<String> get emailErrorStream;
+  Stream<UIError> get mainErrorStream;
+  Stream<UIError> get emailErrorStream;
   Stream<String> get navigateToStream;
-  Stream<String> get passwordErrorStream;
+  Stream<UIError> get passwordErrorStream;
   Stream<bool> get isFormValidStream;
   Stream<bool> get isLoadingStream;
 

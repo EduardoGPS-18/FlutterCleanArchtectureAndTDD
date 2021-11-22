@@ -1,5 +1,7 @@
 import 'package:test/test.dart';
 
+import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
+
 import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
 
@@ -15,10 +17,10 @@ void main() {
   });
 
   test('Should return error if value is empty', () {
-    expect(sut.validate(''), 'Campo obrigatório');
+    expect(sut.validate(''), ValidationError.requiredField);
   });
 
   test('Should return error if value is null', () {
-    expect(sut.validate(null), 'Campo obrigatório');
+    expect(sut.validate(null), ValidationError.requiredField);
   });
 }
