@@ -1,4 +1,4 @@
-import '../../../utils/i18n/strings/translations.dart';
+import 'strings.dart';
 
 class PtBr implements Translations {
   String get addAccount => "Criar conta";

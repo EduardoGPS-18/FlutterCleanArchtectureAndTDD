@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../login.dart';
 
-import '../../../../utils/i18n/i18n.dart';
+import '../../../helpers/i18n/i18n.dart';
 
 class LoginButton extends StatelessWidget {
   @override
