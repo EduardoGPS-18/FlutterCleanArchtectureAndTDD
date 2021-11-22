@@ -1,30 +1,52 @@
+import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
+import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
 
-class LocalLoadCurrentAccount {
+import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+
+class LocalLoadCurrentAccount implements LoadCurrentAccount {
   FetchSecureCacheStorage fetchSecureCacheStorage;
+
   LocalLoadCurrentAccount({
     @required this.fetchSecureCacheStorage,
   });
-  Future<void> load() async {
-    fetchSecureCacheStorage.fetchSecure('token');
+
+  Future<AccountEntity> load() async {
+    final token = await fetchSecureCacheStorage.fetchSecure('token');
+    return AccountEntity(token: token);
   }
 }
 
 abstract class FetchSecureCacheStorage {
-  Future<void> fetchSecure(String key);
+  Future<String> fetchSecure(String key);
 }
 
 class FetchSecureCacheStorageSpy extends Mock implements FetchSecureCacheStorage {}
 
 void main() {
-  test('Should call FetchSecureCacheStorage with correct value', () async {
-    final fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
-    final sut = LocalLoadCurrentAccount(fetchSecureCacheStorage: fetchSecureCacheStorage);
+  FetchSecureCacheStorage fetchSecureCacheStorage;
+  LocalLoadCurrentAccount sut;
+  String token;
 
+  setUp(() {
+    fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
+    sut = LocalLoadCurrentAccount(fetchSecureCacheStorage: fetchSecureCacheStorage);
+    token = faker.guid.guid();
+  });
+
+  test('Should call FetchSecureCacheStorage with correct value', () async {
     await sut.load();
 
     verify(fetchSecureCacheStorage.fetchSecure('token'));
+  });
+
+  test('Should return an Account Entity', () async {
+    when(fetchSecureCacheStorage.fetchSecure(any)).thenAnswer((_) async => token);
+
+    final account = await sut.load();
+
+    expect(account, AccountEntity(token: token));
   });
 }
