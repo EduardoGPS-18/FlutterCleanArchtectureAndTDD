@@ -1,40 +1,10 @@
 import 'dart:async';
 
+import 'package:app_curso_manguinho/ui/pages/splash/splash.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
 import 'package:get/get.dart';
-
-class SplashPage extends StatelessWidget {
-  final SplashPresenter presenter;
-
-  const SplashPage({@required this.presenter});
-
-  @override
-  Widget build(BuildContext context) {
-    presenter.loadCurrentAccount();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('4Dev'),
-      ),
-      body: Builder(builder: (ctx) {
-        presenter.navigateStream.listen((page) {
-          if (page?.isNotEmpty == true) {
-            Get.offAllNamed(page);
-          }
-        });
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }),
-    );
-  }
-}
-
-abstract class SplashPresenter {
-  Stream<String> get navigateStream;
-  Future<void> loadCurrentAccount();
-}
 
 class SplashPresenterSpy extends Mock implements SplashPresenter {}
 
@@ -80,7 +50,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(Get.currentRoute, '/any_route');
-    expect(find.text('fake page'), 'fake page');
+    expect(find.text('fake page'), findsOneWidget);
     verify(presenter.loadCurrentAccount()).called(1);
   });
 }
