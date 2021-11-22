@@ -40,7 +40,7 @@ void main() {
   testWidgets('Should call load current account on page load', (WidgetTester tester) async {
     await loadPage(tester);
 
-    verify(presenter.loadCurrentAccount()).called(1);
+    verify(presenter.checkloadCurrentAccount()).called(1);
   });
 
   testWidgets('Should change page', (WidgetTester tester) async {
@@ -51,7 +51,7 @@ void main() {
 
     expect(Get.currentRoute, '/any_route');
     expect(find.text('fake page'), findsOneWidget);
-    verify(presenter.loadCurrentAccount()).called(1);
+    verify(presenter.checkloadCurrentAccount()).called(1);
   });
 
   testWidgets('Should not change page', (WidgetTester tester) async {
