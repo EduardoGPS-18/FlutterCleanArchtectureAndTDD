@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
@@ -15,14 +17,22 @@ class SplashPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('4Dev'),
       ),
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
+      body: Builder(builder: (ctx) {
+        presenter.navigateStream.listen((page) {
+          if (page?.isNotEmpty == true) {
+            Get.offAllNamed(page);
+          }
+        });
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }),
     );
   }
 }
 
 abstract class SplashPresenter {
+  Stream<String> get navigateStream;
   Future<void> loadCurrentAccount();
 }
 
@@ -30,16 +40,26 @@ class SplashPresenterSpy extends Mock implements SplashPresenter {}
 
 void main() {
   SplashPresenter presenter;
+  StreamController<String> navigateToController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = SplashPresenterSpy();
+    navigateToController = StreamController();
+
+    when(presenter.navigateStream).thenAnswer((_) => navigateToController.stream);
+
     await tester.pumpWidget(GetMaterialApp(
       initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => SplashPage(presenter: presenter)),
+        GetPage(name: '/any_route', page: () => Scaffold(body: Text('fake page'))),
       ],
     ));
   }
+
+  tearDown(() {
+    navigateToController.close();
+  });
 
   testWidgets('Should presents spinner on page load', (WidgetTester tester) async {
     await loadPage(tester);
@@ -50,6 +70,17 @@ void main() {
   testWidgets('Should call load current account on page load', (WidgetTester tester) async {
     await loadPage(tester);
 
+    verify(presenter.loadCurrentAccount()).called(1);
+  });
+
+  testWidgets('Should change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), 'fake page');
     verify(presenter.loadCurrentAccount()).called(1);
   });
 }
