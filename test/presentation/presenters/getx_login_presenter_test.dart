@@ -21,8 +21,8 @@ void main() {
   String email;
   String token;
   String password;
-  LoginPresenter sut;
   Validation validation;
+  LoginPresenter sut;
   SaveCurrentAccount saveCurrentAccount;
 
   Authentication authentication;
@@ -144,6 +144,17 @@ void main() {
     sut.validateEmail(email);
 
     expectLater(sut.isLoadingStream, emits(true));
+
+    await sut.auth();
+  });
+
+  test('(GETX LOGIN PRESENTER) : Should change page on success', () async {
+    sut.validatePassword(password);
+    sut.validateEmail(email);
+
+    sut.navigateToStream.listen(expectAsync1(
+      (page) => expect(page, '/surveys'),
+    ));
 
     await sut.auth();
   });

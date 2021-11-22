@@ -18,6 +18,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   var _emailError = RxString();
   var _mainError = RxString();
   var _passwordError = RxString();
+  var _navigateTo = RxString();
   var _isLoading = RxBool(false);
   var _isFormValid = RxBool(false);
 
@@ -26,6 +27,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   Stream<bool> get isFormValidStream => _isFormValid.stream;
   Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<String> get mainErrorStream => _mainError.stream;
+  Stream<String> get navigateToStream => _navigateTo.stream;
 
   GetxLoginPresenter({
     @required this.validation,
@@ -40,6 +42,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
         params: AuthenticationParams(email: _email, password: _password),
       );
       await saveCurrentAccount.save(account);
+      _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
       _isLoading.value = false;
       _mainError.value = error.description;

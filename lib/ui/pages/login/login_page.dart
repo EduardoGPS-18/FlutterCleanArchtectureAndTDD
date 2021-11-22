@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'components/components.dart';
@@ -7,35 +8,30 @@ import '../../components/components.dart';
 
 import '../../../ui/pages/pages.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   final LoginPresenter presenter;
 
   const LoginPage(this.presenter);
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  void _hideKeyboard() {
-    final currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus) {
-      currentFocus.unfocus();
-    }
-  }
-
-  @override
-  void dispose() {
-    widget.presenter.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          widget.presenter.isLoadingStream.listen(
+          void _hideKeyboard() {
+            final currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          }
+
+          presenter.navigateToStream.listen((page) {
+            if (page?.isNotEmpty == true) {
+              Get.offAllNamed(page);
+            }
+          });
+
+          presenter.isLoadingStream.listen(
             (isLoading) {
               if (isLoading == true) {
                 showLoading(context);
@@ -45,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
             },
           );
 
-          widget.presenter.mainErrorStream.listen((error) {
+          presenter.mainErrorStream.listen((error) {
             if (error != null) {
               showErrorMessage(context: context, error: error);
             }
@@ -64,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.all(32),
                     child: Provider.value(
-                      value: widget.presenter,
+                      value: presenter,
                       child: Form(
                         child: Column(
                           children: [
