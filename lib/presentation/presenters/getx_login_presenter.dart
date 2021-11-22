@@ -1,0 +1,62 @@
+import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
+import 'package:app_curso_manguinho/ui/pages/login/login.dart';
+import 'package:get/get.dart';
+import 'package:meta/meta.dart';
+
+import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+
+import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
+
+class GetxLoginPresenter extends GetxController implements LoginPresenter {
+  final Validation validation;
+  final Authentication authenticationUsecase;
+
+  String _email;
+  String _password;
+  var _emailError = RxString();
+  var _mainError = RxString();
+  var _passwordError = RxString();
+  var _isLoading = RxBool(false);
+  var _isFormValid = RxBool(false);
+
+  Stream<String> get emailErrorStream => _emailError.stream;
+  Stream<String> get passwordErrorStream => _passwordError.stream;
+  Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
+  Stream<String> get mainErrorStream => _mainError.stream;
+
+  GetxLoginPresenter({
+    @required this.validation,
+    @required this.authenticationUsecase,
+  });
+
+  Future<void> auth() async {
+    _isLoading.value = true;
+    try {
+      await authenticationUsecase.auth(
+        params: AuthenticationParams(email: _email, password: _password),
+      );
+    } on DomainError catch (error) {
+      _mainError.value = error.description;
+    }
+    _isLoading.value = false;
+  }
+
+  void validateEmail(String email) {
+    _email = email;
+    _emailError.value = validation.validate(field: 'email', value: email);
+    validateForm();
+  }
+
+  void validatePassword(String password) {
+    _password = password;
+    _passwordError.value = validation.validate(field: 'password', value: password);
+    validateForm();
+  }
+
+  void validateForm() {
+    _isFormValid.value = _emailError.value == null && _passwordError.value == null && _email != null && _password != null;
+  }
+
+  void dispose() {}
+}
