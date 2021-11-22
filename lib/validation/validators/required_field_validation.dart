@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
+import '../../validation/protocols/protocols.dart';
 
 class RequiredFieldValidation extends Equatable implements FieldValidation {
   @override

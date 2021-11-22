@@ -1,5 +1,5 @@
-import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
-import 'package:app_curso_manguinho/validation/validators/validators.dart';
+import '../../validation/protocols/protocols.dart';
+import '../../validation/validators/validators.dart';
 
 class ValidationBuilder {
   List<FieldValidation> _validations = [];

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 
@@ -21,18 +21,18 @@ void main() {
 
   void initStreams() {
     mainErrorController = StreamController();
-    emailErrorController = StreamController();
-    passwordErrorController = StreamController();
-    isFormValidController = StreamController();
     isLoadingController = StreamController();
+    emailErrorController = StreamController();
+    isFormValidController = StreamController();
+    passwordErrorController = StreamController();
   }
 
   void mockStreams() {
+    when(presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
+    when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
+    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
-    when(presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
-    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
   }
 
   void closeStreams() {

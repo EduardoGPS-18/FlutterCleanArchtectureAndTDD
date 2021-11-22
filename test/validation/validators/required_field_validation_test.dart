@@ -1,6 +1,7 @@
+import 'package:test/test.dart';
+
 import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   FieldValidation sut;

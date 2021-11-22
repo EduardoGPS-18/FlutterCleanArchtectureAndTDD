@@ -1,12 +1,12 @@
-import 'package:faker/faker.dart';
 import 'package:test/test.dart';
+import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 
+import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 import 'package:app_curso_manguinho/data/cache/cache.dart';
 
 class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {}

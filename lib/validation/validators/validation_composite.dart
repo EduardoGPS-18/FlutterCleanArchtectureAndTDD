@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
-import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
-import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
+
+import '../../presentation/protocols/protocols.dart';
+import '../../validation/protocols/protocols.dart';
 
 class ValidationComposite implements Validation {
   final List<FieldValidation> validations;

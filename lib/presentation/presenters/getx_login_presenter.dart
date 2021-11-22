@@ -1,11 +1,12 @@
-import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
-import 'package:app_curso_manguinho/ui/pages/login/login.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+import '../../domain/usecases/usecases.dart';
+import '../../domain/helpers/domain_error.dart';
 
-import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
+import '../../presentation/protocols/protocols.dart';
+
+import '../../ui/pages/login/login.dart';
 
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Validation validation;

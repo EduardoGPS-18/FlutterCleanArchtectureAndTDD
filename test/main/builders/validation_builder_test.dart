@@ -1,8 +1,9 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
-import 'package:app_curso_manguinho/main/builders/builders.dart';
 import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
+
+import 'package:app_curso_manguinho/main/builders/builders.dart';
 
 void main() {
   test('validation builder ...', () {

@@ -1,7 +1,9 @@
-import 'package:app_curso_manguinho/main/builders/builders.dart';
-import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
-import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
-import 'package:app_curso_manguinho/validation/validators/validators.dart';
+import '../../../../presentation/protocols/protocols.dart';
+
+import '../../../../validation/protocols/protocols.dart';
+import '../../../../validation/validators/validators.dart';
+
+import '../../../../main/builders/builders.dart';
 
 Validation makeValidationComposite() => ValidationComposite(makeLoginValidations());
 

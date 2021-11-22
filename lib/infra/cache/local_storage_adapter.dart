@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 
-import 'package:app_curso_manguinho/data/cache/cache.dart';
+import '../../data/cache/cache.dart';
 
 class LocalStorageAdapter implements SaveSecureCacheStorage {
   FlutterSecureStorage secureStorage;

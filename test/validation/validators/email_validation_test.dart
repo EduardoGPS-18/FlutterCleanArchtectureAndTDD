@@ -1,4 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 import 'package:app_curso_manguinho/validation/protocols/field_validation.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';

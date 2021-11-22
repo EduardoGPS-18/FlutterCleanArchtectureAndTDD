@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 
-import '../../domain/entities/entities.dart';
+import 'package:app_curso_manguinho/domain/entities/entities.dart';
 
-import '../http/http.dart';
+import 'package:app_curso_manguinho/data/http/http.dart';
 
 class RemoteAccountModel {
   final String token;

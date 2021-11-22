@@ -1,10 +1,10 @@
 import 'package:meta/meta.dart';
 
-import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
-import 'package:app_curso_manguinho/domain/entities/entities.dart';
-import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+import '../../../domain/helpers/helpers.dart';
+import '../../../domain/entities/entities.dart';
+import '../../../domain/usecases/usecases.dart';
 
-import 'package:app_curso_manguinho/data/cache/cache.dart';
+import '../../../data/cache/cache.dart';
 
 class LocalSaveCurrentAccount implements SaveCurrentAccount {
   final SaveSecureCacheStorage saveSecureCacheStorage;
