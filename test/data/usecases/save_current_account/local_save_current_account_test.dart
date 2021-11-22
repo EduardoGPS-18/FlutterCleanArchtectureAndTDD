@@ -29,25 +29,31 @@ abstract class SaveSecureCacheStorage {
 class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {}
 
 void main() {
-  test('Should call save secure cache storage with correct values', () async {
-    final saveSecureCacheStorage = SaveSecureCacheStorageSpy();
-    final sut = LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
-    final account = AccountEntity(token: faker.guid.guid());
+  SaveSecureCacheStorage saveSecureCacheStorage;
+  SaveCurrentAccount sut;
+  AccountEntity account;
 
+  setUp(() {
+    saveSecureCacheStorage = SaveSecureCacheStorageSpy();
+    sut = LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
+    account = AccountEntity(token: faker.guid.guid());
+  });
+
+  PostExpectation mockSaveSecureCall() => when(saveSecureCacheStorage.saveSecure(
+        key: anyNamed('key'),
+        value: anyNamed('value'),
+      ));
+  void mockSaveSecureError() => mockSaveSecureCall().thenThrow(Exception());
+
+  test('Should call save secure cache storage with correct values', () async {
     await sut.save(account);
 
     verify(saveSecureCacheStorage.saveSecure(key: 'token', value: account.token));
   });
 
   test('Should throw unexpected error if save secure cache storage with correct values', () async {
-    final saveSecureCacheStorage = SaveSecureCacheStorageSpy();
-    final sut = LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
-    final account = AccountEntity(token: faker.guid.guid());
+    mockSaveSecureError();
 
-    when(saveSecureCacheStorage.saveSecure(
-      key: anyNamed('key'),
-      value: anyNamed('value'),
-    )).thenThrow(Exception());
     final future = sut.save(account);
 
     expect(future, throwsA(DomainError.unexpected));
