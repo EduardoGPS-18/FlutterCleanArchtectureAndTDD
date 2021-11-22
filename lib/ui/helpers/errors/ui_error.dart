@@ -1,3 +1,5 @@
+import 'package:app_curso_manguinho/ui/helpers/i18n/i18n.dart';
+
 enum UIError {
   unexpected,
   requiredField,
@@ -9,13 +11,13 @@ extension UIErrorExtension on UIError {
   String get description {
     switch (this) {
       case UIError.unexpected:
-        return 'Error inesperado';
+        return R.strings.unexpected;
       case UIError.requiredField:
-        return 'Campo obrigatório';
+        return R.strings.requiredField;
       case UIError.invalidField:
-        return 'Campo inválido';
+        return R.strings.invalidField;
       case UIError.invalidCredentials:
-        return 'Credenciais inválidas';
+        return R.strings.invalidCredentials;
     }
   }
 }

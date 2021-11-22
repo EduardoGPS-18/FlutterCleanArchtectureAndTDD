@@ -3,12 +3,17 @@ import 'strings.dart';
 class PtBr implements Translations {
   String get addAccount => "Criar conta";
 
-  @override
   String get email => "Email";
 
-  @override
   String get login => "Entrar";
 
-  @override
   String get password => "Senha";
+
+  String get invalidCredentials => "Credenciais inválidas";
+
+  String get invalidField => "Campos inválidos";
+
+  String get requiredField => "Campo obrigatório";
+
+  String get unexpected => "Erro inesperado";
 }

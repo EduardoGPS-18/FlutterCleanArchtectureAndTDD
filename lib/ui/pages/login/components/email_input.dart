@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../login.dart';
 
 import '../../../helpers/errors/errors.dart';
-import '../../../../utils/i18n/i18n.dart';
+import '../../../helpers/i18n/i18n.dart';
 
 class EmailInput extends StatelessWidget {
   const EmailInput({
