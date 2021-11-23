@@ -16,15 +16,25 @@ class GetxSignUpPresenter extends GetxController {
 
   var _emailError = Rx<UIError>();
   var _nameError = Rx<UIError>();
+  var _mainError = Rx<UIError>();
   var _passwordError = Rx<UIError>();
   var _confirmPasswordError = Rx<UIError>();
+
+  var _navigateTo = RxString();
+
+  var _isLoading = RxBool(false);
   var _isFormValid = RxBool(false);
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
+  Stream<UIError> get mainErrorStream => _mainError.stream;
   Stream<UIError> get nameErrorStream => _nameError.stream;
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
   Stream<UIError> get confirmPasswordErrorStream => _confirmPasswordError.stream;
+
+  Stream<String> get navigateToStream => _navigateTo.stream;
+
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxSignUpPresenter({
     @required this.validation,
@@ -33,16 +43,22 @@ class GetxSignUpPresenter extends GetxController {
   });
 
   Future<AccountEntity> signUp() async {
-    final account = await addAccount.add(
-      params: AddAccountParams(
-        name: _name,
-        email: _email,
-        password: _password,
-        passwordConfirmation: _confirmPassword,
-      ),
-    );
-    saveCurrentAccount.save(account);
-    return account;
+    try {
+      _isLoading.value = true;
+      final account = await addAccount.add(
+        params: AddAccountParams(
+          name: _name,
+          email: _email,
+          password: _password,
+          passwordConfirmation: _confirmPassword,
+        ),
+      );
+      saveCurrentAccount.save(account);
+      return account;
+    } catch (err) {
+      _mainError.value = UIError.unexpected;
+      _isLoading.value = false;
+    }
   }
 
   void validateName(String name) {

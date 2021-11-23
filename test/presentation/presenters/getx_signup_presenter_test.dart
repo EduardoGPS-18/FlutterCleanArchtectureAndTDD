@@ -1,4 +1,5 @@
-import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
+import 'package:app_curso_manguinho/domain/entities/entities.dart';
+import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:test/test.dart';
 import 'package:faker/faker.dart';
@@ -36,6 +37,10 @@ void main() {
   PostExpectation mockAddAccountCall() => when(addAccount.add(params: anyNamed('params')));
   void mockSuccessAddAccount() {
     mockAddAccountCall().thenAnswer((_) async => AccountEntity(token: token));
+  }
+
+  void mockErrorAddAccount() {
+    mockAddAccountCall().thenThrow(DomainError.unexpected);
   }
 
   setUp(() {
@@ -274,5 +279,18 @@ void main() {
     await sut.signUp();
 
     verify(saveCurrentAccount.save(AccountEntity(token: token)));
+  });
+
+  test('Should emit unexpected error if save current account fails', () async {
+    mockErrorAddAccount();
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validateConfirmPassword(confirmPassword);
+
+    expect(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, UIError.unexpected)));
+
+    await sut.signUp();
   });
 }
