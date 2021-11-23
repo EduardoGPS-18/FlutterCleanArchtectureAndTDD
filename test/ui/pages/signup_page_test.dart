@@ -18,6 +18,8 @@ void main() {
   StreamController<UIError> passwordErrorController;
   StreamController<UIError> passwordConfirmationErrorController;
   StreamController<UIError> mainErrorController;
+
+  StreamController<String> navigateToController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
@@ -29,6 +31,7 @@ void main() {
     isFormValidController = StreamController();
     isLoadingController = StreamController();
     mainErrorController = StreamController();
+    navigateToController = StreamController();
   }
 
   void mockStreams() {
@@ -38,7 +41,8 @@ void main() {
     when(presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
     when(presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.mainErrorController).thenAnswer((_) => mainErrorController.stream);
+    when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -49,6 +53,7 @@ void main() {
       initialRoute: '/signup',
       getPages: [
         GetPage(name: '/signup', page: () => SignUpPage(presenter: presenter)),
+        GetPage(name: '/any_route', page: () => Scaffold(body: Text('fake page'))),
       ],
     );
     await tester.pumpWidget(
@@ -61,6 +66,7 @@ void main() {
     nameErrorController.close();
     mainErrorController.close();
     emailErrorController.close();
+    navigateToController.close();
     isFormValidController.close();
     passwordErrorController.close();
     passwordConfirmationErrorController.close();
@@ -309,5 +315,27 @@ void main() {
     await tester.pump();
 
     expect(find.text(R.strings.unexpected), findsOneWidget);
+  });
+
+  testWidgets('Should navigate on signup with success', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), findsOneWidget);
+  });
+
+  testWidgets('Should not navigate if signup with success but invalid route', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('');
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, '/signup');
+
+    navigateToController.add(null);
+    await tester.pumpAndSettle();
+    expect(Get.currentRoute, '/signup');
   });
 }

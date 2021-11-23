@@ -1,5 +1,6 @@
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/errors/errors.dart';
@@ -26,9 +27,15 @@ class SignUpPage extends StatelessWidget {
             }
           });
 
-          presenter.mainErrorController.listen((error) {
+          presenter.mainErrorStream.listen((error) {
             if (error != null) {
               showErrorMessage(context: context, error: error.description);
+            }
+          });
+
+          presenter.navigateToStream.listen((route) {
+            if (route?.isNotEmpty == true) {
+              Get.offAllNamed(route);
             }
           });
 
