@@ -13,12 +13,14 @@ class NameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
-    return StreamBuilder<Object>(
+    return StreamBuilder<UIError>(
+      stream: presenter.nameErrorController,
       builder: (context, snapshot) {
         return TextFormField(
           onChanged: presenter.validateName,
           decoration: InputDecoration(
             labelText: R.strings.name,
+            errorText: snapshot.hasData ? snapshot.data.description : null,
             icon: Icon(
               Icons.person,
               color: Theme.of(context).primaryColorLight,

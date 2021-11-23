@@ -9,11 +9,13 @@ class PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
-    return StreamBuilder<Object>(
+    return StreamBuilder<UIError>(
+      stream: presenter.passwordErrorController,
       builder: (context, snapshot) {
         return TextFormField(
           onChanged: presenter.validatePassword,
           decoration: InputDecoration(
+            errorText: snapshot.hasData ? snapshot.data.description : null,
             labelText: R.strings.password,
             icon: Icon(
               Icons.lock,

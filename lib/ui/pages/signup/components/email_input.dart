@@ -13,12 +13,14 @@ class EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
-    return StreamBuilder<Object>(
+    return StreamBuilder<UIError>(
+      stream: presenter.emailErrorController,
       builder: (context, snapshot) {
         return TextFormField(
           onChanged: presenter.validateEmail,
           decoration: InputDecoration(
             labelText: R.strings.email,
+            errorText: snapshot.hasData ? snapshot.data.description : null,
             icon: Icon(
               Icons.email,
               color: Theme.of(context).primaryColorLight,
