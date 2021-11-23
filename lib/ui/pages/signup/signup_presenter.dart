@@ -11,4 +11,5 @@ abstract class SignUpPresenter {
   void validateEmail(String email);
   void validatePassword(String password);
   void validateConfirmPassword(String confirmPassword);
+  void signUp();
 }

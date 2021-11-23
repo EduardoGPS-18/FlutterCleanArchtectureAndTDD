@@ -32,6 +32,7 @@ void main() {
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
     when(presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
+    when(presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -227,5 +228,16 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+
+  testWidgets('Should disable signup button if form is invalid', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(false);
+
+    await tester.pump();
+
+    final signupButton = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(signupButton.onPressed, isNull);
   });
 }
