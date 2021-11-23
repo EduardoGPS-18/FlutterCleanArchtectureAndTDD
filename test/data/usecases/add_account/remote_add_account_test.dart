@@ -22,8 +22,8 @@ class RemoteAddAccount {
     final body = RemoteAddAccountParams.fromDomain(params).toJson;
     try {
       httpClient.request(url: url, method: 'post', body: body);
-    } on HttpError {
-      throw DomainError.unexpected;
+    } on HttpError catch (error) {
+      throw error == HttpError.forbidden ? DomainError.emailInUse : DomainError.unexpected;
     }
   }
 }
@@ -120,5 +120,13 @@ void main() {
     final future = sut.add(params: params);
 
     expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw InvalidCredentialsError if HttpClient returns 403', () async {
+    mockHttpError(HttpError.forbidden);
+
+    final future = sut.add(params: params);
+
+    expect(future, throwsA(DomainError.emailInUse));
   });
 }
