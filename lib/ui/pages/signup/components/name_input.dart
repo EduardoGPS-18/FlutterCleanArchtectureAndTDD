@@ -14,7 +14,7 @@ class NameInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
     return StreamBuilder<UIError>(
-      stream: presenter.nameErrorController,
+      stream: presenter.nameErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
           onChanged: presenter.validateName,

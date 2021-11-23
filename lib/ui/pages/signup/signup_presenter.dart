@@ -1,10 +1,11 @@
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
 abstract class SignUpPresenter {
-  Stream<UIError> nameErrorController;
-  Stream<UIError> emailErrorController;
-  Stream<UIError> passwordErrorController;
-  Stream<UIError> passwordConfirmationErrorController;
+  Stream<UIError> nameErrorStream;
+  Stream<UIError> emailErrorStream;
+  Stream<UIError> passwordErrorStream;
+  Stream<UIError> passwordConfirmationErrorStream;
+  Stream<bool> isFormValidStream;
 
   void validateName(String name);
   void validateEmail(String email);

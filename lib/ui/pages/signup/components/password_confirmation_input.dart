@@ -10,7 +10,7 @@ class PasswordConfirmationInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
     return StreamBuilder<UIError>(
-      stream: presenter.passwordConfirmationErrorController,
+      stream: presenter.passwordConfirmationErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
           onChanged: presenter.validateConfirmPassword,

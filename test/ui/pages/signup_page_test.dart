@@ -17,19 +17,21 @@ void main() {
   StreamController<UIError> emailErrorController;
   StreamController<UIError> passwordErrorController;
   StreamController<UIError> passwordConfirmationErrorController;
+  StreamController<bool> isFormValidController;
 
   void initStreams() {
     nameErrorController = StreamController();
     emailErrorController = StreamController();
     passwordErrorController = StreamController();
     passwordConfirmationErrorController = StreamController();
+    isFormValidController = StreamController();
   }
 
   void mockStreams() {
-    when(presenter.nameErrorController).thenAnswer((_) => emailErrorController.stream);
-    when(presenter.emailErrorController).thenAnswer((_) => nameErrorController.stream);
-    when(presenter.passwordErrorController).thenAnswer((_) => passwordErrorController.stream);
-    when(presenter.passwordConfirmationErrorController).thenAnswer((_) => passwordConfirmationErrorController.stream);
+    when(presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
+    when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
+    when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -50,6 +52,7 @@ void main() {
   void closeStreams() {
     nameErrorController.close();
     emailErrorController.close();
+    isFormValidController.close();
     passwordErrorController.close();
     passwordConfirmationErrorController.close();
   }
@@ -136,6 +139,28 @@ void main() {
     verify(presenter.validateConfirmPassword(passwordConfirmation));
   });
 
+  testWidgets('Should signup page presents name error if the name error stream controller is not null', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    nameErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text(R.strings.invalidField), findsOneWidget);
+
+    nameErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text(R.strings.requiredField), findsOneWidget);
+
+    nameErrorController.add(null);
+    await tester.pump();
+    expect(
+      find.descendant(
+        of: find.bySemanticsLabel(R.strings.name),
+        matching: find.byType(Text),
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('Should signup page presents email error if the email error stream controller is not null', (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -152,29 +177,6 @@ void main() {
     expect(
       find.descendant(
         of: find.bySemanticsLabel(R.strings.email),
-        matching: find.byType(Text),
-      ),
-      findsOneWidget,
-    );
-  });
-
-  testWidgets('Should signup page presents password error if the password error stream controller is not null',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    passwordErrorController.add(UIError.invalidField);
-    await tester.pump();
-    expect(find.text(R.strings.invalidField), findsOneWidget);
-
-    passwordErrorController.add(UIError.requiredField);
-    await tester.pump();
-    expect(find.text(R.strings.requiredField), findsOneWidget);
-
-    passwordErrorController.add(null);
-    await tester.pump();
-    expect(
-      find.descendant(
-        of: find.bySemanticsLabel(R.strings.password),
         matching: find.byType(Text),
       ),
       findsOneWidget,

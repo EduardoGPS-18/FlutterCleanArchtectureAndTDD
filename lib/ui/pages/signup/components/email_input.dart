@@ -14,7 +14,7 @@ class EmailInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
     return StreamBuilder<UIError>(
-      stream: presenter.emailErrorController,
+      stream: presenter.emailErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
           onChanged: presenter.validateEmail,

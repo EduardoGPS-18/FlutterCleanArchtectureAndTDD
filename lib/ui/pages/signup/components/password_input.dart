@@ -10,7 +10,7 @@ class PasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = Provider.of<SignUpPresenter>(context);
     return StreamBuilder<UIError>(
-      stream: presenter.passwordErrorController,
+      stream: presenter.passwordErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
           onChanged: presenter.validatePassword,
