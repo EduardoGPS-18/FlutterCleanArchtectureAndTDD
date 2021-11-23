@@ -1,5 +1,6 @@
 import 'package:app_curso_manguinho/data/http/http.dart';
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
+import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
@@ -19,7 +20,11 @@ class RemoteAddAccount {
     @required AddAccountParams params,
   }) async {
     final body = RemoteAddAccountParams.fromDomain(params).toJson;
-    httpClient.request(url: url, method: 'post', body: body);
+    try {
+      httpClient.request(url: url, method: 'post', body: body);
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -59,6 +64,13 @@ void main() {
   HttpClient httpClient;
   AddAccountParams params;
 
+  PostExpectation _mockRequest() => when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ));
+  void mockHttpError(HttpError error) => _mockRequest().thenThrow(error);
+
   setUp(() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
@@ -84,5 +96,13 @@ void main() {
         'passwordConfirmation': params.passwordConfirmation,
       },
     ));
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns 400', () async {
+    mockHttpError(HttpError.badRequest);
+
+    final future = sut.add(params: params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
