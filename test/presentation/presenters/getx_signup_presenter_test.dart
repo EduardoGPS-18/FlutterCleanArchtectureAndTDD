@@ -15,10 +15,13 @@ class AuthenticationSpy extends Mock implements Authentication {}
 
 class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
+class AddAccountSpy extends Mock implements AddAccount {}
+
 void main() {
   String email, name, password, confirmPassword;
   Validation validation;
   GetxSignUpPresenter sut;
+  AddAccount addAccount;
 
   PostExpectation mockValidationCall([String field]) => when(validation.validate(
         field: field == null ? anyNamed('field') : field,
@@ -29,11 +32,12 @@ void main() {
   }
 
   setUp(() {
+    addAccount = AddAccountSpy();
     validation = ValidationSpy();
-    sut = GetxSignUpPresenter(validation: validation);
+    sut = GetxSignUpPresenter(addAccount: addAccount, validation: validation);
     name = faker.person.name();
     email = faker.internet.email();
-    name = faker.internet.password();
+    password = faker.internet.password();
     confirmPassword = faker.internet.password();
     mockValidation();
   });
@@ -204,5 +208,35 @@ void main() {
     sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
 
     sut.validateConfirmPassword(confirmPassword);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should enable form button if all fields are valid', () async {
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+
+    sut.validateName(name);
+    await Future.delayed(Duration.zero);
+    sut.validateEmail(email);
+    await Future.delayed(Duration.zero);
+    sut.validatePassword(password);
+    await Future.delayed(Duration.zero);
+    sut.validateConfirmPassword(confirmPassword);
+    await Future.delayed(Duration.zero);
+  });
+
+  test('Should call add account with correct values', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validateConfirmPassword(confirmPassword);
+
+    await sut.signUp();
+    final params = AddAccountParams(
+      name: name,
+      email: email,
+      password: password,
+      passwordConfirmation: confirmPassword,
+    );
+
+    verify(addAccount.add(params: params)).called(1);
   });
 }
