@@ -1,5 +1,4 @@
 import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
-import 'package:app_curso_manguinho/validation/validators/validation_composite.dart';
 import 'package:test/test.dart';
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
@@ -17,7 +16,7 @@ class AuthenticationSpy extends Mock implements Authentication {}
 class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
 void main() {
-  String email;
+  String email, name, password, confirmPassword;
   Validation validation;
   GetxSignUpPresenter sut;
 
@@ -32,7 +31,10 @@ void main() {
   setUp(() {
     validation = ValidationSpy();
     sut = GetxSignUpPresenter(validation: validation);
+    name = faker.person.name();
     email = faker.internet.email();
+    name = faker.internet.password();
+    confirmPassword = faker.internet.password();
     mockValidation();
   });
 
@@ -67,5 +69,140 @@ void main() {
     sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit null on email validation successed', () {
+    mockValidation(field: 'email', value: null);
+
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should call validation with correct name', () {
+    sut.validateName(name);
+
+    verify(validation.validate(field: 'name', value: name)).called(1);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit name error if validation fails', () {
+    mockValidation(value: ValidationError.invalidField);
+
+    sut.nameErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+    sut.validateName(name);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit name error as null if validation succeeds', () {
+    sut.nameErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+    sut.validateName(name);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit name error if validation fails', () {
+    mockValidation(field: 'name', value: ValidationError.invalidField);
+
+    sut.nameErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit null on name validation successed', () {
+    mockValidation(field: 'name', value: null);
+
+    sut.nameErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validateName(name);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should call validation with correct password', () {
+    sut.validatePassword(password);
+
+    verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit password error if validation fails', () {
+    mockValidation(value: ValidationError.invalidField);
+
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit password error as null if validation succeeds', () {
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit password error if validation fails', () {
+    mockValidation(field: 'password', value: ValidationError.invalidField);
+
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit null on password validation successed', () {
+    mockValidation(field: 'password', value: null);
+
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should call validation with correct confirm confirmPassword', () {
+    sut.validateConfirmPassword(confirmPassword);
+
+    verify(validation.validate(field: 'confirmPassword', value: confirmPassword)).called(1);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit confirmPassword error if validation fails', () {
+    mockValidation(value: ValidationError.invalidField);
+
+    sut.confirmPasswordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateConfirmPassword(confirmPassword);
+    sut.validateConfirmPassword(confirmPassword);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit confirmPassword error as null if validation succeeds', () {
+    sut.confirmPasswordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateConfirmPassword(confirmPassword);
+    sut.validateConfirmPassword(confirmPassword);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit confirmPassword error if validation fails', () {
+    mockValidation(field: 'confirmPassword', value: ValidationError.invalidField);
+
+    sut.confirmPasswordErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validateConfirmPassword(confirmPassword);
+  });
+
+  test('(GETX SIGNUP PRESENTER) : Should emit on confirmPassword null if validation successed1', () {
+    mockValidation(field: 'confirmPassword', value: null);
+
+    sut.confirmPasswordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1<void, bool>((isValid) => expect(isValid, false)));
+
+    sut.validateConfirmPassword(confirmPassword);
   });
 }
