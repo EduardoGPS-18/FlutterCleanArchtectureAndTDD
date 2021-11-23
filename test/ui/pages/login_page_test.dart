@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app_curso_manguinho/ui/helpers/i18n/i18n.dart';
 import 'package:get/get.dart';
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
@@ -287,4 +288,19 @@ void main() {
     await tester.pump();
     expect(Get.currentRoute, '/login');
   });
+
+  testWidgets(
+    'Should call go to signup on link click',
+    (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isFormValidController.add(true);
+      await loadPage(tester);
+      final button = find.text(R.strings.addAccount);
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+
+      verify(presenter.goToSignUp()).called(1);
+    },
+  );
 }

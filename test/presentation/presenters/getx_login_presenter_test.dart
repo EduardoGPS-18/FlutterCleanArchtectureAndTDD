@@ -211,4 +211,25 @@ void main() {
 
     await sut.auth();
   });
+
+  test('(GETX LOGIN PRESENTER) : Should thorws Unexpected error if SaveCurrentAccount fails', () async {
+    mockSaveCurrentAccountError(DomainError.unexpected);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(await authentication.auth(params: anyNamed('params')), AccountEntity(token: token));
+
+    sut.mainErrorStream.listen(expectAsync1(
+      (err) => expect(err, UIError.unexpected),
+    ));
+
+    await sut.auth();
+  });
+
+  test('(GETX LOGIN PRESENTER) : Should go to signup on call go to signup', () async {
+    sut.navigateToStream.listen(expectAsync1((page) => '/signup'));
+
+    sut.goToSignUp();
+  });
 }

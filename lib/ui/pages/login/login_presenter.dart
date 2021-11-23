@@ -9,7 +9,8 @@ abstract class LoginPresenter {
   Stream<bool> get isLoadingStream;
 
   Future<void> auth();
-  void dispose();
+
+  void goToSignUp();
 
   void validateEmail(String email);
   void validatePassword(String pass);
