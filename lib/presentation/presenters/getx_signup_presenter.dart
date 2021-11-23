@@ -9,6 +9,7 @@ import '../../ui/helpers/errors/errors.dart';
 
 class GetxSignUpPresenter extends GetxController {
   final Validation validation;
+  final SaveCurrentAccount saveCurrentAccount;
   final AddAccount addAccount;
 
   String _email, _name, _password, _confirmPassword;
@@ -28,6 +29,7 @@ class GetxSignUpPresenter extends GetxController {
   GetxSignUpPresenter({
     @required this.validation,
     @required this.addAccount,
+    @required this.saveCurrentAccount,
   });
 
   Future<AccountEntity> signUp() async {
@@ -39,6 +41,7 @@ class GetxSignUpPresenter extends GetxController {
         passwordConfirmation: _confirmPassword,
       ),
     );
+    saveCurrentAccount.save(account);
     return account;
   }
 

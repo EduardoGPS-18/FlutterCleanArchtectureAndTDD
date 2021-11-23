@@ -22,6 +22,7 @@ void main() {
   String email, name, password, confirmPassword, token;
   Validation validation;
   GetxSignUpPresenter sut;
+  SaveCurrentAccount saveCurrentAccount;
   AddAccount addAccount;
 
   PostExpectation mockValidationCall([String field]) => when(validation.validate(
@@ -40,7 +41,12 @@ void main() {
   setUp(() {
     addAccount = AddAccountSpy();
     validation = ValidationSpy();
-    sut = GetxSignUpPresenter(addAccount: addAccount, validation: validation);
+    saveCurrentAccount = SaveCurrentAccountSpy();
+    sut = GetxSignUpPresenter(
+      addAccount: addAccount,
+      validation: validation,
+      saveCurrentAccount: saveCurrentAccount,
+    );
     token = faker.guid.guid();
     name = faker.person.name();
     email = faker.internet.email();
@@ -257,5 +263,16 @@ void main() {
     final account = await sut.signUp();
 
     expect(account, AccountEntity(token: token));
+  });
+
+  test('Should call save current account with correct value', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validateConfirmPassword(confirmPassword);
+
+    await sut.signUp();
+
+    verify(saveCurrentAccount.save(AccountEntity(token: token)));
   });
 }
