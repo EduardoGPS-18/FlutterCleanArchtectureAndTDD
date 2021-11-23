@@ -240,4 +240,15 @@ void main() {
     final signupButton = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(signupButton.onPressed, isNull);
   });
+
+  testWidgets('Should turn signup button valid if form is valid', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+
+    await tester.pump();
+
+    final signupButton = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(signupButton.onPressed, isNotNull);
+  });
 }
