@@ -54,7 +54,8 @@ class GetxSignUpPresenter extends GetxController {
           passwordConfirmation: _confirmPassword,
         ),
       );
-      saveCurrentAccount.save(account);
+      await saveCurrentAccount.save(account);
+      _navigateTo.value = '/surveys';
       return account;
     } on DomainError catch (error) {
       _mainError.value = error == DomainError.emailInUse ? UIError.emailInUse : UIError.unexpected;
