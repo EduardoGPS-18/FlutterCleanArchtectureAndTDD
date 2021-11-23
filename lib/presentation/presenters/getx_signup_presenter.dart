@@ -1,3 +1,4 @@
+import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
@@ -29,8 +30,8 @@ class GetxSignUpPresenter extends GetxController {
     @required this.addAccount,
   });
 
-  Future<void> signUp() async {
-    addAccount.add(
+  Future<AccountEntity> signUp() async {
+    final account = await addAccount.add(
       params: AddAccountParams(
         name: _name,
         email: _email,
@@ -38,6 +39,7 @@ class GetxSignUpPresenter extends GetxController {
         passwordConfirmation: _confirmPassword,
       ),
     );
+    return account;
   }
 
   void validateName(String name) {

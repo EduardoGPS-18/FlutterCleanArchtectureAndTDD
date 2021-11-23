@@ -1,3 +1,4 @@
+import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
 import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:test/test.dart';
 import 'package:faker/faker.dart';
@@ -18,7 +19,7 @@ class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 class AddAccountSpy extends Mock implements AddAccount {}
 
 void main() {
-  String email, name, password, confirmPassword;
+  String email, name, password, confirmPassword, token;
   Validation validation;
   GetxSignUpPresenter sut;
   AddAccount addAccount;
@@ -31,15 +32,22 @@ void main() {
     mockValidationCall(field).thenReturn(value);
   }
 
+  PostExpectation mockAddAccountCall() => when(addAccount.add(params: anyNamed('params')));
+  void mockSuccessAddAccount() {
+    mockAddAccountCall().thenAnswer((_) async => AccountEntity(token: token));
+  }
+
   setUp(() {
     addAccount = AddAccountSpy();
     validation = ValidationSpy();
     sut = GetxSignUpPresenter(addAccount: addAccount, validation: validation);
+    token = faker.guid.guid();
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
     confirmPassword = faker.internet.password();
     mockValidation();
+    mockSuccessAddAccount();
   });
 
   test('(GETX SIGNUP PRESENTER) : Should call validation with correct email', () {
@@ -238,5 +246,16 @@ void main() {
     );
 
     verify(addAccount.add(params: params)).called(1);
+  });
+
+  test('Should return account entity on usecase call success', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validateConfirmPassword(confirmPassword);
+
+    final account = await sut.signUp();
+
+    expect(account, AccountEntity(token: token));
   });
 }
