@@ -20,6 +20,12 @@ void main() {
     expect(sut.validate(formData), ValidationError.invalidField);
   });
 
+  test('Should return null on invalid cases', () {
+    expect(sut.validate({'any_field': 'any_value'}), null);
+    expect(sut.validate({'other_field': 'other_value'}), null);
+    expect(sut.validate({}), null);
+  });
+
   test('Should return null if values are not equal', () {
     final formData = {
       'any_field': 'same_value',
