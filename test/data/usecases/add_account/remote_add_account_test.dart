@@ -1,4 +1,5 @@
 import 'package:app_curso_manguinho/data/http/http.dart';
+import 'package:app_curso_manguinho/data/models/models.dart';
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
@@ -16,12 +17,13 @@ class RemoteAddAccount {
     @required this.url,
   });
 
-  Future<void> add({
+  Future<AccountEntity> add({
     @required AddAccountParams params,
   }) async {
     final body = RemoteAddAccountParams.fromDomain(params).toJson;
     try {
-      httpClient.request(url: url, method: 'post', body: body);
+      final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
+      return RemoteAccountModel.fromJson(httpResponse).toEntity();
     } on HttpError catch (error) {
       throw error == HttpError.forbidden ? DomainError.emailInUse : DomainError.unexpected;
     }
@@ -70,6 +72,11 @@ void main() {
         body: anyNamed('body'),
       ));
   void mockHttpError(HttpError error) => _mockRequest().thenThrow(error);
+  void mockHttpData(Map data) => _mockRequest().thenAnswer((_) async => data);
+  Map mockValidData() => {
+        'accessToken': faker.guid.guid(),
+        'name': faker.person.name(),
+      };
 
   setUp(() {
     httpClient = HttpClientSpy();
@@ -81,6 +88,7 @@ void main() {
       password: faker.internet.password(),
       passwordConfirmation: faker.internet.password(),
     );
+    mockHttpData(mockValidData());
   });
 
   test('Should call http client with correct values', () async {
@@ -128,5 +136,14 @@ void main() {
     final future = sut.add(params: params);
 
     expect(future, throwsA(DomainError.emailInUse));
+  });
+
+  test('Should return an Account if HttpClient returns 200', () async {
+    final validData = mockValidData();
+    mockHttpData(validData);
+
+    final account = await sut.add(params: params);
+
+    expect(account.token, validData['accessToken']);
   });
 }
