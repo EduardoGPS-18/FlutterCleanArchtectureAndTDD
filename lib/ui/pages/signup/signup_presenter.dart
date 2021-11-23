@@ -6,6 +6,7 @@ abstract class SignUpPresenter {
   Stream<UIError> passwordErrorStream;
   Stream<UIError> passwordConfirmationErrorStream;
 
+  Stream<UIError> mainErrorController;
   Stream<bool> isFormValidStream;
   Stream<bool> isLoadingStream;
 

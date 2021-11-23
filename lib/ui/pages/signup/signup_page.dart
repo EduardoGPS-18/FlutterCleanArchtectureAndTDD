@@ -2,6 +2,7 @@ import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../helpers/errors/errors.dart';
 import 'components/components.dart';
 
 import '../../../ui/components/components.dart';
@@ -22,6 +23,12 @@ class SignUpPage extends StatelessWidget {
               showLoading(context);
             } else {
               hideLoading(context);
+            }
+          });
+
+          presenter.mainErrorController.listen((error) {
+            if (error != null) {
+              showErrorMessage(context: context, error: error.description);
             }
           });
 

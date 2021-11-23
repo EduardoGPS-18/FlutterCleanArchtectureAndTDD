@@ -10,6 +10,7 @@ class PtBr implements Translations {
 
   String get invalidCredentials => "Credenciais inválidas";
   String get requiredField => "Campo obrigatório";
+  String get emailInUse => "Email já está em uso";
   String get invalidField => "Campos inválidos";
   String get unexpected => "Erro inesperado";
 }
