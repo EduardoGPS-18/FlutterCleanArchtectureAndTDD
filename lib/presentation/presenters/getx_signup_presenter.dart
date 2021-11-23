@@ -1,4 +1,5 @@
 import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
+import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
@@ -55,8 +56,8 @@ class GetxSignUpPresenter extends GetxController {
       );
       saveCurrentAccount.save(account);
       return account;
-    } catch (err) {
-      _mainError.value = UIError.unexpected;
+    } on DomainError catch (error) {
+      _mainError.value = error == DomainError.emailInUse ? UIError.emailInUse : UIError.unexpected;
       _isLoading.value = false;
     }
   }
