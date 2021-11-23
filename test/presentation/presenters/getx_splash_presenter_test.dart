@@ -48,10 +48,4 @@ void main() {
 
     await sut.checkCurrentAccount(durationInSeconds: 0);
   });
-
-  test('Should go to signup page on link click', () async {
-    sut.navigateStream.listen(expectAsync1((page) => expect(page, '/login')));
-
-    await sut.checkCurrentAccount(durationInSeconds: 0);
-  });
 }
