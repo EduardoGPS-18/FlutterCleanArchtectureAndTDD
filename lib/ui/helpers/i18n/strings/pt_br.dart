@@ -8,6 +8,9 @@ class PtBr implements Translations {
   String get addAccount => "Criar conta";
   String get confirmPassword => "Confirme a senha";
 
+  String get goToSignUp => "Cadastrar-se.";
+  String get goToLogin => "Já sou cadastrado!";
+
   String get invalidCredentials => "Credenciais inválidas";
   String get requiredField => "Campo obrigatório";
   String get emailInUse => "Email já está em uso";

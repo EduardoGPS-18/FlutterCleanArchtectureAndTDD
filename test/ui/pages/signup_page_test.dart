@@ -38,7 +38,7 @@ void main() {
     when(presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
-    when(presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
+    when(presenter.confirmPasswordErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
     when(presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
@@ -338,4 +338,19 @@ void main() {
     await tester.pumpAndSettle();
     expect(Get.currentRoute, '/signup');
   });
+
+  testWidgets(
+    'Should call go to login on link click',
+    (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isFormValidController.add(true);
+      await loadPage(tester);
+      final button = find.text(R.strings.goToLogin);
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+
+      verify(presenter.goToLogin()).called(1);
+    },
+  );
 }

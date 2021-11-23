@@ -296,7 +296,7 @@ void main() {
 
       isFormValidController.add(true);
       await loadPage(tester);
-      final button = find.text(R.strings.addAccount);
+      final button = find.text(R.strings.goToSignUp);
       await tester.ensureVisible(button);
       await tester.tap(button);
 

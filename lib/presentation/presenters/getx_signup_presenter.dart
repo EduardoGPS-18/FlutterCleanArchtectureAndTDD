@@ -1,6 +1,7 @@
 import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
@@ -8,7 +9,7 @@ import '../protocols/protocols.dart';
 
 import '../../ui/helpers/errors/errors.dart';
 
-class GetxSignUpPresenter extends GetxController {
+class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   final Validation validation;
   final SaveCurrentAccount saveCurrentAccount;
   final AddAccount addAccount;
@@ -109,4 +110,6 @@ class GetxSignUpPresenter extends GetxController {
         _name != null &&
         _confirmPassword != null;
   }
+
+  void goToLogin() => _navigateTo.value = '/login';
 }
