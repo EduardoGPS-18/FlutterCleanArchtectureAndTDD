@@ -1,4 +1,4 @@
-import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
+import '../entities/entities.dart';
 
 abstract class SaveCurrentAccount {
   Future<void> save(AccountEntity account);

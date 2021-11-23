@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 
-import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
+import '../../presentation/protocols/protocols.dart';
 
-import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
+import '../protocols/protocols.dart';
 
 class CompareFieldsValidation implements FieldValidation {
   final String field, fieldToCompare;

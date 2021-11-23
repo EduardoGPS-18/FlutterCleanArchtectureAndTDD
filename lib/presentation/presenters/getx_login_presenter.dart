@@ -1,13 +1,13 @@
-import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:get/get.dart';
 
-import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../domain/helpers/domain_error.dart';
 
 import '../../presentation/protocols/protocols.dart';
 
-import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/login/login.dart';
+import '../../ui/helpers/errors/errors.dart';
 
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Validation validation;

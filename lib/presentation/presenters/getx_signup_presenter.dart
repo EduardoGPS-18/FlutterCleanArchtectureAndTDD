@@ -1,12 +1,13 @@
-import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
-import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
-import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
-import 'package:app_curso_manguinho/ui/pages/pages.dart';
-import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:get/get.dart';
+
+import '../../domain/helpers/helpers.dart';
+import '../../domain/entities/entities.dart';
+import '../../domain/usecases/usecases.dart';
 
 import '../protocols/protocols.dart';
 
+import '../../ui/pages/pages.dart';
 import '../../ui/helpers/errors/errors.dart';
 
 class GetxSignUpPresenter extends GetxController implements SignUpPresenter {

@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import 'package:app_curso_manguinho/presentation/protocols/validation.dart';
-import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
+import '../../presentation/protocols/validation.dart';
+
+import '../protocols/protocols.dart';
 
 class MinLengthValidation extends Equatable implements FieldValidation {
   @override

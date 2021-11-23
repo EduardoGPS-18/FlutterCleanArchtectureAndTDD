@@ -1,13 +1,13 @@
-import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
-import '../../helpers/errors/errors.dart';
 import 'components/components.dart';
+import '../../helpers/errors/errors.dart';
 
-import '../../../ui/components/components.dart';
+import '../pages.dart';
 import '../../helpers/i18n/i18n.dart';
+import '../../../ui/components/components.dart';
 
 class SignUpPage extends StatelessWidget {
   final SignUpPresenter presenter;

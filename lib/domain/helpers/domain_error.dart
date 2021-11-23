@@ -1,5 +1,5 @@
 enum DomainError {
   unexpected,
-  invalidCredentials,
   emailInUse,
+  invalidCredentials,
 }

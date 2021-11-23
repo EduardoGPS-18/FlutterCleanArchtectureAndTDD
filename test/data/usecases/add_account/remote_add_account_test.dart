@@ -1,62 +1,12 @@
-import 'package:app_curso_manguinho/data/http/http.dart';
-import 'package:app_curso_manguinho/data/models/models.dart';
-import 'package:app_curso_manguinho/domain/entities/entities.dart';
-import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
-import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
-import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
-import 'package:meta/meta.dart';
+import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
-class RemoteAddAccount {
-  final HttpClient httpClient;
-  final String url;
+import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
+import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 
-  RemoteAddAccount({
-    @required this.httpClient,
-    @required this.url,
-  });
-
-  Future<AccountEntity> add({
-    @required AddAccountParams params,
-  }) async {
-    final body = RemoteAddAccountParams.fromDomain(params).toJson;
-    try {
-      final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
-      return RemoteAccountModel.fromJson(httpResponse).toEntity();
-    } on HttpError catch (error) {
-      throw error == HttpError.forbidden ? DomainError.emailInUse : DomainError.unexpected;
-    }
-  }
-}
-
-class RemoteAddAccountParams {
-  final String name;
-  final String email;
-  final String password;
-  final String passwordConfirmation;
-
-  RemoteAddAccountParams({
-    @required this.name,
-    @required this.email,
-    @required this.password,
-    @required this.passwordConfirmation,
-  });
-  factory RemoteAddAccountParams.fromDomain(AddAccountParams params) {
-    return RemoteAddAccountParams(
-      name: params.name,
-      email: params.email,
-      password: params.password,
-      passwordConfirmation: params.passwordConfirmation,
-    );
-  }
-  Map<String, dynamic> get toJson => {
-        'name': name,
-        'email': email,
-        'password': password,
-        'passwordConfirmation': passwordConfirmation,
-      };
-}
+import 'package:app_curso_manguinho/data/http/http.dart';
+import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
 

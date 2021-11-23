@@ -1,13 +1,13 @@
-import 'dart:async';
-import 'package:app_curso_manguinho/ui/helpers/i18n/i18n.dart';
-import 'package:get/get.dart';
-import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
+import 'package:mockito/mockito.dart';
+import 'package:faker/faker.dart';
+import 'package:get/get.dart';
+import 'dart:async';
 
-import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import 'package:app_curso_manguinho/ui/helpers/i18n/i18n.dart';
+import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
 

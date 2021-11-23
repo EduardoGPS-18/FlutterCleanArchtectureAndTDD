@@ -1,5 +1,5 @@
-import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
+import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
@@ -18,10 +18,6 @@ void main() {
   PostExpectation mockLoadCurrentAccountCall() => when(loadCurrentAccount.load());
   void mockLoadCurrentAccount({AccountEntity account}) {
     mockLoadCurrentAccountCall().thenAnswer((_) async => account);
-  }
-
-  void mockLoadCurrentAccountError() {
-    mockLoadCurrentAccountCall().thenThrow(Exception());
   }
 
   setUp(() {

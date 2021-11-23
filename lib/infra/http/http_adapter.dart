@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart';
+import 'dart:convert';
 
 import '../../data/http/http.dart';
 

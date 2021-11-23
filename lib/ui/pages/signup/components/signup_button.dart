@@ -1,7 +1,7 @@
-import 'package:app_curso_manguinho/ui/pages/signup/signup.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
+import '../signup.dart';
 import '../../../helpers/i18n/i18n.dart';
 
 class SignUpButton extends StatelessWidget {

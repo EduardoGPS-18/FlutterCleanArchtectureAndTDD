@@ -1,9 +1,9 @@
+import 'package:mockito/mockito.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
 
-import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
+import 'package:app_curso_manguinho/domain/entities/account_entity.dart';
 
 import 'package:app_curso_manguinho/data/cache/cache.dart';
 import 'package:app_curso_manguinho/data/usecases/usecases.dart';

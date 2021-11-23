@@ -1,11 +1,10 @@
-import 'package:app_curso_manguinho/main/factories/pages/splash/splash.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../ui/components/components.dart';
 
-import 'factories/pages/login/login.dart';
+import 'factories/pages/pages.dart';
 
 void main() {
   runApp(App());

@@ -1,4 +1,4 @@
-import 'package:app_curso_manguinho/ui/helpers/i18n/i18n.dart';
+import '../i18n/i18n.dart';
 
 enum UIError {
   unexpected,

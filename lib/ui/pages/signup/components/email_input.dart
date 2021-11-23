@@ -1,9 +1,9 @@
-import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
-import 'package:app_curso_manguinho/ui/pages/pages.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
+import '../../pages.dart';
 import '../../../helpers/i18n/i18n.dart';
+import '../../../helpers/errors/errors.dart';
 
 class EmailInput extends StatelessWidget {
   const EmailInput({

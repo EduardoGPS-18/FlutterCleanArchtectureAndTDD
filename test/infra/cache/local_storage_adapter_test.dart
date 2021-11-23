@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
-import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mockito/mockito.dart';
+import 'package:faker/faker.dart';
+import 'package:test/test.dart';
 
 import 'package:app_curso_manguinho/infra/cache/cache.dart';
 

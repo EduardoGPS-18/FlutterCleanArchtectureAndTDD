@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import './splash.dart';
-import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
   final SplashPresenter presenter;
