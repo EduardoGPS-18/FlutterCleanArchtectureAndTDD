@@ -1,4 +1,7 @@
+import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
+import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../helpers/i18n/i18n.dart';
 
@@ -9,15 +12,21 @@ class EmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: R.strings.email,
-        icon: Icon(
-          Icons.email,
-          color: Theme.of(context).primaryColorLight,
-        ),
-      ),
-      keyboardType: TextInputType.emailAddress,
+    final presenter = Provider.of<SignUpPresenter>(context);
+    return StreamBuilder<Object>(
+      builder: (context, snapshot) {
+        return TextFormField(
+          onChanged: presenter.validateEmail,
+          decoration: InputDecoration(
+            labelText: R.strings.email,
+            icon: Icon(
+              Icons.email,
+              color: Theme.of(context).primaryColorLight,
+            ),
+          ),
+          keyboardType: TextInputType.emailAddress,
+        );
+      },
     );
   }
 }
