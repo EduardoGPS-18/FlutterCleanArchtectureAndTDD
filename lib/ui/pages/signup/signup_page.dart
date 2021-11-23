@@ -17,6 +17,14 @@ class SignUpPage extends StatelessWidget {
     return Scaffold(
       body: Builder(
         builder: (context) {
+          presenter.isLoadingStream.listen((isLoading) {
+            if (isLoading) {
+              showLoading(context);
+            } else {
+              hideLoading(context);
+            }
+          });
+
           void _hideKeyboard() {
             final currentFocus = FocusScope.of(context);
             if (!currentFocus.hasPrimaryFocus) {
