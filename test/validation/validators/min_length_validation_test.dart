@@ -1,22 +1,10 @@
-import 'package:app_curso_manguinho/presentation/protocols/validation.dart';
-import 'package:app_curso_manguinho/validation/protocols/field_validation.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
-import 'package:meta/meta.dart';
+import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
 
-class MinLengthValidation implements FieldValidation {
-  @override
-  final String field;
-  final int size;
-
-  MinLengthValidation({@required this.field, @required this.size});
-
-  @override
-  ValidationError validate(String value) {
-    return value != null && value.length >= size ? null : ValidationError.invalidField;
-  }
-}
+import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
+import 'package:app_curso_manguinho/validation/validators/validators.dart';
 
 void main() {
   FieldValidation sut;
