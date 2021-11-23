@@ -30,7 +30,7 @@ void main() {
 
   PostExpectation mockValidationCall([String field]) => when(validation.validate(
         field: field == null ? anyNamed('field') : field,
-        value: anyNamed('value'),
+        input: anyNamed('input'),
       ));
   void mockValidation({String field, ValidationError value}) {
     mockValidationCall(field).thenReturn(value);
@@ -63,7 +63,10 @@ void main() {
   test('(GETX LOGIN PRESENTER) : Should call validation with correct email', () {
     sut.validateEmail(email);
 
-    verify(validation.validate(field: 'email', value: email)).called(1);
+    verify(validation.validate(field: 'email', input: {
+      'email': email,
+      'password': null,
+    })).called(1);
   });
 
   test('(GETX LOGIN PRESENTER) : Should emit email error if validation fails', () {
@@ -87,7 +90,10 @@ void main() {
   test('(GETX LOGIN PRESENTER) : Should call validation with correct password', () {
     sut.validatePassword(password);
 
-    verify(validation.validate(field: 'password', value: password)).called(1);
+    verify(validation.validate(field: 'password', input: {
+      'email': null,
+      'password': password,
+    })).called(1);
   });
 
   test('(GETX LOGIN PRESENTER) : Should emit password error if validation fails', () {

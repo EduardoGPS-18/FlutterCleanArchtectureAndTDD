@@ -15,9 +15,9 @@ void main() {
   ValidationComposite sut;
 
   void mockValidationsResponse({ValidationError error1, ValidationError error2, ValidationError error3}) {
-    when(validation1.validate(any)).thenReturn(error1 ?? null);
-    when(validation2.validate(any)).thenReturn(error2 ?? null);
-    when(validation3.validate(any)).thenReturn(error3 ?? null);
+    when(validation1.validate(any)).thenReturn(error1);
+    when(validation2.validate(any)).thenReturn(error2);
+    when(validation3.validate(any)).thenReturn(error3);
   }
 
   void mockValidationsField({String field1, String field2, String field3}) {
@@ -36,7 +36,7 @@ void main() {
   });
 
   test('Should return null if all validation returns null or empty', () {
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final error = sut.validate(field: 'any_field', input: {});
 
     expect(error, null);
   });
@@ -48,7 +48,7 @@ void main() {
       error3: ValidationError.requiredField,
     );
 
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final error = sut.validate(field: 'any_field', input: {});
 
     expect(error, ValidationError.invalidField);
   });
@@ -65,7 +65,7 @@ void main() {
       field3: 'other_field',
     );
 
-    final error = sut.validate(field: 'other_field', value: 'any_value');
+    final error = sut.validate(field: 'other_field', input: {});
 
     expect(error, ValidationError.requiredField);
   });

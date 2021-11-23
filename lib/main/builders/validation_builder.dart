@@ -31,6 +31,11 @@ class ValidationBuilder {
     return this;
   }
 
+  ValidationBuilder saveAs(String fieldToCompare) {
+    _validations.add(CompareFieldsValidation(field: fieldName, fieldToCompare: fieldToCompare));
+    return this;
+  }
+
   List<FieldValidation> build() {
     final validations = [..._validations];
     _validations.clear();

@@ -12,8 +12,8 @@ class MinLengthValidation extends Equatable implements FieldValidation {
   MinLengthValidation({@required this.field, @required this.size});
 
   @override
-  ValidationError validate(String value) {
-    return value != null && value.length >= size ? null : ValidationError.invalidField;
+  ValidationError validate(Map input) {
+    return input[field] != null && input[field].length >= size ? null : ValidationError.invalidField;
   }
 
   @override

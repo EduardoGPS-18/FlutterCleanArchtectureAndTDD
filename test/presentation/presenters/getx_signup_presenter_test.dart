@@ -28,7 +28,7 @@ void main() {
 
   PostExpectation mockValidationCall([String field]) => when(validation.validate(
         field: field == null ? anyNamed('field') : field,
-        value: anyNamed('value'),
+        input: anyNamed('input'),
       ));
   void mockValidation({String field, ValidationError value}) {
     mockValidationCall(field).thenReturn(value);
@@ -64,7 +64,12 @@ void main() {
   test('(GETX SIGNUP PRESENTER) : Should call validation with correct email', () {
     sut.validateEmail(email);
 
-    verify(validation.validate(field: 'email', value: email)).called(1);
+    verify(validation.validate(field: 'email', input: {
+      'name': null,
+      'email': email,
+      'password': null,
+      'confirmPassword': null,
+    })).called(1);
   });
 
   test('(GETX SIGNUP PRESENTER) : Should emit email error if validation fails', () {
@@ -106,7 +111,12 @@ void main() {
   test('(GETX SIGNUP PRESENTER) : Should call validation with correct name', () {
     sut.validateName(name);
 
-    verify(validation.validate(field: 'name', value: name)).called(1);
+    verify(validation.validate(field: 'name', input: {
+      'name': name,
+      'email': null,
+      'password': null,
+      'confirmPassword': null,
+    })).called(1);
   });
 
   test('(GETX SIGNUP PRESENTER) : Should emit name error if validation fails', () {
@@ -148,7 +158,12 @@ void main() {
   test('(GETX SIGNUP PRESENTER) : Should call validation with correct password', () {
     sut.validatePassword(password);
 
-    verify(validation.validate(field: 'password', value: password)).called(1);
+    verify(validation.validate(field: 'password', input: {
+      'name': null,
+      'email': null,
+      'password': password,
+      'confirmPassword': null,
+    })).called(1);
   });
 
   test('(GETX SIGNUP PRESENTER) : Should emit password error if validation fails', () {
@@ -190,7 +205,12 @@ void main() {
   test('(GETX SIGNUP PRESENTER) : Should call validation with correct confirm confirmPassword', () {
     sut.validateConfirmPassword(confirmPassword);
 
-    verify(validation.validate(field: 'confirmPassword', value: confirmPassword)).called(1);
+    verify(validation.validate(field: 'confirmPassword', input: {
+      'name': null,
+      'email': null,
+      'password': null,
+      'confirmPassword': confirmPassword,
+    })).called(1);
   });
 
   test('(GETX SIGNUP PRESENTER) : Should emit confirmPassword error if validation fails', () {

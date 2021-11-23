@@ -89,7 +89,13 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   }
 
   UIError _validateField({String field, String value}) {
-    final error = validation.validate(field: field, value: value);
+    final formData = {
+      'name': _name,
+      'email': _email,
+      'password': _password,
+      'confirmPassword': _confirmPassword,
+    };
+    final error = validation.validate(field: field, input: formData);
     switch (error) {
       case ValidationError.requiredField:
         return UIError.requiredField;

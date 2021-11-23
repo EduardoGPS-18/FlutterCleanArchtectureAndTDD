@@ -9,18 +9,18 @@ void main() {
   FieldValidation sut;
 
   setUp(() {
-    sut = RequiredFieldValidation('any');
+    sut = RequiredFieldValidation('field');
   });
 
   test('Should return null if value is not empty', () {
-    expect(sut.validate('any_value'), null);
+    expect(sut.validate({'field': 'any_value'}), null);
   });
 
   test('Should return error if value is empty', () {
-    expect(sut.validate(''), ValidationError.requiredField);
+    expect(sut.validate({'field': ''}), ValidationError.requiredField);
   });
 
   test('Should return error if value is null', () {
-    expect(sut.validate(null), ValidationError.requiredField);
+    expect(sut.validate({'field': null}), ValidationError.requiredField);
   });
 }

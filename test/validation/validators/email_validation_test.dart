@@ -8,46 +8,46 @@ import 'package:app_curso_manguinho/validation/validators/validators.dart';
 void main() {
   FieldValidation sut;
   setUp(() {
-    sut = EmailValidation('any_field');
+    sut = EmailValidation('email');
   });
 
   test('Should return null if email is empty', () {
-    expect(sut.validate(''), null);
+    expect(sut.validate({'email': ''}), null);
   });
 
   test('Should return null if email is null', () {
-    expect(sut.validate(null), null);
+    expect(sut.validate({'email': null}), null);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('testeteste.com'), ValidationError.invalidField);
+    expect(sut.validate({'email': 'testeteste.com'}), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('teste@testecom'), ValidationError.invalidField);
+    expect(sut.validate({'email': 'teste@testecom'}), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('a@a'), ValidationError.invalidField);
+    expect(sut.validate({'email': 'a@a'}), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('teste@teste.'), ValidationError.invalidField);
+    expect(sut.validate({'email': 'teste@teste.'}), ValidationError.invalidField);
   });
 
   test('Should return error if email is invalid', () {
-    expect(sut.validate('teste@teste@teste.com'), ValidationError.invalidField);
+    expect(sut.validate({'email': 'teste@teste@teste.com'}), ValidationError.invalidField);
   });
 
   test('Should return null if email is valid', () {
-    expect(sut.validate('a@a.a'), null);
+    expect(sut.validate({'email': 'a@a.a'}), null);
   });
 
   test('Should return null if email is valid', () {
-    expect(sut.validate('teste@teste.com'), null);
+    expect(sut.validate({'email': 'teste@teste.com'}), null);
   });
 
   test('Should return null if email is valid', () {
-    expect(sut.validate('teste#\$%@teste.com'), null);
+    expect(sut.validate({'email': 'teste#\$%@teste.com'}), null);
   });
 }
