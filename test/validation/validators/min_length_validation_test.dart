@@ -13,6 +13,10 @@ void main() {
     sut = MinLengthValidation(field: 'field', size: 5);
   });
 
+  test('Should return null on invalid case', () {
+    expect(sut.validate({}), ValidationError.invalidField);
+  });
+
   test('Should return error if value is empty', () {
     expect(sut.validate({'field': ''}), ValidationError.invalidField);
   });
