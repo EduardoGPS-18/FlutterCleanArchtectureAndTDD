@@ -31,7 +31,7 @@ class ValidationBuilder {
     return this;
   }
 
-  ValidationBuilder saveAs(String fieldToCompare) {
+  ValidationBuilder sameAs(String fieldToCompare) {
     _validations.add(CompareFieldsValidation(field: fieldName, fieldToCompare: fieldToCompare));
     return this;
   }

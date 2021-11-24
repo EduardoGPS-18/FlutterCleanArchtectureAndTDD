@@ -32,6 +32,11 @@ class App extends StatelessWidget {
           transition: Transition.fadeIn,
         ),
         GetPage(
+          name: '/signup',
+          page: makeSignUpPage,
+          transition: Transition.fadeIn,
+        ),
+        GetPage(
           name: '/surveys',
           page: () => Scaffold(body: Center(child: Text('Enquetes'))),
           transition: Transition.fadeIn,
