@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
 
-import 'package:app_curso_manguinho/main/factories/pages/login/login.dart';
+import 'package:app_curso_manguinho/main/factories/factories.dart';
 
 void main() {
   test('Should return the correct validations', () async {
