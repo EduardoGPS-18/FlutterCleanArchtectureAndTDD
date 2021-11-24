@@ -58,7 +58,7 @@ void main() {
   });
 
   test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
-    sut.surveysData.listen(
+    sut.surveysDataStream.listen(
       expectAsync1(
         (data) => expect(data, [
           SurveyViewModel(
@@ -84,7 +84,7 @@ void main() {
     mockLoadSurveysError();
 
     expectLater(
-      sut.surveysData,
+      sut.surveysDataStream,
       emitsError(UIError.unexpected.description),
     );
 

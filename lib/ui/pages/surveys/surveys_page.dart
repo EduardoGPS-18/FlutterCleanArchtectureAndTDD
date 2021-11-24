@@ -57,9 +57,7 @@ class SurveysPage extends StatelessWidget {
                   ),
                 );
               }
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return Center();
             },
           );
         },

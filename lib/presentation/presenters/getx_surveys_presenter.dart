@@ -7,14 +7,14 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/pages.dart';
 import '../../ui/helpers/helpers.dart';
 
-class GetxSurveysPresenter extends GetxController {
+class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
   final LoadSurveys loadSurveys;
 
   RxBool _isLoadingController = RxBool(true);
   Stream<bool> get isLoading => _isLoadingController.stream;
 
   Rx<List<SurveyViewModel>> _surveysDataController = Rx();
-  Stream<List<SurveyViewModel>> get surveysData => _surveysDataController.stream;
+  Stream<List<SurveyViewModel>> get surveysDataStream => _surveysDataController.stream;
 
   GetxSurveysPresenter({
     @required this.loadSurveys,
