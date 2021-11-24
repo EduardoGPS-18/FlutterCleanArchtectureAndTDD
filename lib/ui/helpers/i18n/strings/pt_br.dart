@@ -11,9 +11,11 @@ class PtBr implements Translations {
   String get goToSignUp => "Cadastrar-se";
   String get goToLogin => "Já sou cadastrado!";
 
-  String get invalidCredentials => "Credenciais inválidas";
+  String get unexpected => "Erro inesperado";
+  String get invalidField => "Campos inválidos";
   String get requiredField => "Campo obrigatório";
   String get emailInUse => "Email já está em uso";
-  String get invalidField => "Campos inválidos";
-  String get unexpected => "Erro inesperado";
+  String get invalidCredentials => "Credenciais inválidas";
+
+  String get surveys => "Enquetes";
 }
