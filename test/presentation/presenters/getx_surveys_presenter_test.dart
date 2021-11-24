@@ -1,43 +1,16 @@
-import 'package:intl/intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:faker/faker.dart';
+import 'package:intl/intl.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
-import 'package:get/get.dart';
-import 'dart:async';
 
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 import 'package:app_curso_manguinho/domain/usecases/load_surveys.dart';
 
+import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
+
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
-
-class GetxSurveysPresenter extends GetxController {
-  final LoadSurveys loadSurveys;
-
-  RxBool _isLoadingController = RxBool(true);
-  Stream<bool> get isLoading => _isLoadingController.stream;
-
-  Rx<List<SurveyViewModel>> _surveysDataController = Rx();
-  Stream<List<SurveyViewModel>> get surveysData => _surveysDataController.stream;
-
-  GetxSurveysPresenter({
-    @required this.loadSurveys,
-  });
-
-  Future<void> loadData() async {
-    try {
-      _isLoadingController.value = true;
-      final surveys = await loadSurveys.load();
-      _surveysDataController.value = surveys.map((e) => SurveyViewModel.fromEntity(e)).toList();
-    } on DomainError {
-      _surveysDataController.subject.addError(UIError.unexpected.description, StackTrace.empty);
-    } finally {
-      _isLoadingController.value = false;
-    }
-  }
-}
 
 class LoadSurveysSpy extends Mock implements LoadSurveys {}
 
@@ -61,14 +34,15 @@ void main() {
   ];
 
   PostExpectation mockSurveysLoadCall() => when(loadSurveys.load());
-  void mockSurveysData(List<SurveyEntity> mockedList) => mockSurveysLoadCall().thenAnswer(
+  void mockLoadSurveysData(List<SurveyEntity> mockedList) => mockSurveysLoadCall().thenAnswer(
         (_) async => mockedList,
       );
+  void mockLoadSurveysError() => mockSurveysLoadCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     loadSurveys = LoadSurveysSpy();
     sut = GetxSurveysPresenter(loadSurveys: loadSurveys);
-    mockSurveysData(validSurveysData);
+    mockLoadSurveysData(validSurveysData);
   });
 
   test('Should call load surveys usecase when sut call load data', () async {
@@ -107,7 +81,7 @@ void main() {
   });
 
   test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
-    when(loadSurveys.load()).thenThrow(DomainError.unexpected);
+    mockLoadSurveysError();
 
     expectLater(
       sut.surveysData,
