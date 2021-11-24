@@ -69,7 +69,12 @@ void main() {
     await tester.pump();
     isLoadingController.add(false);
     await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
 
+    isLoadingController.add(true);
+    await tester.pump();
+    isLoadingController.add(null);
+    await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }
