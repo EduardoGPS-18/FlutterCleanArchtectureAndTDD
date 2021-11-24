@@ -22,7 +22,7 @@ class GetxSplashPresenter implements SplashPresenter {
     try {
       final account = await loadCurrentAccount.load();
 
-      return _navigateTo.value = account.isNull ? '/login' : '/surveys';
+      return _navigateTo.value = account?.token == null ? '/login' : '/surveys';
     } on Exception {
       return _navigateTo.value = '/login';
     }
