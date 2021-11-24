@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import 'package:app_curso_manguinho/data/cache/cache.dart';
 import 'package:app_curso_manguinho/data/http/http.dart';
 
-class AuthorizedHttpClientDecorator {
+class AuthorizedHttpClientDecorator implements HttpClient {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
   final HttpClient decoratee;
 
@@ -14,7 +14,7 @@ class AuthorizedHttpClientDecorator {
     @required this.fetchSecureCacheStorage,
     @required this.decoratee,
   });
-  Future<void> request({
+  Future<dynamic> request({
     @required String url,
     @required String method,
     Map headers,
@@ -22,7 +22,7 @@ class AuthorizedHttpClientDecorator {
   }) async {
     final token = await fetchSecureCacheStorage.fetchSecure('token');
     final authorizedHeaders = (headers ?? {})..addAll({'x-access-token': token});
-    await decoratee.request(url: url, method: method, body: body, headers: authorizedHeaders);
+    return await decoratee.request(url: url, method: method, body: body, headers: authorizedHeaders);
   }
 }
 
@@ -34,30 +34,42 @@ void main() {
   String url;
   String method;
   Map body;
-  HttpClient httpClient;
+  HttpClient decoratee;
   AuthorizedHttpClientDecorator sut;
   FetchSecureCacheStorage fetchSecureCacheStorageSpy;
 
   String token;
+  String httpResponse;
 
   void mockToken() {
     token = faker.guid.guid();
     when(fetchSecureCacheStorageSpy.fetchSecure(any)).thenAnswer((_) async => token);
   }
 
+  void mockHttpResponse() {
+    httpResponse = faker.randomGenerator.string(50);
+    when(decoratee.request(
+      url: anyNamed('url'),
+      method: anyNamed('method'),
+      body: anyNamed('body'),
+      headers: anyNamed('headers'),
+    )).thenAnswer((_) async => httpResponse);
+  }
+
   setUp(() {
-    httpClient = HttpClientSpy();
+    decoratee = HttpClientSpy();
     fetchSecureCacheStorageSpy = FetchSecureCacheStorageSpy();
 
     sut = AuthorizedHttpClientDecorator(
       fetchSecureCacheStorage: fetchSecureCacheStorageSpy,
-      decoratee: httpClient,
+      decoratee: decoratee,
     );
 
     url = faker.internet.httpUrl();
     method = faker.randomGenerator.string(10);
     body = {'any_key': 'any_value'};
     mockToken();
+    mockHttpResponse();
   });
 
   test('Should call fetch secure storage with correct key', () async {
@@ -68,7 +80,7 @@ void main() {
 
   test('Should call decoratee with access token on header', () async {
     await sut.request(url: url, method: method, body: body);
-    verify(httpClient.request(
+    verify(decoratee.request(
       url: url,
       method: method,
       body: body,
@@ -76,7 +88,7 @@ void main() {
     )).called(1);
 
     await sut.request(url: url, method: method, body: body, headers: {'any_header': 'any_value'});
-    verify(httpClient.request(
+    verify(decoratee.request(
       url: url,
       method: method,
       body: body,
@@ -85,5 +97,11 @@ void main() {
         'any_header': 'any_value',
       },
     )).called(1);
+  });
+
+  test('Should return same result as decoratee', () async {
+    final response = await sut.request(url: url, method: method);
+
+    expect(response, httpResponse);
   });
 }
