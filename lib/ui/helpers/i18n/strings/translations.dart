@@ -7,6 +7,7 @@ abstract class Translations {
 
   String get goToSignUp;
   String get goToLogin;
+  String get reload;
 
   String get addAccount;
   String get email;
