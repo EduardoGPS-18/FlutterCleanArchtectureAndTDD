@@ -11,5 +11,5 @@ LoginPresenter makeGetxLoginPresenter() => GetxLoginPresenter(
         makeLoginValidations(),
       ),
       authenticationUsecase: makeRemoteAuthentication(),
-      saveCurrentAccount: null,
+      saveCurrentAccount: makeSaveCurrentAccount(),
     );
