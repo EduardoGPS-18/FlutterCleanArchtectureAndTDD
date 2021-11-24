@@ -181,11 +181,8 @@ void main() {
     mockAuthenticationError(DomainError.invalidCredentials);
     sut.validateEmail(email);
     sut.validatePassword(password);
-
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.invalidCredentials]));
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1(
-      (err) => expect(err, UIError.invalidCredentials),
-    ));
 
     await sut.auth();
   });
@@ -196,9 +193,7 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1(
-      (err) => expect(err, UIError.unexpected),
-    ));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.auth();
   });
@@ -210,25 +205,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     expectLater(await authentication.auth(params: anyNamed('params')), AccountEntity(token: token));
-
-    sut.mainErrorStream.listen(expectAsync1(
-      (err) => expect(err, UIError.unexpected),
-    ));
-
-    await sut.auth();
-  });
-
-  test('(GETX LOGIN PRESENTER) : Should thorws Unexpected error if SaveCurrentAccount fails', () async {
-    mockSaveCurrentAccountError(DomainError.unexpected);
-    sut.validateEmail(email);
-    sut.validatePassword(password);
-
-    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    expectLater(await authentication.auth(params: anyNamed('params')), AccountEntity(token: token));
-
-    sut.mainErrorStream.listen(expectAsync1(
-      (err) => expect(err, UIError.unexpected),
-    ));
+    expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.auth();
   });

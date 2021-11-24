@@ -37,6 +37,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   });
 
   Future<void> auth() async {
+    _mainError.value = null;
     try {
       _isLoading.value = true;
       final account = await authenticationUsecase.auth(
