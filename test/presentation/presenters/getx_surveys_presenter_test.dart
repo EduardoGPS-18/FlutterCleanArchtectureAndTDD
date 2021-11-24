@@ -1,32 +1,119 @@
-import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:mockito/mockito.dart';
+import 'package:faker/faker.dart';
+import 'package:test/test.dart';
 import 'package:meta/meta.dart';
 import 'package:get/get.dart';
-import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
+import 'dart:async';
 
+import 'package:app_curso_manguinho/domain/entities/entities.dart';
+import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 import 'package:app_curso_manguinho/domain/usecases/load_surveys.dart';
 
+import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
+
 class GetxSurveysPresenter extends GetxController {
-  LoadSurveys loadSurveys;
+  final LoadSurveys loadSurveys;
+
+  RxBool _isLoadingController = RxBool(true);
+  Stream<bool> get isLoading => _isLoadingController.stream;
+
+  Rx<List<SurveyViewModel>> _surveysDataController = Rx();
+  Stream<List<SurveyViewModel>> get surveysData => _surveysDataController.stream;
 
   GetxSurveysPresenter({
     @required this.loadSurveys,
   });
 
   Future<void> loadData() async {
-    await loadSurveys.load();
+    try {
+      _isLoadingController.value = true;
+      final surveys = await loadSurveys.load();
+      _surveysDataController.value = surveys.map((e) => SurveyViewModel.fromEntity(e)).toList();
+    } on DomainError {
+      _surveysDataController.subject.addError(UIError.unexpected.description, StackTrace.empty);
+    } finally {
+      _isLoadingController.value = false;
+    }
   }
 }
 
 class LoadSurveysSpy extends Mock implements LoadSurveys {}
 
 void main() {
-  test('Should call load surveys usecase when sut call load data', () async {
-    final loadSurveys = LoadSurveysSpy();
-    final sut = GetxSurveysPresenter(loadSurveys: loadSurveys);
+  GetxSurveysPresenter sut;
+  LoadSurveys loadSurveys;
 
+  List<SurveyEntity> validSurveysData = [
+    SurveyEntity(
+      dateTime: DateTime(2020, 2, 20),
+      didAnswer: faker.randomGenerator.boolean(),
+      id: faker.guid.guid(),
+      question: faker.lorem.sentence(),
+    ),
+    SurveyEntity(
+      dateTime: DateTime(2018, 10, 3),
+      didAnswer: faker.randomGenerator.boolean(),
+      id: faker.guid.guid(),
+      question: faker.lorem.sentence(),
+    ),
+  ];
+
+  PostExpectation mockSurveysLoadCall() => when(loadSurveys.load());
+  void mockSurveysData(List<SurveyEntity> mockedList) => mockSurveysLoadCall().thenAnswer(
+        (_) async => mockedList,
+      );
+
+  setUp(() {
+    loadSurveys = LoadSurveysSpy();
+    sut = GetxSurveysPresenter(loadSurveys: loadSurveys);
+    mockSurveysData(validSurveysData);
+  });
+
+  test('Should call load surveys usecase when sut call load data', () async {
     await sut.loadData();
 
     verify(loadSurveys.load()).called(1);
+  });
+
+  test('Is loading controller should emits true before call usecase method and hide on method end', () async {
+    expectLater(sut.isLoading, emitsInOrder([true, false]));
+
+    await sut.loadData();
+  });
+
+  test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
+    sut.surveysData.listen(
+      expectAsync1(
+        (data) => expect(data, [
+          SurveyViewModel(
+            date: DateFormat("dd MMM yyyy").format(validSurveysData[0].dateTime),
+            didAnswer: validSurveysData[0].didAnswer,
+            id: validSurveysData[0].id,
+            question: validSurveysData[0].question,
+          ),
+          SurveyViewModel(
+            date: DateFormat("dd MMM yyyy").format(validSurveysData[1].dateTime),
+            didAnswer: validSurveysData[1].didAnswer,
+            id: validSurveysData[1].id,
+            question: validSurveysData[1].question,
+          ),
+        ]),
+      ),
+    );
+
+    await sut.loadData();
+  });
+
+  test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
+    when(loadSurveys.load()).thenThrow(DomainError.unexpected);
+
+    expectLater(
+      sut.surveysData,
+      emitsError(UIError.unexpected.description),
+    );
+
+    await sut.loadData();
   });
 }
