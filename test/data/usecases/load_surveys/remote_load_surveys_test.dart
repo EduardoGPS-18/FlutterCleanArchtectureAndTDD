@@ -23,7 +23,7 @@ class RemoteLoadSurveys implements LoadSurveys {
     try {
       final httpResponse = await httpClient.request(url: url, method: 'get');
       return httpResponse.map((e) => RemoteSurveyModel.fromJson(e).toEntity()).toList();
-    } on HttpError catch (err) {
+    } on HttpError {
       throw DomainError.unexpected;
     }
   }
@@ -57,6 +57,7 @@ void main() {
         method: anyNamed('method'),
       ));
   void mockHttpResponseData(List<Map> data) => mockHttpRequestCall().thenAnswer((_) async => data);
+  void mockHttpResponseError(HttpError httpError) => mockHttpRequestCall().thenThrow(httpError);
 
   setUp(() {
     httpClient = HttpClientSpy();
@@ -99,6 +100,14 @@ void main() {
     mockHttpResponseData([
       {'invalid_key': 'invalid_data'}
     ]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw unexpected error if http client returns 404', () async {
+    mockHttpResponseError(HttpError.notFound);
 
     final future = sut.load();
 
