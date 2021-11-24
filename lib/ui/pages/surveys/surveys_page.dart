@@ -37,7 +37,13 @@ class SurveysPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(child: Text(snapshot.error)),
+                    Center(
+                      child: Text(
+                        snapshot.error,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    SizedBox(height: 15),
                     Center(
                       child: RaisedButton(
                         onPressed: presenter.loadData,
