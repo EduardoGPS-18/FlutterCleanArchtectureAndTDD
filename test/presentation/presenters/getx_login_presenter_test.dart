@@ -170,7 +170,6 @@ void main() {
     sut.validatePassword(password);
     sut.validateEmail(email);
 
-    sut.mainErrorStream.listen(expectAsync1((err) => expect(err, null)));
     sut.navigateToStream.listen(expectAsync1(
       (page) => expect(page, '/surveys'),
     ));

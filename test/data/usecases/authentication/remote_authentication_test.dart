@@ -8,11 +8,11 @@ import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 import 'package:app_curso_manguinho/data/http/http.dart';
 
-class HttpClientSpy extends Mock implements HttpClient {}
+class HttpClientSpy extends Mock implements HttpClient<Map> {}
 
 void main() {
   RemoteAuthentication sut;
-  HttpClient httpClient;
+  HttpClient<Map> httpClient;
   String url;
   AuthenticationParams authParams;
 

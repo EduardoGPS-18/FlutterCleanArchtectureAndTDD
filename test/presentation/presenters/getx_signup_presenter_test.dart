@@ -355,7 +355,6 @@ void main() {
     sut.validatePassword(password);
 
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
-    expectLater(sut.mainErrorStream, emits(null));
 
     await sut.signUp();
   });
