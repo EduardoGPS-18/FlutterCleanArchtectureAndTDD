@@ -34,13 +34,15 @@ class SurveysPage extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(snapshot.error),
-                    RaisedButton(
-                      onPressed: presenter.loadData,
-                      child: Text(R.strings.reload),
+                    Center(child: Text(snapshot.error)),
+                    Center(
+                      child: RaisedButton(
+                        onPressed: presenter.loadData,
+                        child: Text(R.strings.reload),
+                      ),
                     ),
                   ],
                 );

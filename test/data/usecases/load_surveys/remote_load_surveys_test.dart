@@ -8,7 +8,7 @@ import 'package:app_curso_manguinho/domain/entities/entities.dart';
 
 import 'package:app_curso_manguinho/data/http/http.dart';
 
-class HttpClientSpy extends Mock implements HttpClient<List<Map<dynamic, dynamic>>> {}
+class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   HttpClient httpClient;

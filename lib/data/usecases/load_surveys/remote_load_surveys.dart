@@ -8,7 +8,7 @@ import '../../models/models.dart';
 import '../../http/http.dart';
 
 class RemoteLoadSurveys implements LoadSurveys {
-  final HttpClient<List<Map<dynamic, dynamic>>> httpClient;
+  final HttpClient httpClient;
   final String url;
 
   RemoteLoadSurveys({

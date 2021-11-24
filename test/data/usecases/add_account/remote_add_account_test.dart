@@ -8,12 +8,12 @@ import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:app_curso_manguinho/data/http/http.dart';
 import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 
-class HttpClientSpy extends Mock implements HttpClient<Map> {}
+class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   String url;
   RemoteAddAccount sut;
-  HttpClient<Map> httpClient;
+  HttpClient httpClient;
   AddAccountParams params;
 
   PostExpectation _mockRequest() => when(httpClient.request(
