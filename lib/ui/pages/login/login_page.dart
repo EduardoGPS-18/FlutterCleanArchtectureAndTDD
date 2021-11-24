@@ -43,6 +43,7 @@ class LoginPage extends StatelessWidget {
 
           presenter.mainErrorStream.listen((error) {
             if (error != null) {
+              print(error);
               showErrorMessage(context: context, error: error.description);
             }
           });

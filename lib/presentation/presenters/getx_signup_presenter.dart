@@ -46,7 +46,6 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   });
 
   Future<AccountEntity> signUp() async {
-    _mainError.value = null;
     try {
       _isLoading.value = true;
       final account = await addAccount.add(
@@ -61,6 +60,7 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
       _navigateTo.value = '/surveys';
       return account;
     } on DomainError catch (error) {
+      _mainError.value = null;
       _mainError.value = error == DomainError.emailInUse ? UIError.emailInUse : UIError.unexpected;
       _isLoading.value = false;
     }

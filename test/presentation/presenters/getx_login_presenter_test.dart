@@ -170,6 +170,7 @@ void main() {
     sut.validatePassword(password);
     sut.validateEmail(email);
 
+    sut.mainErrorStream.listen(expectAsync1((err) => expect(err, null)));
     sut.navigateToStream.listen(expectAsync1(
       (page) => expect(page, '/surveys'),
     ));
@@ -181,6 +182,7 @@ void main() {
     mockAuthenticationError(DomainError.invalidCredentials);
     sut.validateEmail(email);
     sut.validatePassword(password);
+
     expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.invalidCredentials]));
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 

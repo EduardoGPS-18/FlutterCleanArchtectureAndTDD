@@ -37,7 +37,6 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   });
 
   Future<void> auth() async {
-    _mainError.value = null;
     try {
       _isLoading.value = true;
       final account = await authenticationUsecase.auth(
@@ -47,18 +46,18 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
       _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
       _isLoading.value = false;
-      UIError mappedError;
+      _mainError.value = null;
       switch (error) {
         case DomainError.unexpected:
-          mappedError = UIError.unexpected;
+          _mainError.value = UIError.unexpected;
           break;
         case DomainError.invalidCredentials:
-          mappedError = UIError.invalidCredentials;
+          _mainError.value = UIError.invalidCredentials;
           break;
         case DomainError.emailInUse:
+          _mainError.value = UIError.emailInUse;
           break;
       }
-      _mainError.value = mappedError;
     }
   }
 
