@@ -13,10 +13,23 @@ void main() {
   SurveysPresenter presenter;
   StreamController<bool> isLoadingController;
 
-  Future<void> loadPage(WidgetTester tester) async {
+  void initStreams() {
     isLoadingController = StreamController();
-    presenter = SurveysPresenterSpy();
+  }
+
+  void mockStreams() {
     when(presenter.isLoading).thenAnswer((_) => isLoadingController.stream);
+  }
+
+  void closeStreams() {
+    isLoadingController.close();
+  }
+
+  Future<void> loadPage(WidgetTester tester) async {
+    presenter = SurveysPresenterSpy();
+
+    initStreams();
+    mockStreams();
 
     final surveysPage = GetMaterialApp(
       initialRoute: '/surveys',
@@ -32,9 +45,7 @@ void main() {
     await tester.pumpWidget(surveysPage);
   }
 
-  tearDown(() {
-    isLoadingController.close();
-  });
+  tearDown(closeStreams);
 
   testWidgets('Should call load surveys on page load', (WidgetTester tester) async {
     await loadPage(tester);
