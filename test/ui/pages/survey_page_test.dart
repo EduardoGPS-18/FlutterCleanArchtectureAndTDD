@@ -50,6 +50,11 @@ void main() {
     await tester.pumpWidget(surveysPage);
   }
 
+  List<SurveyViewModel> makeSurveys() => [
+        SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
+        SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
+      ];
+
   tearDown(closeStreams);
 
   testWidgets('Should call load surveys on page load', (WidgetTester tester) async {
@@ -92,4 +97,19 @@ void main() {
     expect(find.text(R.strings.reload), findsOneWidget);
     expect(find.text('Question 1'), findsNothing);
   });
+
+  testWidgets('Should presents list if surveys has data', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveysDataController.add(makeSurveys());
+    await tester.pump();
+    expect(find.text(UIError.unexpected.description), findsNothing);
+    expect(find.text(R.strings.reload), findsNothing);
+    expect(find.text('Question 1'), findsWidgets);
+    expect(find.text('Question 2'), findsWidgets);
+    expect(find.text('Date 1'), findsWidgets);
+    expect(find.text('Date 2'), findsWidgets);
+  });
+
+  testWidgets('', (WidgetTester tester) async {});
 }

@@ -30,7 +30,6 @@ class SurveysPage extends StatelessWidget {
               hideLoading(ctx);
             }
           });
-
           return StreamBuilder<List<SurveyViewModel>>(
             stream: presenter.surveysDataStream,
             builder: (context, snapshot) {
@@ -47,21 +46,20 @@ class SurveysPage extends StatelessWidget {
                   ],
                 );
               }
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: CarouselSlider(
-                  items: [
-                    SurveyItem(),
-                    SurveyItem(),
-                    SurveyItem(),
-                    SurveyItem(),
-                    SurveyItem(),
-                  ],
-                  options: CarouselOptions(
-                    enlargeCenterPage: true,
-                    aspectRatio: 1,
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: CarouselSlider(
+                    items: snapshot.data.map((viewModel) => SurveyItem(viewModel)).toList(),
+                    options: CarouselOptions(
+                      enlargeCenterPage: true,
+                      aspectRatio: 1,
+                    ),
                   ),
-                ),
+                );
+              }
+              return Center(
+                child: CircularProgressIndicator(),
               );
             },
           );
