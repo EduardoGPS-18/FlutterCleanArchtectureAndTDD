@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import '../../pages.dart';
 
 class SurveyItem extends StatelessWidget {
   final SurveyViewModel _surveyViewModel;

@@ -1,12 +1,12 @@
-import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
-import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
+import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
 class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
 

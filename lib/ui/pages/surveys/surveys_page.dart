@@ -1,12 +1,11 @@
-import 'package:app_curso_manguinho/ui/components/components.dart';
-import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import 'surveys_presenter.dart';
+import '../pages.dart';
 import 'components/components.dart';
 import '../../helpers/helpers.dart';
+import '../../components/components.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
