@@ -1,3 +1,4 @@
+import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 
 void showLoading(BuildContext context) {
@@ -12,7 +13,7 @@ void showLoading(BuildContext context) {
             CircularProgressIndicator(),
             SizedBox(height: 10),
             Text(
-              'Aguarde...',
+              R.strings.wait,
               textAlign: TextAlign.center,
             ),
           ],

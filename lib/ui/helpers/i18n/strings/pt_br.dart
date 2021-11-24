@@ -3,6 +3,7 @@ import 'strings.dart';
 class PtBr implements Translations {
   String get name => "Nome";
   String get email => "Email";
+  String get wait => "Aguarde...";
   String get login => "Entrar";
   String get password => "Senha";
   String get addAccount => "Criar conta";
