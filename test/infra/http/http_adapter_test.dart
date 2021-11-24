@@ -246,7 +246,7 @@ void main() {
     });
 
     test('Should return BadRequestError if get returns 400', () async {
-      mockResponse(400, body: '');
+      mockResponse(400);
 
       final future = sut.request(url: url, method: 'get');
 
@@ -254,11 +254,19 @@ void main() {
     });
 
     test('Should return UnauthorizedError if get returns 401', () async {
-      mockResponse(401, body: '');
+      mockResponse(401);
 
       final future = sut.request(url: url, method: 'get');
 
       expect(future, throwsA(HttpError.unauthorized));
+    });
+
+    test('Should return ForbiddenError if get returns 403', () async {
+      mockResponse(403);
+
+      final future = sut.request(url: url, method: 'get');
+
+      expect(future, throwsA(HttpError.forbidden));
     });
   });
 }
