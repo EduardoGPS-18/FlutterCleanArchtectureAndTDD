@@ -4,6 +4,6 @@ import '../../../data/cache/cache.dart';
 
 import '../../../infra/cache/cache.dart';
 
-SaveSecureCacheStorage makeSaveSecureCacheStorage() => LocalStorageAdapter(
+SaveSecureCacheStorage makeSaveSecureCacheStorage() => SecureStorageAdapter(
       secureStorage: FlutterSecureStorage(),
     );

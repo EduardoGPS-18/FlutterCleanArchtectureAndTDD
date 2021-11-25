@@ -5,5 +5,5 @@ import '../../../../data/usecases/usecases.dart';
 import '../../../../main/factories/cache/local_load_storage_adapter_factory.dart';
 
 LoadCurrentAccount makeLoadCurrentAccount() => LocalLoadCurrentAccount(
-      fetchSecureCacheStorage: makeLoadSecureCacheStorage(),
+      fetchSecureCacheStorage: makeSecureCacheStorage(),
     );

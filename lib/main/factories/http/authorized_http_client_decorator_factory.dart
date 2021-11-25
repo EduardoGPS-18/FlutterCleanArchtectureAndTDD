@@ -6,6 +6,6 @@ import '../../decorators/decorators.dart';
 HttpClient makeAuthorizedHttpClientDecoratorAdapter() {
   return AuthorizedHttpClientDecorator(
     decoratee: makeHttpAdapter(),
-    fetchSecureCacheStorage: makeLoadSecureCacheStorage(),
+    fetchSecureCacheStorage: makeSecureCacheStorage(),
   );
 }
