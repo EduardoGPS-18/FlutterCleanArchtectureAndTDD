@@ -3,9 +3,10 @@ import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
-import 'package:app_curso_manguinho/domain/entities/survey_entity.dart';
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
+import 'package:app_curso_manguinho/domain/entities/survey_entity.dart';
 
+import 'package:app_curso_manguinho/data/cache/cache.dart';
 import 'package:app_curso_manguinho/data/models/models.dart';
 
 class LocalLoadSurveys {
@@ -17,7 +18,7 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     try {
-      final data = await fetchCacheStorage.fetch(key: 'surveys');
+      final data = await fetchCacheStorage.fetch('surveys');
       if (data?.isEmpty != false) {
         throw Exception();
       }
@@ -29,10 +30,6 @@ class LocalLoadSurveys {
 }
 
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {}
-
-abstract class FetchCacheStorage {
-  Future<dynamic> fetch({@required String key});
-}
 
 void main() {
   FetchCacheStorage fetchCacheStorage;
@@ -53,7 +50,7 @@ void main() {
     },
   ];
 
-  PostExpectation mockFetchCall() => when(fetchCacheStorage.fetch(key: anyNamed('key')));
+  PostExpectation mockFetchCall() => when(fetchCacheStorage.fetch(any));
   void mockFetch(List<Map> list) => mockFetchCall().thenAnswer((_) async => list);
   void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
@@ -66,7 +63,7 @@ void main() {
   test('Should call fetch cache storage with correct key', () async {
     await sut.load();
 
-    verify(fetchCacheStorage.fetch(key: 'surveys')).called(1);
+    verify(fetchCacheStorage.fetch('surveys')).called(1);
   });
 
   test('Should return a list of surveys on success', () async {
