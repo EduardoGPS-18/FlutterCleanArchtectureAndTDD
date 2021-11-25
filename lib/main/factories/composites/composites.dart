@@ -1,1 +1,1 @@
-export 'validation_composite.dart';
+export 'validation_composite_factory.dart';
