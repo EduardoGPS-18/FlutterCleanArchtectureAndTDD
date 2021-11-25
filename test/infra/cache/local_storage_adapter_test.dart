@@ -69,7 +69,10 @@ void main() {
 
   group('fetch', () {
     String result;
-    void mockFetchData() => mockFetchCall().thenAnswer((_) => result);
+    void mockFetchData() {
+      result = faker.randomGenerator.string(50);
+      mockFetchCall().thenAnswer((_) => result);
+    }
 
     setUp(() {
       mockFetchData();
