@@ -8,11 +8,11 @@ import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:app_curso_manguinho/data/cache/cache.dart';
 import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 
-class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {}
+class CacheStorageSpy extends Mock implements CacheStorage {}
 
 void main() {
   group('load', () {
-    FetchCacheStorage fetchCacheStorage;
+    CacheStorage cacheStorage;
     LocalLoadSurveys sut;
 
     List<Map> mockValidData = [
@@ -30,20 +30,20 @@ void main() {
       },
     ];
 
-    PostExpectation mockFetchCall() => when(fetchCacheStorage.fetch(any));
+    PostExpectation mockFetchCall() => when(cacheStorage.fetch(any));
     void mockFetch(List<Map> list) => mockFetchCall().thenAnswer((_) async => list);
     void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
     setUp(() {
-      fetchCacheStorage = FetchCacheStorageSpy();
-      sut = LocalLoadSurveys(fetchCacheStorage: fetchCacheStorage);
+      cacheStorage = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cacheStorage);
       mockFetch(mockValidData);
     });
 
     test('Should call fetch cache storage with correct key', () async {
       await sut.load();
 
-      verify(fetchCacheStorage.fetch('surveys')).called(1);
+      verify(cacheStorage.fetch('surveys')).called(1);
     });
 
     test('Should return a list of surveys on success', () async {
