@@ -4,7 +4,8 @@ import 'package:mockito/mockito.dart';
 import 'package:app_curso_manguinho/presentation/protocols/protocols.dart';
 
 import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
-import 'package:app_curso_manguinho/validation/validators/validators.dart';
+
+import 'package:app_curso_manguinho/main/composites/composites.dart';
 
 class FieldValidationSpy extends Mock implements FieldValidation {}
 

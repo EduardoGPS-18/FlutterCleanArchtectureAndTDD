@@ -3,6 +3,7 @@ import 'package:test/test.dart';
 import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
 
+import 'package:app_curso_manguinho/main/composites/composites.dart';
 import 'package:app_curso_manguinho/main/builders/builders.dart';
 
 void main() {
