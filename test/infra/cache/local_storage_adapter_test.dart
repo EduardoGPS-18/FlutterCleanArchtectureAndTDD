@@ -16,6 +16,7 @@ void main() {
   void mockDeleteCacheError() => when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
 
   void mockSaveError() => when(localStorageSpy.setItem(any, any)).thenThrow(Exception());
+  void mockFetchError() => when(localStorageSpy.getItem(any)).thenThrow(Exception());
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -60,6 +61,22 @@ void main() {
       mockDeleteCacheError();
 
       final future = sut.delete(key);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
+    });
+  });
+
+  group('fetch', () {
+    test('Should call local storage with correct values', () async {
+      await sut.fetch(key);
+
+      verify(localStorageSpy.getItem(key)).called(1);
+    });
+
+    test('Should rethrows if fetch throw exceptions', () async {
+      mockFetchError();
+
+      final future = sut.fetch(key);
 
       expect(future, throwsA(TypeMatcher<Exception>()));
     });
