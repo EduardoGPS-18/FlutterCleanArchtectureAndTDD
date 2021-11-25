@@ -13,9 +13,9 @@ void main() {
   LocalStorage localStorageSpy;
   LocalStorageAdapter sut;
 
-  void mockDeleteItemError() => when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
+  void mockDeleteCacheError() => when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
 
-  void mockSetItemError() => when(localStorageSpy.setItem(any, any)).thenThrow(Exception());
+  void mockSaveError() => when(localStorageSpy.setItem(any, any)).thenThrow(Exception());
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -32,7 +32,7 @@ void main() {
   });
 
   test('Should throws if delete item throws', () async {
-    mockDeleteItemError();
+    mockDeleteCacheError();
 
     final future = sut.save(key: key, value: value);
 
@@ -40,7 +40,7 @@ void main() {
   });
 
   test('Should throws if delete item throws', () async {
-    mockSetItemError();
+    mockSaveError();
 
     final future = sut.save(key: key, value: value);
 
