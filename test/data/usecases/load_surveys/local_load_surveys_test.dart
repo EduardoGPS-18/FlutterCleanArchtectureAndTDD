@@ -1,3 +1,4 @@
+import 'package:app_curso_manguinho/data/models/local_survey_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
@@ -175,6 +176,53 @@ void main() {
       await sut.validate();
 
       verify(cacheStorage.delete('surveys')).called(1);
+    });
+  });
+
+  group('save', () {
+    CacheStorage cacheStorage;
+    LocalLoadSurveys sut;
+    List<SurveyEntity> surveys;
+    List<SurveyEntity> mockSurveys() => [
+          SurveyEntity(
+            id: faker.guid.guid(),
+            question: faker.randomGenerator.string(10),
+            dateTime: DateTime.utc(2018, 02, 25),
+            didAnswer: false,
+          ),
+          SurveyEntity(
+            id: faker.guid.guid(),
+            question: faker.randomGenerator.string(10),
+            dateTime: DateTime.utc(2020, 04, 27),
+            didAnswer: true,
+          ),
+        ];
+
+    setUp(() {
+      cacheStorage = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cacheStorage);
+      surveys = mockSurveys();
+    });
+
+    test('Should call save cache storage with correct values', () async {
+      final list = [
+        {
+          'id': surveys[0].id,
+          'question': surveys[0].question,
+          'date': DateTime.utc(2018, 02, 25).toIso8601String(),
+          'didAnswer': 'false',
+        },
+        {
+          'id': surveys[1].id,
+          'question': surveys[1].question,
+          'date': DateTime.utc(2020, 04, 27).toIso8601String(),
+          'didAnswer': 'true',
+        }
+      ];
+
+      await sut.save(surveys);
+
+      verify(cacheStorage.save(key: 'surveys', value: list)).called(1);
     });
   });
 }
