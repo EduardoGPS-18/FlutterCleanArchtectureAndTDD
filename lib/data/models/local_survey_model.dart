@@ -30,7 +30,7 @@ class LocalSurveyModel {
     }
     return LocalSurveyModel(
       date: DateTime.parse(json['date']),
-      didAnswer: (json['didAnswer']) == true ? true : false,
+      didAnswer: (json['didAnswer']) == 'true' ? true : false,
       id: json['id'],
       question: json['question'],
     );
