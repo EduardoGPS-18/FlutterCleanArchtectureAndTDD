@@ -20,16 +20,17 @@ class AuthorizedHttpClientDecorator implements HttpClient {
     try {
       final token = await fetchSecureCacheStorage.fetchSecure('token');
       final authorizedHeaders = (headers ?? {})..addAll({'x-access-token': token});
-      return await decoratee.request(
+      final data = await decoratee.request(
         url: url,
         method: method,
         body: body,
         headers: authorizedHeaders,
       );
-    } on Exception {
-      throw HttpError.forbidden;
+      return data;
     } on HttpError {
       rethrow;
+    } on Exception {
+      throw HttpError.forbidden;
     }
   }
 }

@@ -106,12 +106,8 @@ void main() {
   });
 
   test('Should rethrow if decoratee throws', () async {
-    mockHttpResponseError(HttpError.badRequest);
-    final future = sut.request(url: url, method: method, body: body);
-    expect(future, throwsA(HttpError.badRequest));
-
-    mockHttpResponseError(HttpError.serverError);
-    final future2 = sut.request(url: url, method: method, body: body);
-    expect(future2, throwsA(HttpError.serverError));
+    mockHttpResponseError(HttpError.forbidden);
+    Future future = sut.request(url: url, method: method, body: body);
+    expect(future, throwsA(HttpError.forbidden));
   });
 }
