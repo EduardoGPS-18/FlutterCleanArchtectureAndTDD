@@ -1,10 +1,12 @@
-import 'package:app_curso_manguinho/data/models/models.dart';
-import 'package:app_curso_manguinho/domain/entities/survey_entity.dart';
-import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
+import 'package:mockito/mockito.dart';
 import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+import 'package:app_curso_manguinho/domain/entities/survey_entity.dart';
+import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
+
+import 'package:app_curso_manguinho/data/models/models.dart';
 
 class LocalLoadSurveys {
   final FetchCacheStorage fetchCacheStorage;
@@ -108,6 +110,19 @@ void main() {
         'id': faker.guid.guid(),
         'question': faker.randomGenerator.string(10),
         'date': 'invalidData',
+        'didAnswer': 'false',
+      },
+    ]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throws unexpected error if cache is incomplete', () async {
+    mockFetch([
+      {
+        'date': '2020-04-27T00:00:00Z',
         'didAnswer': 'false',
       },
     ]);
