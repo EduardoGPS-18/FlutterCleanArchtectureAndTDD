@@ -14,9 +14,10 @@ void main() {
   LocalStorageAdapter sut;
 
   void mockDeleteCacheError() => when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
-
   void mockSaveError() => when(localStorageSpy.setItem(any, any)).thenThrow(Exception());
-  void mockFetchError() => when(localStorageSpy.getItem(any)).thenThrow(Exception());
+
+  PostExpectation mockFetchCall() => when(localStorageSpy.getItem(any));
+  void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -67,6 +68,13 @@ void main() {
   });
 
   group('fetch', () {
+    String result;
+    void mockFetchData() => mockFetchCall().thenAnswer((_) => result);
+
+    setUp(() {
+      mockFetchData();
+    });
+
     test('Should call local storage with correct values', () async {
       await sut.fetch(key);
 
@@ -79,6 +87,12 @@ void main() {
       final future = sut.fetch(key);
 
       expect(future, throwsA(TypeMatcher<Exception>()));
+    });
+
+    test('Should returns storage value', () async {
+      final data = await sut.fetch(key);
+
+      expect(data, result);
     });
   });
 }
