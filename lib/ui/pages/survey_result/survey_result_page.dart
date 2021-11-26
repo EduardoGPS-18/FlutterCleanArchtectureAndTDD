@@ -40,20 +40,19 @@ class SurveyResultPage extends StatelessWidget {
                   reload: presenter.loadData,
                 );
               }
-
-              return ListView.builder(
-                itemCount: 4,
-                itemBuilder: (ctx, index) {
-                  if (index == 0) {
-                    return Container(
-                      padding: EdgeInsets.only(top: 40, bottom: 20, left: 20, right: 20),
-                      child: Text('Qual é seu framework web favorito?'),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).disabledColor.withAlpha(90),
-                      ),
-                    );
-                  }
-                  if (snapshot.hasData) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: 4,
+                  itemBuilder: (ctx, index) {
+                    if (index == 0) {
+                      return Container(
+                        padding: EdgeInsets.only(top: 40, bottom: 20, left: 20, right: 20),
+                        child: Text('Qual é seu framework web favorito?'),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).disabledColor.withAlpha(90),
+                        ),
+                      );
+                    }
                     return Column(
                       children: [
                         Container(
@@ -101,10 +100,10 @@ class SurveyResultPage extends StatelessWidget {
                         ),
                       ],
                     );
-                  }
-                  return Center();
-                },
-              );
+                  },
+                );
+              }
+              return Center();
             },
           );
         },
