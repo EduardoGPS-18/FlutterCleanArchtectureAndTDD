@@ -1,11 +1,12 @@
-import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:image_test_utils/image_test_utils.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
+import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
+import 'package:app_curso_manguinho/ui/pages/survey_result/components/components.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 
 class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
@@ -124,5 +125,7 @@ void main() {
     expect(find.text('Answer 1'), findsOneWidget);
     expect(find.text('100%'), findsOneWidget);
     expect(find.text('30%'), findsOneWidget);
+    expect(find.byType(ActiveIcon), findsOneWidget);
+    expect(find.byType(InactiveIcon), findsOneWidget);
   });
 }
