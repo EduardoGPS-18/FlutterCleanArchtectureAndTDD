@@ -14,7 +14,7 @@ void main() {
   SurveyResultPresenter presenter;
 
   StreamController<bool> isLoadingController;
-  StreamController<dynamic> surveysDataController;
+  StreamController<SurveyResultViewModel> surveysDataController;
 
   void initStreams() {
     surveysDataController = StreamController();
@@ -51,15 +51,33 @@ void main() {
     });
   }
 
+  SurveyResultViewModel makeSurveyResult() => SurveyResultViewModel(
+        surveyId: 'Any id',
+        question: 'Question',
+        answers: [
+          SurveyAnswerViewModel(
+            image: 'Image 0',
+            answer: 'Answer 0',
+            isCurrentAnswer: true,
+            percent: '100%',
+          ),
+          SurveyAnswerViewModel(
+            answer: 'Answer 1',
+            isCurrentAnswer: false,
+            percent: '30%',
+          ),
+        ],
+      );
+
   tearDown(closeStreams);
 
-  testWidgets('Should call load surveys on page load', (WidgetTester tester) async {
+  testWidgets('Should call load surveys on page load', (tester) async {
     await loadPage(tester);
 
     verify(presenter.loadData()).called(1);
   });
 
-  testWidgets('Should handle loading correctly', (WidgetTester tester) async {
+  testWidgets('Should handle loading correctly', (tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
@@ -71,16 +89,17 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should presents error message if surveys data has error', (WidgetTester tester) async {
+  testWidgets('Should presents error message if surveys data has error', (tester) async {
     await loadPage(tester);
 
     surveysDataController.addError(UIError.unexpected.description);
     await tester.pump();
     expect(find.text(UIError.unexpected.description), findsOneWidget);
     expect(find.text(R.strings.reload), findsOneWidget);
+    expect(find.text('Question'), findsNothing);
   });
 
-  testWidgets('Should call load surveys on reload button click', (WidgetTester tester) async {
+  testWidgets('Should call load surveys on reload button click', (tester) async {
     await loadPage(tester);
 
     surveysDataController.addError(UIError.unexpected.description);
@@ -88,5 +107,18 @@ void main() {
     await tester.tap(find.text(R.strings.reload));
 
     verify(presenter.loadData()).called(2);
+  });
+
+  testWidgets('Should presents valid data if survey result screen success ', (tester) async {
+    await loadPage(tester);
+
+    surveysDataController.add(makeSurveyResult());
+    await provideMockedNetworkImages(() async {
+      await tester.pump();
+    });
+
+    expect(find.text(UIError.unexpected.description), findsNothing);
+    expect(find.text(R.strings.reload), findsNothing);
+    expect(find.text('Question'), findsOneWidget);
   });
 }
