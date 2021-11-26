@@ -29,9 +29,7 @@ class SurveyResultPage extends StatelessWidget {
               hideLoading(context);
             }
           });
-
           presenter.loadData();
-
           return StreamBuilder<SurveyResultViewModel>(
             stream: presenter.surveysData,
             builder: (ctx, snapshot) {

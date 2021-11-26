@@ -10,7 +10,7 @@ class SurveyResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 4,
+      itemCount: viewModel.answers.length + 1,
       itemBuilder: (ctx, index) {
         if (index == 0) {
           return Container(
@@ -39,13 +39,13 @@ class SurveyResult extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: Text(
-                        'Angular',
+                        viewModel.answers[index - 1].answer,
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
                   Text(
-                    '100%',
+                    viewModel.answers[index - 1].percent,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

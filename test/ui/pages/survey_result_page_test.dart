@@ -120,5 +120,9 @@ void main() {
     expect(find.text(UIError.unexpected.description), findsNothing);
     expect(find.text(R.strings.reload), findsNothing);
     expect(find.text('Question'), findsOneWidget);
+    expect(find.text('Answer 0'), findsOneWidget);
+    expect(find.text('Answer 1'), findsOneWidget);
+    expect(find.text('100%'), findsOneWidget);
+    expect(find.text('30%'), findsOneWidget);
   });
 }
