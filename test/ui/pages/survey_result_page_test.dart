@@ -24,7 +24,7 @@ void main() {
 
   void mockStreams() {
     when(presenter.isLoading).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.surveysData).thenAnswer((_) => surveysDataController.stream);
+    when(presenter.surveyResultStream).thenAnswer((_) => surveysDataController.stream);
   }
 
   void closeStreams() {

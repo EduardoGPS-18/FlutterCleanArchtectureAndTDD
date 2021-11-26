@@ -5,24 +5,23 @@ import '../../domain/entities/entities.dart';
 import 'models.dart';
 import '../http/http.dart';
 
-class RemoteSurveyResultModel extends SurveyResultEntity {
+class RemoteSurveyResultModel {
+  final String surveyId;
+  final String question;
+  final List<RemoteSurveyAnswerResultModel> answers;
+
   RemoteSurveyResultModel({
-    @required String surveyId,
-    @required String question,
-    @required List<SurveyAnswerEntity> answers,
-  }) : super(
-          surveyId: surveyId,
-          answers: answers,
-          question: question,
-        );
+    @required this.surveyId,
+    @required this.question,
+    @required this.answers,
+  });
 
   factory RemoteSurveyResultModel.fromJson(Map json) {
     if (!json.keys.toSet().containsAll(['surveyId', 'answers', 'question'])) {
       throw HttpError.invalidData;
     }
-    final convertedAnswers = ((json['answers'] as List<Map<String, dynamic>>) ?? [])
-        .map<SurveyAnswerEntity>((ans) => RemoteSurveyAnswerResultModel.fromJson(ans).toEntity())
-        .toList();
+    final convertedAnswers =
+        (json['answers'] ?? []).map<RemoteSurveyAnswerResultModel>((ans) => RemoteSurveyAnswerResultModel.fromJson(ans)).toList();
     return RemoteSurveyResultModel(
       surveyId: json['surveyId'],
       answers: convertedAnswers,
@@ -32,7 +31,7 @@ class RemoteSurveyResultModel extends SurveyResultEntity {
 
   SurveyResultEntity toEntity() {
     return SurveyResultEntity(
-      answers: answers,
+      answers: answers.map((answer) => answer.toEntity()).toList(),
       question: question,
       surveyId: surveyId,
     );

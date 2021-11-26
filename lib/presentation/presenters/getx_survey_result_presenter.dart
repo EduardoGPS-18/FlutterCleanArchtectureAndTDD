@@ -5,7 +5,7 @@ import '../../ui/pages/pages.dart';
 import '../../ui/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
-class GetxSurveyResultPresenter {
+class GetxSurveyResultPresenter implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
   final String surveyId;
 

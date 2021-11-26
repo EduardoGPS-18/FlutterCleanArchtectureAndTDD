@@ -31,7 +31,7 @@ class SurveyResultPage extends StatelessWidget {
           });
           presenter.loadData();
           return StreamBuilder<SurveyResultViewModel>(
-            stream: presenter.surveysData,
+            stream: presenter.surveyResultStream,
             builder: (ctx, snapshot) {
               if (snapshot.hasError) {
                 return ReloadScreen(

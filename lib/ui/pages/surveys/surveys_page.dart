@@ -31,7 +31,7 @@ class SurveysPage extends StatelessWidget {
             }
           });
           presenter.navigateTo.listen((page) {
-            if (page?.isNotEmpty == true) {
+            if (page != null && page.isNotEmpty == true) {
               Get.toNamed(page);
             }
           });

@@ -9,6 +9,8 @@ import 'package:app_curso_manguinho/main/decorators/decorators.dart';
 
 class FetchSecureCacheStorageSpy extends Mock implements FetchSecureCacheStorage {}
 
+class DeleteSecureCacheStorageSpy extends Mock implements DeleteSecureCacheStorage {}
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
@@ -18,6 +20,7 @@ void main() {
   HttpClient decoratee;
   AuthorizedHttpClientDecorator sut;
   FetchSecureCacheStorage fetchSecureCacheStorageSpy;
+  DeleteSecureCacheStorage deleteSecureCacheStorageSpy;
 
   String token;
   String httpResponse;
@@ -51,9 +54,11 @@ void main() {
   setUp(() {
     decoratee = HttpClientSpy();
     fetchSecureCacheStorageSpy = FetchSecureCacheStorageSpy();
+    deleteSecureCacheStorageSpy = DeleteSecureCacheStorageSpy();
 
     sut = AuthorizedHttpClientDecorator(
       fetchSecureCacheStorage: fetchSecureCacheStorageSpy,
+      deleteSecureCacheStorage: deleteSecureCacheStorageSpy,
       decoratee: decoratee,
     );
 
@@ -103,6 +108,7 @@ void main() {
     final future = sut.request(url: url, method: method, body: body);
 
     expect(future, throwsA(HttpError.forbidden));
+    verify(deleteSecureCacheStorageSpy.deleteSecure('token')).called(1);
   });
 
   test('Should rethrow if decoratee throws', () async {

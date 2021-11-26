@@ -4,18 +4,18 @@ import '../../domain/entities/entities.dart';
 
 import '../http/http.dart';
 
-class RemoteSurveyAnswerResultModel extends SurveyAnswerEntity {
+class RemoteSurveyAnswerResultModel {
+  final String image;
+  final String answer;
+  final bool isCurrentAccountAnswer;
+  final int percent;
+
   RemoteSurveyAnswerResultModel({
-    @required int percent,
-    @required bool isCurrentAccountAnswer,
-    @required String answer,
-    @required String image,
-  }) : super(
-          percent: percent,
-          isCurrentAnswer: isCurrentAccountAnswer,
-          answer: answer,
-          image: image,
-        );
+    @required this.percent,
+    @required this.isCurrentAccountAnswer,
+    @required this.answer,
+    @required this.image,
+  });
 
   factory RemoteSurveyAnswerResultModel.fromJson(Map json) {
     if (!json.keys.toSet().containsAll(['percent', 'answer', 'isCurrentAccountAnswer'])) {
@@ -32,7 +32,7 @@ class RemoteSurveyAnswerResultModel extends SurveyAnswerEntity {
   SurveyAnswerEntity toEntity() => SurveyAnswerEntity(
         answer: answer,
         image: image,
-        isCurrentAnswer: isCurrentAnswer,
+        isCurrentAnswer: isCurrentAccountAnswer,
         percent: percent,
       );
 }
