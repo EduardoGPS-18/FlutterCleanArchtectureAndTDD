@@ -1,3 +1,4 @@
+import 'package:app_curso_manguinho/ui/components/components.dart';
 import 'package:flutter/material.dart';
 
 import '../pages.dart';
@@ -20,7 +21,16 @@ class SurveyResultPage extends StatelessWidget {
       ),
       body: Builder(
         builder: (_) {
+          presenter.isLoading.listen((isLoading) {
+            if (isLoading == true) {
+              showLoading(context);
+            } else {
+              hideLoading(context);
+            }
+          });
+
           presenter.loadData();
+
           return ListView.builder(
             itemBuilder: (ctx, index) {
               if (index == 0) {
