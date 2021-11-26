@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../survey_result_viewmodel.dart';
+import 'components.dart';
 
 class SurveyResult extends StatelessWidget {
   final SurveyResultViewModel viewModel;
@@ -64,32 +65,6 @@ class SurveyResult extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class ActiveIcon extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: Icon(
-        Icons.check_circle,
-        color: Theme.of(context).highlightColor,
-      ),
-    );
-  }
-}
-
-class InactiveIcon extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: Icon(
-        Icons.check_circle,
-        color: Theme.of(context).highlightColor,
-      ),
     );
   }
 }
