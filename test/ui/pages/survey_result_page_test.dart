@@ -114,6 +114,7 @@ void main() {
     await loadPage(tester);
 
     surveysDataController.add(makeSurveyResult());
+
     await provideMockedNetworkImages(() async {
       await tester.pump();
     });
@@ -127,5 +128,8 @@ void main() {
     expect(find.text('30%'), findsOneWidget);
     expect(find.byType(ActiveIcon), findsOneWidget);
     expect(find.byType(InactiveIcon), findsOneWidget);
+
+    final image = tester.widget<Image>(find.byType(Image)).image as NetworkImage;
+    expect(image.url, 'Image 0');
   });
 }

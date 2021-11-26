@@ -33,10 +33,11 @@ class SurveyResult extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.network(
-                    'http://fordevs.herokuapp.com/static/img/logo-angular.png',
-                    width: 40,
-                  ),
+                  if (currentAnswer.image != null)
+                    Image.network(
+                      currentAnswer.image,
+                      width: 40,
+                    ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
