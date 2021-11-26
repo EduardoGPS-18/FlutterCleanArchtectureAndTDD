@@ -3,9 +3,9 @@ import 'package:meta/meta.dart';
 
 class SurveyEntity extends Equatable {
   final String id;
+  final bool didAnswer;
   final String question;
   final DateTime dateTime;
-  final bool didAnswer;
 
   SurveyEntity({
     @required this.id,
