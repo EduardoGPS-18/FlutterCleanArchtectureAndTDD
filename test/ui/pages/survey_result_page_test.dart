@@ -79,4 +79,14 @@ void main() {
     expect(find.text(UIError.unexpected.description), findsOneWidget);
     expect(find.text(R.strings.reload), findsOneWidget);
   });
+
+  testWidgets('Should call load surveys on reload button click', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveysDataController.addError(UIError.unexpected.description);
+    await tester.pump();
+    await tester.tap(find.text(R.strings.reload));
+
+    verify(presenter.loadData()).called(2);
+  });
 }
