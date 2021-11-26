@@ -1,3 +1,4 @@
+import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_test_utils/image_test_utils.dart';
@@ -13,16 +14,20 @@ void main() {
   SurveyResultPresenter presenter;
 
   StreamController<bool> isLoadingController;
+  StreamController<dynamic> surveysDataController;
 
   void initStreams() {
+    surveysDataController = StreamController();
     isLoadingController = StreamController();
   }
 
   void mockStreams() {
     when(presenter.isLoading).thenAnswer((_) => isLoadingController.stream);
+    when(presenter.surveysData).thenAnswer((_) => surveysDataController.stream);
   }
 
   void closeStreams() {
+    surveysDataController.close();
     isLoadingController.close();
   }
 
@@ -64,5 +69,14 @@ void main() {
     isLoadingController.add(false);
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('Should presents error message if surveys data has error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    surveysDataController.addError(UIError.unexpected.description);
+    await tester.pump();
+    expect(find.text(UIError.unexpected.description), findsOneWidget);
+    expect(find.text(R.strings.reload), findsOneWidget);
   });
 }
