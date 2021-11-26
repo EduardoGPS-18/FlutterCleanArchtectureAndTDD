@@ -2,10 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../components/components.dart';
+import '../../helpers/helpers.dart';
 import '../pages.dart';
 import 'components/components.dart';
-import '../../helpers/helpers.dart';
-import '../../components/components.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
@@ -34,24 +34,9 @@ class SurveysPage extends StatelessWidget {
             stream: presenter.surveysDataStream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Text(
-                        snapshot.error,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Center(
-                      child: RaisedButton(
-                        onPressed: presenter.loadData,
-                        child: Text(R.strings.reload),
-                      ),
-                    ),
-                  ],
+                return ReloadScreen(
+                  error: snapshot.error,
+                  reload: presenter.loadData,
                 );
               }
               if (snapshot.hasData) {
