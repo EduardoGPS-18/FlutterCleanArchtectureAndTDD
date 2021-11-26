@@ -7,6 +7,7 @@ import '../ui/components/components.dart';
 import 'factories/pages/pages.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(App());
 }
 

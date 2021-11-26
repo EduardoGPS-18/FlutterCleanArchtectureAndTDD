@@ -24,16 +24,22 @@ class HttpAdapter implements HttpClient {
     Response response = Response('', 500);
     try {
       if (method == 'post') {
-        response = await client.post(
-          url,
-          headers: defaultheaders,
-          body: jsonBody,
-        );
+        response = await client
+            .post(
+              url,
+              headers: defaultheaders,
+              body: jsonBody,
+            )
+            .timeout(
+              Duration(seconds: 10),
+            );
       } else if (method == 'get') {
-        response = await client.get(
-          url,
-          headers: defaultheaders,
-        );
+        response = await client
+            .get(
+              url,
+              headers: defaultheaders,
+            )
+            .timeout(Duration(seconds: 10));
       }
     } on Exception {
       throw HttpError.serverError;
