@@ -90,4 +90,10 @@ void main() {
 
     await sut.loadData();
   });
+
+  test('Should go to survey result page on call go to survey result', () async {
+    sut.navigateTo.listen(expectAsync1((page) => '/survey_result/any_route'));
+
+    sut.goToSurveyResult('any_route');
+  });
 }

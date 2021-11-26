@@ -13,9 +13,11 @@ class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
 void main() {
   SurveysPresenter presenter;
   StreamController<bool> isLoadingController;
+  StreamController<String> navigateToController;
   StreamController<List<SurveyViewModel>> surveysDataController;
 
   void initStreams() {
+    navigateToController = StreamController();
     isLoadingController = StreamController();
     surveysDataController = StreamController();
   }
@@ -23,14 +25,16 @@ void main() {
   void mockStreams() {
     when(presenter.isLoading).thenAnswer((_) => isLoadingController.stream);
     when(presenter.surveysDataStream).thenAnswer((_) => surveysDataController.stream);
+    when(presenter.navigateTo).thenAnswer((_) => navigateToController.stream);
   }
 
   void closeStreams() {
     surveysDataController.close();
     isLoadingController.close();
+    navigateToController.close();
   }
 
-  Future<void> loadPage(WidgetTester tester) async {
+  Future<void> loadPage(tester) async {
     presenter = SurveysPresenterSpy();
 
     initStreams();
@@ -45,6 +49,12 @@ void main() {
             presenter: presenter,
           ),
         ),
+        GetPage(
+          name: '/any_route',
+          page: () => Center(
+            child: Text('fake page'),
+          ),
+        ),
       ],
     );
     await tester.pumpWidget(surveysPage);
@@ -57,13 +67,13 @@ void main() {
 
   tearDown(closeStreams);
 
-  testWidgets('Should call load surveys on page load', (WidgetTester tester) async {
+  testWidgets('Should call load surveys on page load', (tester) async {
     await loadPage(tester);
 
     verify(presenter.loadData()).called(1);
   });
 
-  testWidgets('Should show loading', (WidgetTester tester) async {
+  testWidgets('Should show loading', (tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
@@ -72,7 +82,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets('Should hide loading', (WidgetTester tester) async {
+  testWidgets('Should hide loading', (tester) async {
     await loadPage(tester);
 
     isLoadingController.add(true);
@@ -88,7 +98,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should presents error message if surveys data has error', (WidgetTester tester) async {
+  testWidgets('Should presents error message if surveys data has error', (tester) async {
     await loadPage(tester);
 
     surveysDataController.addError(UIError.unexpected.description);
@@ -98,7 +108,7 @@ void main() {
     expect(find.text('Question 1'), findsNothing);
   });
 
-  testWidgets('Should presents list if surveys has data', (WidgetTester tester) async {
+  testWidgets('Should presents list if surveys has data', (tester) async {
     await loadPage(tester);
 
     surveysDataController.add(makeSurveys());
@@ -111,7 +121,7 @@ void main() {
     expect(find.text('Date 2'), findsWidgets);
   });
 
-  testWidgets('Should call load surveys on reload button click', (WidgetTester tester) async {
+  testWidgets('Should call load surveys on reload button click', (tester) async {
     await loadPage(tester);
 
     surveysDataController.addError(UIError.unexpected.description);
@@ -120,4 +130,33 @@ void main() {
 
     verify(presenter.loadData()).called(2);
   });
+
+  testWidgets(
+    'Should call go to survey result on survey click',
+    (tester) async {
+      await loadPage(tester);
+
+      final surveys = makeSurveys();
+      surveysDataController.add(surveys);
+      await tester.pump();
+
+      final button = find.text(surveys[0].question);
+      await tester.tap(button);
+
+      verify(presenter.goToSurveyResult(surveys[0].id)).called(1);
+    },
+  );
+
+  testWidgets(
+    'Should change page',
+    (WidgetTester tester) async {
+      await loadPage(tester);
+
+      navigateToController.add('/any_route');
+      await tester.pumpAndSettle();
+
+      expect(Get.currentRoute, '/any_route');
+      expect(find.text('fake page'), findsOneWidget);
+    },
+  );
 }
