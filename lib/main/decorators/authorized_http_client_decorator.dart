@@ -20,7 +20,7 @@ class AuthorizedHttpClientDecorator implements HttpClient {
     Map body,
   }) async {
     try {
-      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      final token = await fetchSecureCacheStorage.fetch('token');
       final authorizedHeaders = (headers ?? {})..addAll({'x-access-token': token});
       final data = await decoratee.request(
         url: url,
@@ -33,7 +33,7 @@ class AuthorizedHttpClientDecorator implements HttpClient {
       if (error is HttpError && error != HttpError.forbidden) {
         rethrow;
       } else {
-        await deleteSecureCacheStorage.deleteSecure('token');
+        await deleteSecureCacheStorage.delete('token');
         throw HttpError.forbidden;
       }
     }

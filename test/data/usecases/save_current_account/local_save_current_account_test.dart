@@ -22,7 +22,7 @@ void main() {
     account = AccountEntity(token: faker.guid.guid());
   });
 
-  PostExpectation mockSaveSecureCall() => when(saveSecureCacheStorage.saveSecure(
+  PostExpectation mockSaveSecureCall() => when(saveSecureCacheStorage.save(
         key: anyNamed('key'),
         value: anyNamed('value'),
       ));
@@ -31,7 +31,7 @@ void main() {
   test('Should call save secure cache storage with correct values', () async {
     await sut.save(account);
 
-    verify(saveSecureCacheStorage.saveSecure(key: 'token', value: account.token));
+    verify(saveSecureCacheStorage.save(key: 'token', value: account.token));
   });
 
   test('Should throw unexpected error if save secure cache storage with correct values', () async {

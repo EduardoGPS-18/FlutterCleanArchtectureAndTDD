@@ -25,7 +25,7 @@ void main() {
   String token;
   String httpResponse;
 
-  PostExpectation mockTokenCall() => when(fetchSecureCacheStorageSpy.fetchSecure(any));
+  PostExpectation mockTokenCall() => when(fetchSecureCacheStorageSpy.fetch(any));
   PostExpectation mockHttpResponseCall() => when(decoratee.request(
         url: anyNamed('url'),
         method: anyNamed('method'),
@@ -72,7 +72,7 @@ void main() {
   test('Should call fetch secure storage with correct key', () async {
     await sut.request(url: url, method: method, body: body);
 
-    verify(fetchSecureCacheStorageSpy.fetchSecure('token')).called(1);
+    verify(fetchSecureCacheStorageSpy.fetch('token')).called(1);
   });
 
   test('Should call decoratee with access token on header', () async {
@@ -114,10 +114,10 @@ void main() {
     mockHttpResponseError(HttpError.forbidden);
 
     Future future = sut.request(url: url, method: method, body: body);
-    await untilCalled(deleteSecureCacheStorageSpy.deleteSecure('token'));
+    await untilCalled(deleteSecureCacheStorageSpy.delete('token'));
 
     expect(future, throwsA(HttpError.forbidden));
-    verify(deleteSecureCacheStorageSpy.deleteSecure('token')).called(1);
+    verify(deleteSecureCacheStorageSpy.delete('token')).called(1);
   });
 
   test('Should cache if request throws forbidden error', () async {
@@ -126,6 +126,6 @@ void main() {
     final future = sut.request(url: url, method: method, body: body);
 
     expect(future, throwsA(HttpError.forbidden));
-    verify(deleteSecureCacheStorageSpy.deleteSecure('token')).called(1);
+    verify(deleteSecureCacheStorageSpy.delete('token')).called(1);
   });
 }
