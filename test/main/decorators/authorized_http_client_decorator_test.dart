@@ -108,12 +108,24 @@ void main() {
     final future = sut.request(url: url, method: method, body: body);
 
     expect(future, throwsA(HttpError.forbidden));
+  });
+
+  test('Should rethrow if decoratee throws and remove cached token', () async {
+    mockHttpResponseError(HttpError.forbidden);
+
+    Future future = sut.request(url: url, method: method, body: body);
+    await untilCalled(deleteSecureCacheStorageSpy.deleteSecure('token'));
+
+    expect(future, throwsA(HttpError.forbidden));
     verify(deleteSecureCacheStorageSpy.deleteSecure('token')).called(1);
   });
 
-  test('Should rethrow if decoratee throws', () async {
-    mockHttpResponseError(HttpError.forbidden);
-    Future future = sut.request(url: url, method: method, body: body);
+  test('Should cache if request throws forbidden error', () async {
+    mockTokenError();
+
+    final future = sut.request(url: url, method: method, body: body);
+
     expect(future, throwsA(HttpError.forbidden));
+    verify(deleteSecureCacheStorageSpy.deleteSecure('token')).called(1);
   });
 }
