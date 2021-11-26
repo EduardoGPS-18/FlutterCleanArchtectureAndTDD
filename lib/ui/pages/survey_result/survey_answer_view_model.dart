@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import 'package:app_curso_manguinho/domain/entities/entities.dart';
-import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import '../../../domain/entities/entities.dart';
 
 class SurveyAnswerViewModel extends Equatable {
   final String image;

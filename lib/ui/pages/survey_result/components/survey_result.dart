@@ -1,4 +1,3 @@
-import 'package:app_curso_manguinho/ui/pages/survey_result/survey_answer_view_model.dart';
 import 'package:flutter/material.dart';
 
 import '../survey_result_viewmodel.dart';

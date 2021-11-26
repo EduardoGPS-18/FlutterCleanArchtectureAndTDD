@@ -3,13 +3,13 @@ import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
-import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 
 import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 
-import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
 

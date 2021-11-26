@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import 'package:app_curso_manguinho/domain/entities/entities.dart';
-import 'package:app_curso_manguinho/ui/pages/pages.dart';
+import '../../../domain/entities/entities.dart';
 
+import '../pages.dart';
 import 'survey_answer_view_model.dart';
 
 class SurveyResultViewModel extends Equatable {
