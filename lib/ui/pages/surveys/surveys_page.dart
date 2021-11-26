@@ -40,15 +40,8 @@ class SurveysPage extends StatelessWidget {
                 );
               }
               if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: CarouselSlider(
-                    items: snapshot.data.map((viewModel) => SurveyItem(viewModel)).toList(),
-                    options: CarouselOptions(
-                      enlargeCenterPage: true,
-                      aspectRatio: 1,
-                    ),
-                  ),
+                return SurveyItems(
+                  snapshot.data,
                 );
               }
               return Center();
