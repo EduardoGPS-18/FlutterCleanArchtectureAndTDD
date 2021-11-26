@@ -21,6 +21,7 @@ class SurveyResult extends StatelessWidget {
             ),
           );
         }
+        final currentAnswer = viewModel.answers[index - 1];
         return Column(
           children: [
             Container(
@@ -39,13 +40,13 @@ class SurveyResult extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: Text(
-                        viewModel.answers[index - 1].answer,
+                        currentAnswer.answer,
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
                   Text(
-                    viewModel.answers[index - 1].percent,
+                    currentAnswer.percent,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
