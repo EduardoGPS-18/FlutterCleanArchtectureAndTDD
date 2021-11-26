@@ -38,6 +38,7 @@ void main() {
         (_) async => mockedList,
       );
   void mockLoadSurveysError() => mockSurveysLoadCall().thenThrow(DomainError.unexpected);
+  void mockAccessDeniedError() => mockSurveysLoadCall().thenThrow(DomainError.accessDenied);
 
   setUp(() {
     loadSurveys = LoadSurveysSpy();
@@ -86,6 +87,21 @@ void main() {
     expectLater(
       sut.surveysDataStream,
       emitsError(UIError.unexpected.description),
+    );
+
+    await sut.loadData();
+  });
+
+  test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
+    mockAccessDeniedError();
+
+    expectLater(
+      sut.isLoading,
+      emitsInOrder([true, false]),
+    );
+    expectLater(
+      sut.isSessionExpiredStream,
+      emits(true),
     );
 
     await sut.loadData();

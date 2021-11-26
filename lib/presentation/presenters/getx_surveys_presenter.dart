@@ -13,6 +13,9 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
   RxBool _isLoadingController = RxBool(true);
   Stream<bool> get isLoading => _isLoadingController.stream;
 
+  Rx<bool> _isSessionExpiredController = Rx();
+  Stream<bool> get isSessionExpiredStream => _isSessionExpiredController.stream;
+
   Rx<String> navigateToController = Rx();
   Stream<String> get navigateTo => navigateToController.stream;
 
@@ -28,7 +31,11 @@ class GetxSurveysPresenter extends GetxController implements SurveysPresenter {
       _isLoadingController.value = true;
       final surveys = await loadSurveys.load();
       _surveysDataController.value = surveys.map((e) => SurveyViewModel.fromEntity(e)).toList();
-    } on DomainError {
+    } on DomainError catch (error) {
+      if (error == DomainError.accessDenied) {
+        _isSessionExpiredController.value = true;
+      }
+
       _surveysDataController.subject.addError(UIError.unexpected.description, StackTrace.empty);
     } finally {
       _isLoadingController.value = false;

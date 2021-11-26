@@ -45,6 +45,7 @@ void main() {
   }
 
   void mockLoadSurveyResultError() => mockLoadSurveyResultCall().thenThrow(DomainError.unexpected);
+  void mockAccessDeniedError() => mockLoadSurveyResultCall().thenThrow(DomainError.accessDenied);
 
   setUp(() {
     surveyId = faker.randomGenerator.string(50);
@@ -103,6 +104,21 @@ void main() {
           UIError.unexpected.description,
         ),
       ),
+    );
+
+    await sut.loadData();
+  });
+
+  test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
+    mockAccessDeniedError();
+
+    expectLater(
+      sut.isLoading,
+      emitsInOrder([true, false]),
+    );
+    expectLater(
+      sut.isSessionExpiredStream,
+      emits(true),
     );
 
     await sut.loadData();

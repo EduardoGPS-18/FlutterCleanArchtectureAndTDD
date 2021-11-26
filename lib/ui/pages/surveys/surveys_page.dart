@@ -1,13 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+import 'package:get/get.dart';
 
-import '../../components/components.dart';
-import '../../helpers/helpers.dart';
 import '../pages.dart';
 import 'components/components.dart';
+import '../../helpers/helpers.dart';
+import '../../components/components.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
@@ -28,6 +27,11 @@ class SurveysPage extends StatelessWidget {
               showLoading(ctx);
             } else {
               hideLoading(ctx);
+            }
+          });
+          presenter.isSessionExpiredStream.listen((isExpired) {
+            if (isExpired == true) {
+              Get.offAllNamed('/login');
             }
           });
           presenter.navigateTo.listen((page) {
