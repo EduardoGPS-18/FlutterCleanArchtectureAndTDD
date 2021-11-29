@@ -13,10 +13,14 @@ import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
 
+class SaveSurveyResultSpy extends Mock implements SaveSurveyResult {}
+
 void main() {
   GetxSurveyResultPresenter sut;
   LoadSurveyResult loadSurveyResult;
+  SaveSurveyResult saveSurveyResult;
   String surveyId;
+  String answer;
 
   SurveyResultEntity surveyResult = SurveyResultEntity(
     surveyId: faker.guid.guid(),
@@ -48,79 +52,93 @@ void main() {
   void mockAccessDeniedError() => mockLoadSurveyResultCall().thenThrow(DomainError.accessDenied);
 
   setUp(() {
+    answer = faker.randomGenerator.string(50);
     surveyId = faker.randomGenerator.string(50);
+    saveSurveyResult = SaveSurveyResultSpy();
     loadSurveyResult = LoadSurveyResultSpy();
+
     sut = GetxSurveyResultPresenter(
       loadSurveyResult: loadSurveyResult,
+      saveSurveyResult: saveSurveyResult,
       surveyId: surveyId,
     );
     mockLoadSurveyResult(surveyResult);
   });
 
-  test('Should call load surveys usecase when sut call load data', () async {
-    await sut.loadData();
+  group('load data', () {
+    test('Should call load surveys usecase when sut call load data', () async {
+      await sut.loadData();
 
-    verify(loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
-  });
+      verify(loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
+    });
 
-  test('Should emit correct events on success', () async {
-    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    test('Should emit correct events on success', () async {
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 
-    sut.surveyResultStream.listen(expectAsync1(
-      (result) => expect(
-        result,
-        SurveyResultViewModel(
-          surveyId: surveyResult.surveyId,
-          question: surveyResult.question,
-          answers: [
-            SurveyAnswerViewModel(
-              image: surveyResult.answers[0].image,
-              answer: surveyResult.answers[0].answer,
-              isCurrentAnswer: surveyResult.answers[0].isCurrentAnswer,
-              percent: '${surveyResult.answers[0].percent}%',
-            ),
-            SurveyAnswerViewModel(
-              answer: surveyResult.answers[1].answer,
-              isCurrentAnswer: surveyResult.answers[1].isCurrentAnswer,
-              percent: '${surveyResult.answers[1].percent}%',
-            ),
-          ],
+      sut.surveyResultStream.listen(expectAsync1(
+        (result) => expect(
+          result,
+          SurveyResultViewModel(
+            surveyId: surveyResult.surveyId,
+            question: surveyResult.question,
+            answers: [
+              SurveyAnswerViewModel(
+                image: surveyResult.answers[0].image,
+                answer: surveyResult.answers[0].answer,
+                isCurrentAnswer: surveyResult.answers[0].isCurrentAnswer,
+                percent: '${surveyResult.answers[0].percent}%',
+              ),
+              SurveyAnswerViewModel(
+                answer: surveyResult.answers[1].answer,
+                isCurrentAnswer: surveyResult.answers[1].isCurrentAnswer,
+                percent: '${surveyResult.answers[1].percent}%',
+              ),
+            ],
+          ),
         ),
-      ),
-    ));
+      ));
 
-    await sut.loadData();
-  });
+      await sut.loadData();
+    });
 
-  test('Should thorws error if load survey result throws', () async {
-    mockLoadSurveyResultError();
+    test('Should thorws error if load survey result throws', () async {
+      mockLoadSurveyResultError();
 
-    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.surveyResultStream.listen(
-      null,
-      onError: expectAsync1(
-        (error) => expect(
-          error,
-          UIError.unexpected.description,
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      sut.surveyResultStream.listen(
+        null,
+        onError: expectAsync1(
+          (error) => expect(
+            error,
+            UIError.unexpected.description,
+          ),
         ),
-      ),
-    );
+      );
 
-    await sut.loadData();
+      await sut.loadData();
+    });
+
+    test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
+      mockAccessDeniedError();
+
+      expectLater(
+        sut.isLoadingStream,
+        emitsInOrder([true, false]),
+      );
+      expectLater(
+        sut.isSessionExpiredStream,
+        emits(true),
+      );
+
+      await sut.loadData();
+    });
   });
 
-  test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
-    mockAccessDeniedError();
+  group('save', () {
+    test('Should call save surveys result on save', () async {
+      await sut.save(answer: answer);
 
-    expectLater(
-      sut.isLoadingStream,
-      emitsInOrder([true, false]),
-    );
-    expectLater(
-      sut.isSessionExpiredStream,
-      emits(true),
-    );
-
-    await sut.loadData();
+      verify(saveSurveyResult.save(answer: answer)).called(1);
+    });
   });
 }

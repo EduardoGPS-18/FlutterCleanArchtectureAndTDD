@@ -9,12 +9,14 @@ import '../../domain/usecases/usecases.dart';
 
 class GetxSurveyResultPresenter extends GetxController with SessionManager, LoadingManager implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
+  final SaveSurveyResult saveSurveyResult;
   final String surveyId;
 
   Rx<SurveyResultViewModel> _surveyResultController = Rx();
   Stream<SurveyResultViewModel> get surveyResultStream => _surveyResultController.stream;
 
   GetxSurveyResultPresenter({
+    @required this.saveSurveyResult,
     @required this.surveyId,
     @required this.loadSurveyResult,
   });
@@ -35,5 +37,7 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
   }
 
   @override
-  Future<void> save({@required String answer}) async {}
+  Future<void> save({@required String answer}) async {
+    await saveSurveyResult.save(answer: answer);
+  }
 }
