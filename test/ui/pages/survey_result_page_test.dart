@@ -2,12 +2,13 @@ import 'package:image_test_utils/image_test_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
-import 'package:get/get.dart';
 import 'dart:async';
 
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
 import 'package:app_curso_manguinho/ui/pages/survey_result/components/components.dart';
+
+import '../helpers/helpers.dart';
 
 class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
 
@@ -39,22 +40,11 @@ void main() {
     presenter = SurveyResultPresenterSpy();
     mockStreams();
     initStreams();
-    final surveysPage = GetMaterialApp(
-      initialRoute: '/survey_result/any_survey_id',
-      getPages: [
-        GetPage(
-          name: '/survey_result/:any_survey_id',
-          page: () => SurveyResultPage(
-            presenter: presenter,
-          ),
-        ),
-        GetPage(
-          name: '/login',
-          page: () => Center(
-            child: Text('fake login'),
-          ),
-        ),
-      ],
+    final surveysPage = makePage(
+      path: '/survey_result/any_survey_id',
+      page: () => SurveyResultPage(
+        presenter: presenter,
+      ),
     );
     await provideMockedNetworkImages(() async {
       await tester.pumpWidget(surveysPage);
@@ -150,7 +140,7 @@ void main() {
       isSessionExpiredController.add(true);
       await tester.pumpAndSettle();
 
-      expect(Get.currentRoute, '/login');
+      expect(currentPage, '/login');
       expect(find.text('fake login'), findsOneWidget);
     },
   );
@@ -165,7 +155,7 @@ void main() {
       isSessionExpiredController.add(null);
       await tester.pumpAndSettle();
 
-      expect(Get.currentRoute, '/survey_result/any_survey_id');
+      expect(currentPage, '/survey_result/any_survey_id');
       expect(find.text('fake login'), findsNothing);
     },
   );

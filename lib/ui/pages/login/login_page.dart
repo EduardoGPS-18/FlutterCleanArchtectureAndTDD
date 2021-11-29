@@ -20,19 +20,14 @@ class _LoginPageState extends State<LoginPage> with KeyboardManager, LoadingMana
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
-  void initState() {
-    handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
-    handleLoading(context: context, stream: widget.presenter.isLoadingStream);
-    handleMainError(stream: widget.presenter.mainErrorStream, scaffoldKey: scaffoldKey);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       body: Builder(
         builder: (context) {
+          handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
+          handleLoading(context: context, stream: widget.presenter.isLoadingStream);
+          handleMainError(stream: widget.presenter.mainErrorStream, scaffoldKey: scaffoldKey);
           return GestureDetector(
             onTap: () => hideKeyboard(context),
             child: SingleChildScrollView(
