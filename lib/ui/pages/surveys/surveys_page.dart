@@ -1,14 +1,14 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:get/get.dart';
 
 import '../pages.dart';
+import '../../mixins/mixins.dart';
 import 'components/components.dart';
 import '../../helpers/helpers.dart';
 import '../../components/components.dart';
 
-class SurveysPage extends StatelessWidget {
+class SurveysPage extends StatelessWidget with LoadingManager, NavigateManager, SessionManager {
   final SurveysPresenter presenter;
 
   SurveysPage({@required this.presenter});
@@ -22,23 +22,10 @@ class SurveysPage extends StatelessWidget {
       ),
       body: Builder(
         builder: (ctx) {
-          presenter.isLoadingStream.listen((isLoading) {
-            if (isLoading == true) {
-              showLoading(ctx);
-            } else {
-              hideLoading(ctx);
-            }
-          });
-          presenter.isSessionExpiredStream.listen((isExpired) {
-            if (isExpired == true) {
-              Get.offAllNamed('/login');
-            }
-          });
-          presenter.navigateToStream.listen((page) {
-            if (page != null && page.isNotEmpty == true) {
-              Get.toNamed(page);
-            }
-          });
+          handleLoading(context: context, stream: presenter.isLoadingStream);
+          handleSession(stream: presenter.isSessionExpiredStream);
+          handleNavigate(stream: presenter.navigateToStream);
+
           presenter.loadData();
 
           return StreamBuilder<List<SurveyViewModel>>(

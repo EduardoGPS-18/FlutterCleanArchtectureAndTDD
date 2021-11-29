@@ -3,12 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 
 import '../pages.dart';
+import '../../mixins/mixins.dart';
 import './components/components.dart';
 import '../../helpers/i18n/i18n.dart';
 import '../../components/components.dart';
 import '../../helpers/errors/errors.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatelessWidget with KeyboardManager, LoadingManager, NavigateManager, MainErrorManager {
   final LoginPresenter presenter;
 
   const LoginPage(this.presenter);
@@ -18,38 +19,11 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          void _hideKeyboard() {
-            final currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          }
-
-          presenter.navigateToStream.listen((page) {
-            if (page?.isNotEmpty == true) {
-              Get.offAllNamed(page);
-            }
-          });
-
-          presenter.isLoadingStream.listen(
-            (isLoading) {
-              if (isLoading == true) {
-                showLoading(context);
-              } else {
-                hideLoading(context);
-              }
-            },
-          );
-
-          presenter.mainErrorStream.listen((error) {
-            if (error != null) {
-              print(error);
-              showErrorMessage(context: context, error: error.description);
-            }
-          });
-
+          handleNavigate(stream: presenter.navigateToStream, clear: true);
+          handleLoading(context: context, stream: presenter.isLoadingStream);
+          handleMainError(stream: presenter.mainErrorStream, context: context);
           return GestureDetector(
-            onTap: _hideKeyboard,
+            onTap: () => hideKeyboard(context),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,15 +1,14 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'components/components.dart';
-import '../../helpers/errors/errors.dart';
 
 import '../pages.dart';
+import '../../mixins/mixins.dart';
 import '../../helpers/i18n/i18n.dart';
 import '../../../ui/components/components.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatelessWidget with KeyboardManager, LoadingManager, MainErrorManager, NavigateManager {
   final SignUpPresenter presenter;
 
   const SignUpPage({this.presenter});
@@ -19,35 +18,12 @@ class SignUpPage extends StatelessWidget {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          presenter.isLoadingStream.listen((isLoading) {
-            if (isLoading) {
-              showLoading(context);
-            } else {
-              hideLoading(context);
-            }
-          });
-
-          presenter.mainErrorStream.listen((error) {
-            if (error != null) {
-              showErrorMessage(context: context, error: error.description);
-            }
-          });
-
-          presenter.navigateToStream.listen((route) {
-            if (route?.isNotEmpty == true) {
-              Get.offAllNamed(route);
-            }
-          });
-
-          void _hideKeyboard() {
-            final currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          }
+          handleLoading(context: context, stream: presenter.isLoadingStream);
+          handleMainError(stream: presenter.mainErrorStream, context: context);
+          handleNavigate(stream: presenter.navigateToStream, clear: true);
 
           return GestureDetector(
-            onTap: _hideKeyboard,
+            onTap: () => hideKeyboard(context),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
