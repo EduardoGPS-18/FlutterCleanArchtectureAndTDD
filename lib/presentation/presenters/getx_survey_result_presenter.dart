@@ -38,6 +38,17 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
 
   @override
   Future<void> save({@required String answer}) async {
-    await saveSurveyResult.save(answer: answer);
+    try {
+      isLoading = true;
+      final surveyResult = await saveSurveyResult.save(answer: answer);
+      _surveyResultController.value = SurveyResultViewModel.fromEntity(surveyResult);
+    } on DomainError catch (error) {
+      if (error == DomainError.accessDenied) {
+        isSessionExpired = true;
+      }
+      _surveyResultController.subject.addError(UIError.unexpected.description);
+    } finally {
+      isLoading = false;
+    }
   }
 }
