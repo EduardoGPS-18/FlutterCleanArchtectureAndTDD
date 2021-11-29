@@ -1,5 +1,6 @@
-import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:meta/meta.dart';
+
+import '../../domain/entities/entities.dart';
 
 class LocalSurveyAnswerModel {
   final String image;
