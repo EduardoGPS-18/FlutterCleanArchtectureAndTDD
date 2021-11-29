@@ -108,8 +108,15 @@ void main() {
   });
 
   test('Should go to survey result page on call go to survey result', () async {
-    sut.navigateToStream.listen(expectAsync1((page) => '/survey_result/any_route'));
+    expectLater(
+      sut.navigateToStream,
+      emitsInOrder([
+        '/survey_result/any_route',
+        '/survey_result/any_route',
+      ]),
+    );
 
+    sut.goToSurveyResult('any_route');
     sut.goToSurveyResult('any_route');
   });
 }
