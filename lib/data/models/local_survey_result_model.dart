@@ -15,6 +15,12 @@ class LocalSurveyResultModel {
     @required this.answers,
   });
 
+  factory LocalSurveyResultModel.fromEntity(SurveyResultEntity entity) => LocalSurveyResultModel(
+        surveyId: entity.surveyId,
+        question: entity.question,
+        answers: entity.answers.map((entity) => LocalSurveyAnswerModel.fromEntity(entity)).toList(),
+      );
+
   SurveyResultEntity toEntity() {
     return SurveyResultEntity(
       answers: answers.map<SurveyAnswerEntity>((answer) => answer.toEntity()).toList(),
@@ -33,4 +39,9 @@ class LocalSurveyResultModel {
       answers: json['answers'].map<LocalSurveyAnswerModel>((answerJson) => LocalSurveyAnswerModel.fromJson(answerJson)).toList(),
     );
   }
+  Map toJson() => {
+        'surveyId': surveyId,
+        'question': question,
+        'answers': answers.map((e) => e.toJson()).toList(),
+      };
 }
