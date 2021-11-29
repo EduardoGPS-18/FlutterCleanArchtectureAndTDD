@@ -136,4 +136,12 @@ void main() {
 
     expect(result, expectedReturn);
   });
+
+  test('Should throw unexpected error if http client returns 200 with invalid data', () async {
+    mockHttpResponseData({'invalid_key': 'invalid_data'});
+
+    final future = sut.save(answer: answer);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }
