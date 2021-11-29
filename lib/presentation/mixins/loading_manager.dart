@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-mixin LoadingManager {
+mixin LoadingManager on GetxController {
   var _isLoading = RxBool(false);
 
   Stream<bool> get isLoadingStream => _isLoading.stream;

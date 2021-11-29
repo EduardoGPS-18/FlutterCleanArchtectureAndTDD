@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-mixin SessionManager {
+mixin SessionManager on GetxController {
   Rx<bool> _isSessionExpiredController = Rx();
 
   Stream<bool> get isSessionExpiredStream => _isSessionExpiredController.stream;
