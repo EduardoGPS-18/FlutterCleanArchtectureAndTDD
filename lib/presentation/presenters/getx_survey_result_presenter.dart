@@ -1,8 +1,11 @@
-import 'package:app_curso_manguinho/domain/entities/entities.dart';
-import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
-import 'package:app_curso_manguinho/presentation/mixins/mixins.dart';
 import 'package:meta/meta.dart';
 import 'package:get/get.dart';
+
+import '../../domain/entities/entities.dart';
+import '../../domain/helpers/domain_error.dart';
+
+import '../mixins/mixins.dart';
+import '../helpers/helpers.dart';
 
 import '../../ui/pages/pages.dart';
 import '../../ui/helpers/helpers.dart';
@@ -35,7 +38,7 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
     try {
       isLoading = true;
       final surveyResult = await action();
-      _surveyResultController.value = SurveyResultViewModel.fromEntity(surveyResult);
+      _surveyResultController.subject.add(surveyResult.toViewModel());
     } on DomainError catch (error) {
       if (error == DomainError.accessDenied) {
         isSessionExpired = true;
