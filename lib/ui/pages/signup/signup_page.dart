@@ -18,10 +18,11 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> with KeyboardManager, LoadingManager, MainErrorManager, NavigateManager {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   @override
   void initState() {
     handleLoading(context: context, stream: widget.presenter.isLoadingStream);
-    handleMainError(stream: widget.presenter.mainErrorStream, context: context);
+    handleMainError(stream: widget.presenter.mainErrorStream, scaffoldKey: scaffoldKey);
     handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
     super.initState();
   }
@@ -29,6 +30,7 @@ class _SignUpPageState extends State<SignUpPage> with KeyboardManager, LoadingMa
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: GestureDetector(
         onTap: () => hideKeyboard(context),
         child: SingleChildScrollView(

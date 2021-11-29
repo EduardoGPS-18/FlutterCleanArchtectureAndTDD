@@ -4,10 +4,10 @@ import '../helpers/helpers.dart';
 import '../components/components.dart';
 
 mixin MainErrorManager {
-  void handleMainError({@required Stream<UIError> stream, @required BuildContext context}) {
+  void handleMainError({@required Stream<UIError> stream, @required GlobalKey<ScaffoldState> scaffoldKey}) {
     stream.listen((error) {
       if (error != null) {
-        showErrorMessage(context: context, error: error.description);
+        showErrorMessage(scaffoldKey: scaffoldKey, error: error.description);
       }
     });
   }

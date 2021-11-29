@@ -17,56 +17,63 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with KeyboardManager, LoadingManager, NavigateManager, MainErrorManager {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
   @override
   void initState() {
     handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
     handleLoading(context: context, stream: widget.presenter.isLoadingStream);
-    handleMainError(stream: widget.presenter.mainErrorStream, context: context);
+    handleMainError(stream: widget.presenter.mainErrorStream, scaffoldKey: scaffoldKey);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => hideKeyboard(context),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              LoginHeader(),
-              Headline1(
-                text: R.strings.login,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(32),
-                child: Provider.value(
-                  value: widget.presenter,
-                  child: Form(
-                    child: Column(
-                      children: [
-                        EmailInput(),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 8.0,
-                            bottom: 32,
-                          ),
-                          child: PasswordInput(),
+      key: scaffoldKey,
+      body: Builder(
+        builder: (context) {
+          return GestureDetector(
+            onTap: () => hideKeyboard(context),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  LoginHeader(),
+                  Headline1(
+                    text: R.strings.login,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Provider.value(
+                      value: widget.presenter,
+                      child: Form(
+                        child: Column(
+                          children: [
+                            EmailInput(),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 8.0,
+                                bottom: 32,
+                              ),
+                              child: PasswordInput(),
+                            ),
+                            LoginButton(),
+                            FlatButton.icon(
+                              onPressed: widget.presenter.goToSignUp,
+                              icon: Icon(Icons.person),
+                              label: Text(R.strings.goToSignUp),
+                            )
+                          ],
                         ),
-                        LoginButton(),
-                        FlatButton.icon(
-                          onPressed: widget.presenter.goToSignUp,
-                          icon: Icon(Icons.person),
-                          label: Text(R.strings.goToSignUp),
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

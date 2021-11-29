@@ -15,7 +15,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> with NavigateManager {
   @override
   void initState() {
-    handleNavigate(stream: widget.presenter.navigateToStream);
+    handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
     super.initState();
   }
 
