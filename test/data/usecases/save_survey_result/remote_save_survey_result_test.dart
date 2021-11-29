@@ -1,32 +1,12 @@
-import 'package:app_curso_manguinho/data/models/models.dart';
-import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
 
+import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
 
 import 'package:app_curso_manguinho/data/http/http.dart';
-
-class RemoteSaveSurveyResult {
-  final HttpClient httpClient;
-  final String url;
-
-  RemoteSaveSurveyResult({
-    @required this.httpClient,
-    @required this.url,
-  });
-
-  Future<SurveyResultEntity> save({@required String answer}) async {
-    try {
-      final json = await httpClient.request(url: url, method: 'put', body: {'answer': answer});
-      return RemoteSurveyResultModel.fromJson(json).toEntity();
-    } on HttpError catch (err) {
-      throw err == HttpError.forbidden ? DomainError.accessDenied : DomainError.unexpected;
-    }
-  }
-}
+import 'package:app_curso_manguinho/data/usecases/save_survey_result/save_survey_result.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
 
