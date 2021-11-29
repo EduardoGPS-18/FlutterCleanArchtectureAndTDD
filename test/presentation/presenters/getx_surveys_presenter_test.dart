@@ -53,7 +53,7 @@ void main() {
   });
 
   test('Is loading controller should emits true before call usecase method and hide on method end', () async {
-    expectLater(sut.isLoading, emitsInOrder([true, false]));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 
     await sut.loadData();
   });
@@ -96,7 +96,7 @@ void main() {
     mockAccessDeniedError();
 
     expectLater(
-      sut.isLoading,
+      sut.isLoadingStream,
       emitsInOrder([true, false]),
     );
     expectLater(
@@ -108,7 +108,7 @@ void main() {
   });
 
   test('Should go to survey result page on call go to survey result', () async {
-    sut.navigateTo.listen(expectAsync1((page) => '/survey_result/any_route'));
+    sut.navigateToStream.listen(expectAsync1((page) => '/survey_result/any_route'));
 
     sut.goToSurveyResult('any_route');
   });

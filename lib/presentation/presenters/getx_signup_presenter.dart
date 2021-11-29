@@ -6,11 +6,14 @@ import '../../domain/entities/entities.dart';
 import '../../domain/usecases/usecases.dart';
 
 import '../protocols/protocols.dart';
+import '../mixins/mixins.dart';
 
 import '../../ui/pages/pages.dart';
 import '../../ui/helpers/errors/errors.dart';
 
-class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
+class GetxSignUpPresenter extends GetxController
+    with NavigateManager, FormManager, LoadingManager, MainErrorManager
+    implements SignUpPresenter {
   final Validation validation;
   final SaveCurrentAccount saveCurrentAccount;
   final AddAccount addAccount;
@@ -19,25 +22,13 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
 
   var _emailError = Rx<UIError>();
   var _nameError = Rx<UIError>();
-  var _mainError = Rx<UIError>();
   var _passwordError = Rx<UIError>();
   var _confirmPasswordError = Rx<UIError>();
 
-  var _navigateTo = RxString();
-
-  var _isLoading = RxBool(false);
-  var _isFormValid = RxBool(false);
-
   Stream<UIError> get emailErrorStream => _emailError.stream;
-  Stream<UIError> get mainErrorStream => _mainError.stream;
   Stream<UIError> get nameErrorStream => _nameError.stream;
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
   Stream<UIError> get confirmPasswordErrorStream => _confirmPasswordError.stream;
-
-  Stream<String> get navigateToStream => _navigateTo.stream;
-
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
-  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxSignUpPresenter({
     @required this.validation,
@@ -47,7 +38,7 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
 
   Future<AccountEntity> signUp() async {
     try {
-      _isLoading.value = true;
+      isLoading = true;
       final account = await addAccount.add(
         params: AddAccountParams(
           name: _name,
@@ -57,12 +48,12 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
         ),
       );
       await saveCurrentAccount.save(account);
-      _navigateTo.value = '/surveys';
+      navigateTo = '/surveys';
       return account;
     } on DomainError catch (error) {
-      _mainError.value = null;
-      _mainError.value = error == DomainError.emailInUse ? UIError.emailInUse : UIError.unexpected;
-      _isLoading.value = false;
+      mainError = null;
+      mainError = error == DomainError.emailInUse ? UIError.emailInUse : UIError.unexpected;
+      isLoading = false;
     }
   }
 
@@ -109,7 +100,7 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   }
 
   void validateForm() {
-    _isFormValid.value = _confirmPasswordError.value == null &&
+    isFormValid = _confirmPasswordError.value == null &&
         _passwordError.value == null &&
         _emailError.value == null &&
         _passwordError.value == null &&
@@ -119,5 +110,5 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
         _confirmPassword != null;
   }
 
-  void goToLogin() => _navigateTo.value = '/login';
+  void goToLogin() => navigateTo = '/login';
 }

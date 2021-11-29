@@ -64,7 +64,7 @@ void main() {
   });
 
   test('Should emit correct events on success', () async {
-    expectLater(sut.isLoading, emitsInOrder([true, false]));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
 
     sut.surveyResultStream.listen(expectAsync1(
       (result) => expect(
@@ -95,7 +95,7 @@ void main() {
   test('Should thorws error if load survey result throws', () async {
     mockLoadSurveyResultError();
 
-    expectLater(sut.isLoading, emitsInOrder([true, false]));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.surveyResultStream.listen(
       null,
       onError: expectAsync1(
@@ -113,7 +113,7 @@ void main() {
     mockAccessDeniedError();
 
     expectLater(
-      sut.isLoading,
+      sut.isLoadingStream,
       emitsInOrder([true, false]),
     );
     expectLater(

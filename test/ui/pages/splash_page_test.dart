@@ -16,7 +16,7 @@ void main() {
     presenter = SplashPresenterSpy();
     navigateToController = StreamController();
 
-    when(presenter.navigateStream).thenAnswer((_) => navigateToController.stream);
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
 
     await tester.pumpWidget(GetMaterialApp(
       initialRoute: '/',

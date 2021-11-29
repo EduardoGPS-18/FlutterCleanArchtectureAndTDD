@@ -16,7 +16,7 @@ class SplashPage extends StatelessWidget {
         title: Text('4Dev'),
       ),
       body: Builder(builder: (ctx) {
-        presenter.navigateStream.listen((page) {
+        presenter.navigateToStream.listen((page) {
           if (page?.isNotEmpty == true) {
             Get.offAllNamed(page);
           }

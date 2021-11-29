@@ -23,7 +23,7 @@ class SurveyResultPage extends StatelessWidget {
       ),
       body: Builder(
         builder: (_) {
-          presenter.isLoading.listen((isLoading) {
+          presenter.isLoadingStream.listen((isLoading) {
             if (isLoading == true) {
               showLoading(context);
             } else {

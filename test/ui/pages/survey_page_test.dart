@@ -25,9 +25,9 @@ void main() {
   }
 
   void mockStreams() {
-    when(presenter.isLoading).thenAnswer((_) => isLoadingController.stream);
+    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.surveysDataStream).thenAnswer((_) => surveysDataController.stream);
-    when(presenter.navigateTo).thenAnswer((_) => navigateToController.stream);
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
     when(presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
   }
 

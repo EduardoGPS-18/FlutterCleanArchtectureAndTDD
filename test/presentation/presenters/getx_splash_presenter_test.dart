@@ -33,14 +33,14 @@ void main() {
   });
 
   test('Should go to surveys page on success', () async {
-    sut.navigateStream.listen(expectAsync1((page) => expect(page, '/surveys')));
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
 
     await sut.checkCurrentAccount(durationInSeconds: 0);
   });
 
   test('Should go to login page on null result', () async {
     mockLoadCurrentAccount(account: null);
-    sut.navigateStream.listen(expectAsync1((page) => expect(page, '/login')));
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 
     await sut.checkCurrentAccount(durationInSeconds: 0);
   });
@@ -48,7 +48,7 @@ void main() {
   test('Should go to login page on null token', () async {
     mockLoadCurrentAccount(account: AccountEntity(token: null));
 
-    sut.navigateStream.listen(expectAsync1((page) => expect(page, '/login')));
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 
     await sut.checkCurrentAccount(durationInSeconds: 0);
   });

@@ -22,7 +22,7 @@ class SurveysPage extends StatelessWidget {
       ),
       body: Builder(
         builder: (ctx) {
-          presenter.isLoading.listen((isLoading) {
+          presenter.isLoadingStream.listen((isLoading) {
             if (isLoading == true) {
               showLoading(ctx);
             } else {
@@ -34,7 +34,7 @@ class SurveysPage extends StatelessWidget {
               Get.offAllNamed('/login');
             }
           });
-          presenter.navigateTo.listen((page) {
+          presenter.navigateToStream.listen((page) {
             if (page != null && page.isNotEmpty == true) {
               Get.toNamed(page);
             }
