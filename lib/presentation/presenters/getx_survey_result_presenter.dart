@@ -1,3 +1,4 @@
+import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 import 'package:app_curso_manguinho/presentation/mixins/mixins.dart';
 import 'package:meta/meta.dart';
@@ -22,25 +23,18 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
   });
 
   Future<void> loadData() async {
-    try {
-      isLoading = true;
-      final surveyResult = await loadSurveyResult.loadBySurvey(surveyId: surveyId);
-      _surveyResultController.value = SurveyResultViewModel.fromEntity(surveyResult);
-    } on DomainError catch (error) {
-      if (error == DomainError.accessDenied) {
-        isSessionExpired = true;
-      }
-      _surveyResultController.subject.addError(UIError.unexpected.description);
-    } finally {
-      isLoading = false;
-    }
+    await _showResultOnAction(() async => await loadSurveyResult.loadBySurvey(surveyId: surveyId));
   }
 
   @override
   Future<void> save({@required String answer}) async {
+    await _showResultOnAction(() async => await saveSurveyResult.save(answer: answer));
+  }
+
+  Future<void> _showResultOnAction(Future<SurveyResultEntity> Function() action) async {
     try {
       isLoading = true;
-      final surveyResult = await saveSurveyResult.save(answer: answer);
+      final surveyResult = await action();
       _surveyResultController.value = SurveyResultViewModel.fromEntity(surveyResult);
     } on DomainError catch (error) {
       if (error == DomainError.accessDenied) {
