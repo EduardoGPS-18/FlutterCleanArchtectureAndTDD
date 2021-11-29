@@ -8,10 +8,23 @@ import 'components/components.dart';
 import '../../helpers/helpers.dart';
 import '../../components/components.dart';
 
-class SurveysPage extends StatelessWidget with LoadingManager, NavigateManager, SessionManager {
+class SurveysPage extends StatefulWidget {
   final SurveysPresenter presenter;
 
   SurveysPage({@required this.presenter});
+
+  @override
+  _SurveysPageState createState() => _SurveysPageState();
+}
+
+class _SurveysPageState extends State<SurveysPage> with LoadingManager, NavigateManager, SessionManager {
+  @override
+  void initState() {
+    handleLoading(context: context, stream: widget.presenter.isLoadingStream);
+    handleSession(stream: widget.presenter.isSessionExpiredStream);
+    handleNavigate(stream: widget.presenter.navigateToStream);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,24 +35,19 @@ class SurveysPage extends StatelessWidget with LoadingManager, NavigateManager, 
       ),
       body: Builder(
         builder: (ctx) {
-          handleLoading(context: context, stream: presenter.isLoadingStream);
-          handleSession(stream: presenter.isSessionExpiredStream);
-          handleNavigate(stream: presenter.navigateToStream);
-
-          presenter.loadData();
-
+          widget.presenter.loadData();
           return StreamBuilder<List<SurveyViewModel>>(
-            stream: presenter.surveysDataStream,
+            stream: widget.presenter.surveysDataStream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return ReloadScreen(
                   error: snapshot.error,
-                  reload: presenter.loadData,
+                  reload: widget.presenter.loadData,
                 );
               }
               if (snapshot.hasData) {
                 return Provider.value(
-                  value: presenter,
+                  value: widget.presenter,
                   child: SurveyItems(
                     snapshot.data,
                   ),

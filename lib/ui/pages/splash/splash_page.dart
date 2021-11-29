@@ -3,24 +3,32 @@ import 'package:flutter/material.dart';
 import './splash.dart';
 import '../../mixins/mixins.dart';
 
-class SplashPage extends StatelessWidget with NavigateManager {
+class SplashPage extends StatefulWidget {
   final SplashPresenter presenter;
 
   const SplashPage({@required this.presenter});
 
   @override
+  _SplashPageState createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> with NavigateManager {
+  @override
+  void initState() {
+    handleNavigate(stream: widget.presenter.navigateToStream);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    presenter.checkCurrentAccount();
+    widget.presenter.checkCurrentAccount();
     return Scaffold(
       appBar: AppBar(
         title: Text('4Dev'),
       ),
-      body: Builder(builder: (ctx) {
-        handleNavigate(stream: presenter.navigateToStream);
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }),
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

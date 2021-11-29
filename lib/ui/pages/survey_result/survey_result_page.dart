@@ -7,12 +7,24 @@ import '../../mixins/mixins.dart';
 import '../../helpers/helpers.dart';
 import '../../components/components.dart';
 
-class SurveyResultPage extends StatelessWidget with LoadingManager, SessionManager {
+class SurveyResultPage extends StatefulWidget {
   final SurveyResultPresenter presenter;
 
   const SurveyResultPage({
     @required this.presenter,
   });
+
+  @override
+  _SurveyResultPageState createState() => _SurveyResultPageState();
+}
+
+class _SurveyResultPageState extends State<SurveyResultPage> with LoadingManager, SessionManager {
+  @override
+  void initState() {
+    handleLoading(context: context, stream: widget.presenter.isLoadingStream);
+    handleSession(stream: widget.presenter.isSessionExpiredStream);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +35,14 @@ class SurveyResultPage extends StatelessWidget with LoadingManager, SessionManag
       ),
       body: Builder(
         builder: (_) {
-          handleLoading(context: context, stream: presenter.isLoadingStream);
-          handleSession(stream: presenter.isSessionExpiredStream);
-
-          presenter.loadData();
+          widget.presenter.loadData();
           return StreamBuilder<SurveyResultViewModel>(
-            stream: presenter.surveyResultStream,
+            stream: widget.presenter.surveyResultStream,
             builder: (ctx, snapshot) {
               if (snapshot.hasError) {
                 return ReloadScreen(
                   error: snapshot.error,
-                  reload: presenter.loadData,
+                  reload: widget.presenter.loadData,
                 );
               }
               if (snapshot.hasData) {
