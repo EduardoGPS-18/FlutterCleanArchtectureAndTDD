@@ -20,26 +20,16 @@ class HttpAdapter implements HttpClient {
         'accept': 'application/json',
       });
     final jsonBody = body != null ? jsonEncode(body) : null;
-
-    Response response = Response('', 500);
+    var response = Response('', 500);
+    Future<Response> futureResponse;
     try {
       if (method == 'post') {
-        response = await client
-            .post(
-              url,
-              headers: defaultheaders,
-              body: jsonBody,
-            )
-            .timeout(
-              Duration(seconds: 10),
-            );
+        futureResponse = client.post(url, headers: defaultheaders, body: jsonBody);
       } else if (method == 'get') {
-        response = await client
-            .get(
-              url,
-              headers: defaultheaders,
-            )
-            .timeout(Duration(seconds: 10));
+        futureResponse = client.get(url, headers: defaultheaders);
+      }
+      if (futureResponse != null) {
+        response = await futureResponse.timeout(Duration(seconds: 5));
       }
     } on Exception {
       throw HttpError.serverError;
