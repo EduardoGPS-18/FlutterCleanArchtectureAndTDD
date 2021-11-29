@@ -8,6 +8,8 @@ import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:app_curso_manguinho/data/http/http.dart';
 import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 
+import '../../../mocks/mocks.dart';
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
@@ -15,30 +17,27 @@ void main() {
   RemoteAddAccount sut;
   HttpClient httpClient;
   AddAccountParams params;
+  Map apiResult;
 
   PostExpectation _mockRequest() => when(httpClient.request(
         url: anyNamed('url'),
         method: anyNamed('method'),
         body: anyNamed('body'),
       ));
+
   void mockHttpError(HttpError error) => _mockRequest().thenThrow(error);
-  void mockHttpData(Map data) => _mockRequest().thenAnswer((_) async => data);
-  Map mockValidData() => {
-        'accessToken': faker.guid.guid(),
-        'name': faker.person.name(),
-      };
+
+  void mockHttpData(Map data) {
+    apiResult = data;
+    _mockRequest().thenAnswer((_) async => data);
+  }
 
   setUp(() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
     sut = RemoteAddAccount(httpClient: httpClient, url: url);
-    params = AddAccountParams(
-      name: faker.person.name(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      passwordConfirmation: faker.internet.password(),
-    );
-    mockHttpData(mockValidData());
+    params = FakeParamsFactory.makeAddAccount();
+    mockHttpData(FakeAccountFactory.makeApiJson());
   });
 
   test('Should call http client with correct values', () async {
@@ -89,12 +88,9 @@ void main() {
   });
 
   test('Should return an Account if HttpClient returns 200', () async {
-    final validData = mockValidData();
-    mockHttpData(validData);
-
     final account = await sut.add(params: params);
 
-    expect(account.token, validData['accessToken']);
+    expect(account.token, apiResult['accessToken']);
   });
 
   test('Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {

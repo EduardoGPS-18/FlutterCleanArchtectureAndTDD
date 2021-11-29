@@ -12,6 +12,8 @@ import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
+import '../../mocks/mocks.dart';
+
 class ValidationSpy extends Mock implements Validation {}
 
 class AuthenticationSpy extends Mock implements Authentication {}
@@ -20,10 +22,10 @@ class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
 void main() {
   String email;
-  String token;
   String password;
-  Validation validation;
   LoginPresenter sut;
+  AccountEntity account;
+  Validation validation;
   SaveCurrentAccount saveCurrentAccount;
 
   Authentication authentication;
@@ -37,10 +39,13 @@ void main() {
   }
 
   PostExpectation mockAuthenticationCall() => when(authentication.auth(params: anyNamed('params')));
-  void mockAuthentication() => mockAuthenticationCall().thenAnswer(
-        (_) async => AccountEntity(token: token),
-      );
+  void mockAuthentication(AccountEntity data) {
+    account = data;
+    mockAuthenticationCall().thenAnswer((_) async => account);
+  }
+
   void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
+
   PostExpectation mockSaveCurrentAccountCall() => when(saveCurrentAccount.save(any));
   void mockSaveCurrentAccountError(DomainError error) => mockSaveCurrentAccountCall().thenThrow(error);
 
@@ -53,10 +58,9 @@ void main() {
       authenticationUsecase: authentication,
       saveCurrentAccount: saveCurrentAccount,
     );
-    token = faker.guid.guid();
     email = faker.internet.email();
     password = faker.internet.password();
-    mockAuthentication();
+    mockAuthentication(FakeAccountFactory.makeEntity());
     mockValidation();
   });
 
@@ -154,7 +158,7 @@ void main() {
 
     await sut.auth();
 
-    verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
+    verify(saveCurrentAccount.save(account)).called(1);
   });
 
   test('(GETX LOGIN PRESENTER) : Should emit correct events on authentication success', () async {
@@ -205,7 +209,7 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    expectLater(await authentication.auth(params: anyNamed('params')), AccountEntity(token: token));
+    expectLater(await authentication.auth(params: anyNamed('params')), account);
     expectLater(sut.mainErrorStream, emitsInOrder([null, UIError.unexpected]));
 
     await sut.auth();

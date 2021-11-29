@@ -8,6 +8,7 @@ import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
 import 'package:app_curso_manguinho/ui/pages/survey_result/components/components.dart';
 
+import '../../mocks/mocks.dart';
 import '../helpers/helpers.dart';
 
 class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
@@ -50,24 +51,6 @@ void main() {
       await tester.pumpWidget(surveysPage);
     });
   }
-
-  SurveyResultViewModel makeSurveyResult() => SurveyResultViewModel(
-        surveyId: 'Any id',
-        question: 'Question',
-        answers: [
-          SurveyAnswerViewModel(
-            image: 'Image 0',
-            answer: 'Answer 0',
-            isCurrentAnswer: true,
-            percent: '100%',
-          ),
-          SurveyAnswerViewModel(
-            answer: 'Answer 1',
-            isCurrentAnswer: false,
-            percent: '30%',
-          ),
-        ],
-      );
 
   tearDown(closeStreams);
 
@@ -112,7 +95,7 @@ void main() {
   testWidgets('Should presents valid data if survey result screen success ', (tester) async {
     await loadPage(tester);
 
-    surveysDataController.add(makeSurveyResult());
+    surveysDataController.add(FakeSurveyResultFactory.makeViewModel());
 
     await provideMockedNetworkImages(() async {
       await tester.pump();
@@ -163,7 +146,7 @@ void main() {
   testWidgets('Should call save on list item click', (tester) async {
     await loadPage(tester);
 
-    surveysDataController.add(makeSurveyResult());
+    surveysDataController.add(FakeSurveyResultFactory.makeViewModel());
     await provideMockedNetworkImages(() async {
       await tester.pump();
     });
@@ -176,7 +159,7 @@ void main() {
   testWidgets('Should not call save on current answer click', (tester) async {
     await loadPage(tester);
 
-    surveysDataController.add(makeSurveyResult());
+    surveysDataController.add(FakeSurveyResultFactory.makeViewModel());
     await provideMockedNetworkImages(() async {
       await tester.pump();
     });

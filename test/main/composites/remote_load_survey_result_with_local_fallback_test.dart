@@ -9,6 +9,8 @@ import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 
 import 'package:app_curso_manguinho/main/composites/composites.dart';
 
+import '../../mocks/mocks.dart';
+
 class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {}
 
 class LocalLoadSurveyResultSpy extends Mock implements LocalLoadSurveyResult {}
@@ -20,21 +22,9 @@ void main() {
   SurveyResultEntity remoteResult, localResult;
   RemoteLoadSurveyResultWithLocalFallback sut;
 
-  SurveyResultEntity mockSurveyResult() => SurveyResultEntity(
-        surveyId: faker.guid.guid(),
-        question: faker.lorem.sentence(),
-        answers: [
-          SurveyAnswerEntity(
-            answer: faker.lorem.sentence(),
-            isCurrentAnswer: faker.randomGenerator.boolean(),
-            percent: faker.randomGenerator.integer(100),
-          ),
-        ],
-      );
-
   PostExpectation mockRemoteLoadCall() => when(remote.loadBySurvey(surveyId: anyNamed('surveyId')));
   void mockRemoteLoad() {
-    remoteResult = mockSurveyResult();
+    remoteResult = FakeSurveyResultFactory.makeEntity();
     mockRemoteLoadCall().thenAnswer((_) async => remoteResult);
   }
 
@@ -42,7 +32,7 @@ void main() {
 
   PostExpectation mockLocalLoadCall() => when(local.loadBySurvey(surveyId: anyNamed('surveyId')));
   void mockLocalLoad() {
-    localResult = mockSurveyResult();
+    localResult = FakeSurveyResultFactory.makeEntity();
     mockLocalLoadCall().thenAnswer((_) async => localResult);
   }
 

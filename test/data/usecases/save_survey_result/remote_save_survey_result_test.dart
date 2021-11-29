@@ -8,6 +8,8 @@ import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:app_curso_manguinho/data/http/http.dart';
 import 'package:app_curso_manguinho/data/usecases/save_survey_result/save_survey_result.dart';
 
+import '../../../mocks/mocks.dart';
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
@@ -17,27 +19,6 @@ void main() {
   RemoteSaveSurveyResult sut;
 
   Map<String, dynamic> surveyResult;
-
-  Map<String, dynamic> mockValidData() => {
-        'surveyId': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'answers': [
-          {
-            'image': faker.internet.httpUrl(),
-            'answer': faker.randomGenerator.string(20),
-            'percent': faker.randomGenerator.integer(50),
-            'count': faker.randomGenerator.integer(1000),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-          },
-          {
-            'answer': faker.randomGenerator.string(20),
-            'percent': faker.randomGenerator.integer(50),
-            'count': faker.randomGenerator.integer(1000),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-          }
-        ],
-        'date': faker.date.dateTime().toIso8601String(),
-      };
 
   PostExpectation mockHttpRequestCall() => when(httpClient.request(
         url: anyNamed('url'),
@@ -60,7 +41,7 @@ void main() {
       httpClient: httpClient,
       url: url,
     );
-    mockHttpResponseData(mockValidData());
+    mockHttpResponseData(FakeSurveyResultFactory.makeApiJson());
   });
 
   test('Should call httpClient with correct values', () async {
@@ -118,7 +99,7 @@ void main() {
   });
 
   test('Should throw unexpected error if http client returns 200 with invalid data', () async {
-    mockHttpResponseData({'invalid_key': 'invalid_data'});
+    mockHttpResponseData(FakeSurveyResultFactory.makeInvalidApiJson());
 
     final future = sut.save(answer: answer);
 

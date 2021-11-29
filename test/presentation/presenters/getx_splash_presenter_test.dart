@@ -9,6 +9,8 @@ import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 
 import 'package:app_curso_manguinho/ui/pages/splash/splash.dart';
 
+import '../../mocks/mocks.dart';
+
 class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {}
 
 void main() {
@@ -16,14 +18,12 @@ void main() {
   SplashPresenter sut;
 
   PostExpectation mockLoadCurrentAccountCall() => when(loadCurrentAccount.load());
-  void mockLoadCurrentAccount({AccountEntity account}) {
-    mockLoadCurrentAccountCall().thenAnswer((_) async => account);
-  }
+  void mockLoadCurrentAccount(AccountEntity account) => mockLoadCurrentAccountCall().thenAnswer((_) async => account);
 
   setUp(() {
     loadCurrentAccount = LoadCurrentAccountSpy();
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
-    mockLoadCurrentAccount(account: AccountEntity(token: faker.guid.guid()));
+    mockLoadCurrentAccount(FakeAccountFactory.makeEntity());
   });
 
   test('Should call LoadCurrentAccount', () async {
@@ -39,14 +39,14 @@ void main() {
   });
 
   test('Should go to login page on null result', () async {
-    mockLoadCurrentAccount(account: null);
+    mockLoadCurrentAccount(null);
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 
     await sut.checkCurrentAccount(durationInSeconds: 0);
   });
 
   test('Should go to login page on null token', () async {
-    mockLoadCurrentAccount(account: AccountEntity(token: null));
+    mockLoadCurrentAccount(AccountEntity(token: null));
 
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 

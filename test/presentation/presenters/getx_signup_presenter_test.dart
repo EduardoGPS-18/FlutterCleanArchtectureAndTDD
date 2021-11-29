@@ -11,6 +11,8 @@ import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
+import '../../mocks/mocks.dart';
+
 class ValidationSpy extends Mock implements Validation {}
 
 class AuthenticationSpy extends Mock implements Authentication {}
@@ -20,7 +22,8 @@ class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 class AddAccountSpy extends Mock implements AddAccount {}
 
 void main() {
-  String email, name, password, confirmPassword, token;
+  String email, name, password, confirmPassword;
+  AccountEntity account;
   Validation validation;
   GetxSignUpPresenter sut;
   SaveCurrentAccount saveCurrentAccount;
@@ -35,8 +38,9 @@ void main() {
   }
 
   PostExpectation mockAddAccountCall() => when(addAccount.add(params: anyNamed('params')));
-  void mockSuccessAddAccount() {
-    mockAddAccountCall().thenAnswer((_) async => AccountEntity(token: token));
+  void mockSuccessAddAccount(AccountEntity entity) {
+    account = entity;
+    mockAddAccountCall().thenAnswer((_) async => account);
   }
 
   void mockErrorAddAccount(DomainError error) {
@@ -52,13 +56,12 @@ void main() {
       validation: validation,
       saveCurrentAccount: saveCurrentAccount,
     );
-    token = faker.guid.guid();
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
     confirmPassword = faker.internet.password();
     mockValidation();
-    mockSuccessAddAccount();
+    mockSuccessAddAccount(FakeAccountFactory.makeEntity());
   });
 
   test('(GETX SIGNUP PRESENTER) : Should call validation with correct email', () {
@@ -287,7 +290,7 @@ void main() {
 
     final account = await sut.signUp();
 
-    expect(account, AccountEntity(token: token));
+    expect(account, account);
   });
 
   test('Should call save current account with correct value', () async {
@@ -298,7 +301,7 @@ void main() {
 
     await sut.signUp();
 
-    verify(saveCurrentAccount.save(AccountEntity(token: token)));
+    verify(saveCurrentAccount.save(account));
   });
 
   test('Should emit unexpected error if save current account fails', () async {

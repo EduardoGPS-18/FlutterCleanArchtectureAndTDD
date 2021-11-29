@@ -1,5 +1,4 @@
 import 'package:mockito/mockito.dart';
-import 'package:faker/faker.dart';
 import 'package:intl/intl.dart';
 import 'package:test/test.dart';
 
@@ -12,38 +11,28 @@ import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
+import '../../mocks/mocks.dart';
+
 class LoadSurveysSpy extends Mock implements LoadSurveys {}
 
 void main() {
   GetxSurveysPresenter sut;
   LoadSurveys loadSurveys;
-
-  List<SurveyEntity> validSurveysData = [
-    SurveyEntity(
-      dateTime: DateTime(2020, 2, 20),
-      didAnswer: faker.randomGenerator.boolean(),
-      id: faker.guid.guid(),
-      question: faker.lorem.sentence(),
-    ),
-    SurveyEntity(
-      dateTime: DateTime(2018, 10, 3),
-      didAnswer: faker.randomGenerator.boolean(),
-      id: faker.guid.guid(),
-      question: faker.lorem.sentence(),
-    ),
-  ];
+  List<SurveyEntity> surveys;
 
   PostExpectation mockSurveysLoadCall() => when(loadSurveys.load());
-  void mockLoadSurveysData(List<SurveyEntity> mockedList) => mockSurveysLoadCall().thenAnswer(
-        (_) async => mockedList,
-      );
+  void mockLoadSurveysData(List<SurveyEntity> list) {
+    surveys = list;
+    mockSurveysLoadCall().thenAnswer((_) async => surveys);
+  }
+
   void mockLoadSurveysError() => mockSurveysLoadCall().thenThrow(DomainError.unexpected);
   void mockAccessDeniedError() => mockSurveysLoadCall().thenThrow(DomainError.accessDenied);
 
   setUp(() {
     loadSurveys = LoadSurveysSpy();
     sut = GetxSurveysPresenter(loadSurveys: loadSurveys);
-    mockLoadSurveysData(validSurveysData);
+    mockLoadSurveysData(FakeSurveysFactory.makeEntities());
   });
 
   test('Should call load surveys usecase when sut call load data', () async {
@@ -63,16 +52,16 @@ void main() {
       expectAsync1(
         (data) => expect(data, [
           SurveyViewModel(
-            date: DateFormat("dd MMM yyyy").format(validSurveysData[0].dateTime),
-            didAnswer: validSurveysData[0].didAnswer,
-            id: validSurveysData[0].id,
-            question: validSurveysData[0].question,
+            date: "25 Feb 2018",
+            didAnswer: false,
+            id: surveys[0].id,
+            question: surveys[0].question,
           ),
           SurveyViewModel(
-            date: DateFormat("dd MMM yyyy").format(validSurveysData[1].dateTime),
-            didAnswer: validSurveysData[1].didAnswer,
-            id: validSurveysData[1].id,
-            question: validSurveysData[1].question,
+            date: "27 Apr 2020",
+            didAnswer: true,
+            id: surveys[1].id,
+            question: surveys[1].question,
           ),
         ]),
       ),

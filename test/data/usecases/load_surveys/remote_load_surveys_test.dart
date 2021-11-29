@@ -8,34 +8,25 @@ import 'package:app_curso_manguinho/domain/entities/entities.dart';
 
 import 'package:app_curso_manguinho/data/http/http.dart';
 
+import '../../../mocks/fake_surveys_factory.dart';
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   HttpClient httpClient;
   String url;
   RemoteLoadSurveys sut;
-  List<Map> listValidData;
-
-  List<Map> mockValidData() => [
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'didAnswer': faker.randomGenerator.boolean(),
-          'date': faker.date.dateTime().toIso8601String(),
-        },
-        {
-          'id': faker.guid.guid(),
-          'question': faker.randomGenerator.string(50),
-          'didAnswer': faker.randomGenerator.boolean(),
-          'date': faker.date.dateTime().toIso8601String(),
-        }
-      ];
+  List<Map> data;
 
   PostExpectation mockHttpRequestCall() => when(httpClient.request(
         url: anyNamed('url'),
         method: anyNamed('method'),
       ));
-  void mockHttpResponseData(List<Map> data) => mockHttpRequestCall().thenAnswer((_) async => data);
+  void mockHttpResponseData(List<Map> list) {
+    data = list;
+    mockHttpRequestCall().thenAnswer((_) async => list);
+  }
+
   void mockHttpResponseError(HttpError httpError) => mockHttpRequestCall().thenThrow(httpError);
 
   setUp(() {
@@ -46,8 +37,7 @@ void main() {
       httpClient: httpClient,
       url: url,
     );
-    listValidData = mockValidData();
-    mockHttpResponseData(listValidData);
+    mockHttpResponseData(FakeSurveysFactory.makeApiJson());
   });
 
   test('Should call httpClient with correct values', () async {
@@ -61,24 +51,22 @@ void main() {
 
     expect(surveys, [
       SurveyEntity(
-        id: listValidData[0]['id'],
-        question: listValidData[0]['question'],
-        dateTime: DateTime.parse(listValidData[0]['date']),
-        didAnswer: listValidData[0]['didAnswer'],
+        id: data[0]['id'],
+        question: data[0]['question'],
+        dateTime: DateTime.parse(data[0]['date']),
+        didAnswer: data[0]['didAnswer'],
       ),
       SurveyEntity(
-        id: listValidData[1]['id'],
-        question: listValidData[1]['question'],
-        dateTime: DateTime.parse(listValidData[1]['date']),
-        didAnswer: listValidData[1]['didAnswer'],
+        id: data[1]['id'],
+        question: data[1]['question'],
+        dateTime: DateTime.parse(data[1]['date']),
+        didAnswer: data[1]['didAnswer'],
       ),
     ]);
   });
 
   test('Should throw unexpected error if http client returns 200 with invalid data', () async {
-    mockHttpResponseData([
-      {'invalid_key': 'invalid_data'}
-    ]);
+    mockHttpResponseData(FakeSurveysFactory.makeInvalidApiJson());
 
     final future = sut.load();
 

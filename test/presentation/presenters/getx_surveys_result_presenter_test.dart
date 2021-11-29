@@ -11,6 +11,8 @@ import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
+import '../../mocks/mocks.dart';
+
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
 
 class SaveSurveyResultSpy extends Mock implements SaveSurveyResult {}
@@ -39,24 +41,6 @@ void main() {
             answer: entity.answers[1].answer,
             isCurrentAnswer: entity.answers[1].isCurrentAnswer,
             percent: '${entity.answers[1].percent}%',
-          ),
-        ],
-      );
-
-  SurveyResultEntity mockValidData() => SurveyResultEntity(
-        surveyId: faker.guid.guid(),
-        question: faker.lorem.sentence(),
-        answers: [
-          SurveyAnswerEntity(
-            answer: faker.lorem.sentence(),
-            isCurrentAnswer: faker.randomGenerator.boolean(),
-            percent: faker.randomGenerator.integer(100),
-            image: faker.internet.httpUrl(),
-          ),
-          SurveyAnswerEntity(
-            answer: faker.lorem.sentence(),
-            isCurrentAnswer: faker.randomGenerator.boolean(),
-            percent: faker.randomGenerator.integer(100),
           ),
         ],
       );
@@ -92,8 +76,8 @@ void main() {
       saveSurveyResult: saveSurveyResult,
       surveyId: surveyId,
     );
-    mockLoadSurveyResult(mockValidData());
-    mockSaveSurveyResult(mockValidData());
+    mockLoadSurveyResult(FakeSurveyResultFactory.makeEntity());
+    mockSaveSurveyResult(FakeSurveyResultFactory.makeEntity());
   });
 
   group('load data', () {

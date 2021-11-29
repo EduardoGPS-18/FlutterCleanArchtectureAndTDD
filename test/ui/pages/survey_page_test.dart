@@ -7,6 +7,7 @@ import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/helpers.dart';
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
+import '../../mocks/mocks.dart';
 import '../helpers/helpers.dart';
 
 class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
@@ -48,11 +49,6 @@ void main() {
     final surveysPage = makePage(page: () => SurveysPage(presenter: presenter), path: '/surveys');
     await tester.pumpWidget(surveysPage);
   }
-
-  List<SurveyViewModel> makeSurveys() => [
-        SurveyViewModel(id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
-        SurveyViewModel(id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
-      ];
 
   tearDown(closeStreams);
 
@@ -110,7 +106,7 @@ void main() {
   testWidgets('Should presents list if surveys has data', (tester) async {
     await loadPage(tester);
 
-    surveysDataController.add(makeSurveys());
+    surveysDataController.add(FakeSurveysFactory.makeViewModel());
     await tester.pump();
     expect(find.text(UIError.unexpected.description), findsNothing);
     expect(find.text(R.strings.reload), findsNothing);
@@ -135,7 +131,7 @@ void main() {
     (tester) async {
       await loadPage(tester);
 
-      final surveys = makeSurveys();
+      final surveys = FakeSurveysFactory.makeViewModel();
       surveysDataController.add(surveys);
       await tester.pump();
 

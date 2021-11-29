@@ -8,6 +8,8 @@ import 'package:app_curso_manguinho/domain/entities/entities.dart';
 
 import 'package:app_curso_manguinho/data/http/http.dart';
 
+import '../../../mocks/mocks.dart';
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
@@ -16,32 +18,15 @@ void main() {
   RemoteLoadSurveyResult sut;
   Map<String, dynamic> surveyResult;
 
-  Map<String, dynamic> mockValidData() => {
-        'surveyId': faker.guid.guid(),
-        'question': faker.randomGenerator.string(50),
-        'answers': [
-          {
-            'image': faker.internet.httpUrl(),
-            'answer': faker.randomGenerator.string(20),
-            'percent': faker.randomGenerator.integer(50),
-            'count': faker.randomGenerator.integer(1000),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-          },
-          {
-            'answer': faker.randomGenerator.string(20),
-            'percent': faker.randomGenerator.integer(50),
-            'count': faker.randomGenerator.integer(1000),
-            'isCurrentAccountAnswer': faker.randomGenerator.boolean(),
-          }
-        ],
-        'date': faker.date.dateTime().toIso8601String(),
-      };
-
   PostExpectation mockHttpRequestCall() => when(httpClient.request(
         url: anyNamed('url'),
         method: anyNamed('method'),
       ));
-  void mockHttpResponseData(Map<String, dynamic> data) => mockHttpRequestCall().thenAnswer((_) async => data);
+  void mockHttpResponseData(Map<String, dynamic> data) {
+    surveyResult = data;
+    mockHttpRequestCall().thenAnswer((_) async => data);
+  }
+
   void mockHttpResponseError(HttpError httpError) => mockHttpRequestCall().thenThrow(httpError);
 
   setUp(() {
@@ -52,8 +37,7 @@ void main() {
       httpClient: httpClient,
       url: url,
     );
-    surveyResult = mockValidData();
-    mockHttpResponseData(surveyResult);
+    mockHttpResponseData(FakeSurveyResultFactory.makeApiJson());
   });
 
   test('Should call httpClient with correct values', () async {
@@ -87,7 +71,7 @@ void main() {
   });
 
   test('Should throw unexpected error if http client returns 200 with invalid data', () async {
-    mockHttpResponseData({'invalid_key': 'invalid_data'});
+    mockHttpResponseData(FakeSurveyResultFactory.makeInvalidApiJson());
 
     final future = sut.loadBySurvey();
 
