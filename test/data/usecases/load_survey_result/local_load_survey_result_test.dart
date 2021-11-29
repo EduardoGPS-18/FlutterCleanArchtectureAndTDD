@@ -249,8 +249,8 @@ void main() {
     void mockSaveError() => mockSaveCall().thenThrow(Exception());
 
     setUp(() {
-      surveyId = faker.guid.guid();
       surveyResult = mockSurveyResult();
+      surveyId = surveyResult.surveyId;
       cacheStorage = CacheStorageSpy();
       sut = LocalLoadSurveyResult(cacheStorage: cacheStorage);
     });
@@ -275,7 +275,7 @@ void main() {
         ],
       };
 
-      await sut.save(surveyId: surveyId, surveyResult: surveyResult);
+      await sut.save(surveyResult);
 
       verify(cacheStorage.save(key: 'survey_result/$surveyId', value: toSaveData)).called(1);
     });
@@ -283,7 +283,7 @@ void main() {
     test('Should throw unexpected error if save throws', () async {
       mockSaveError();
 
-      final future = sut.save(surveyId: surveyId, surveyResult: surveyResult);
+      final future = sut.save(surveyResult);
 
       expect(future, throwsA(DomainError.unexpected));
     });
