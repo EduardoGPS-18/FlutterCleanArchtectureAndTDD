@@ -1,4 +1,3 @@
-import 'package:app_curso_manguinho/data/models/local_survey_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
