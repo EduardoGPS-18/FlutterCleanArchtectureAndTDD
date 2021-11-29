@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'package:app_curso_manguinho/domain/helpers/helpers.dart';
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
 
-import 'package:app_curso_manguinho/data/usecases/load_surveys/load_surveys.dart';
+import 'package:app_curso_manguinho/data/usecases/usecases.dart';
 
 import 'package:app_curso_manguinho/main/composites/composites.dart';
 
