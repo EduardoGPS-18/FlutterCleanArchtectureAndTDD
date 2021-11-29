@@ -169,4 +169,17 @@ void main() {
       expect(find.text('fake login'), findsNothing);
     },
   );
+
+  testWidgets('Should call save on list item click', (tester) async {
+    await loadPage(tester);
+
+    surveysDataController.add(makeSurveyResult());
+    await provideMockedNetworkImages(() async {
+      await tester.pump();
+    });
+
+    await tester.tap(find.text('Answer 1'));
+
+    verify(presenter.save(answer: 'Answer 1')).called(1);
+  });
 }

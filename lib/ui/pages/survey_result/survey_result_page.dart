@@ -46,7 +46,7 @@ class _SurveyResultPageState extends State<SurveyResultPage> with LoadingManager
                 );
               }
               if (snapshot.hasData) {
-                return SurveyResult(snapshot.data);
+                return SurveyResult(viewModel: snapshot.data, onTap: widget.presenter.save);
               }
               return Center();
             },
