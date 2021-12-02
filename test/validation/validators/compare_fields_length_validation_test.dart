@@ -6,7 +6,7 @@ import 'package:app_curso_manguinho/validation/protocols/protocols.dart';
 import 'package:app_curso_manguinho/validation/validators/validators.dart';
 
 void main() {
-  FieldValidation sut;
+  late FieldValidation sut;
 
   setUp(() {
     sut = CompareFieldsValidation(field: 'any_field', fieldToCompare: 'other_field');

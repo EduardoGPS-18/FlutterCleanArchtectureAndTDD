@@ -4,7 +4,7 @@ import 'components.dart';
 import '../survey_answer_view_model.dart';
 
 class SurveyResultAnswer extends StatelessWidget {
-  const SurveyResultAnswer({@required this.answer});
+  const SurveyResultAnswer({required this.answer});
 
   final SurveyAnswerViewModel answer;
 
@@ -14,7 +14,7 @@ class SurveyResultAnswer extends StatelessWidget {
       return [
         if (answer.image != null)
           Image.network(
-            answer.image,
+            answer.image!,
             width: 40,
           ),
         Expanded(

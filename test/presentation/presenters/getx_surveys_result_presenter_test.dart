@@ -1,9 +1,8 @@
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
-import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
 
 import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
@@ -11,20 +10,16 @@ import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
-import '../../mocks/mocks.dart';
-
-class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
-
-class SaveSurveyResultSpy extends Mock implements SaveSurveyResult {}
+import '../../domain/mocks/mocks.dart';
 
 void main() {
-  GetxSurveyResultPresenter sut;
-  LoadSurveyResult loadSurveyResult;
-  SaveSurveyResult saveSurveyResult;
-  SurveyResultEntity loadResult;
-  SurveyResultEntity saveResult;
-  String surveyId;
-  String answer;
+  late String answer;
+  late String surveyId;
+  late GetxSurveyResultPresenter sut;
+  late SurveyResultEntity loadResult;
+  late SurveyResultEntity saveResult;
+  late LoadSurveyResultSpy loadSurveyResult;
+  late SaveSurveyResultSpy saveSurveyResult;
 
   SurveyResultViewModel mapToViewModel(SurveyResultEntity entity) => SurveyResultViewModel(
         surveyId: entity.surveyId,
@@ -37,33 +32,12 @@ void main() {
             percent: '${entity.answers[0].percent}%',
           ),
           SurveyAnswerViewModel(
-            image: null,
             answer: entity.answers[1].answer,
             isCurrentAnswer: entity.answers[1].isCurrentAnswer,
             percent: '${entity.answers[1].percent}%',
           ),
         ],
       );
-
-  PostExpectation mockSaveSurveyResultCall() => when(saveSurveyResult.save(
-        answer: anyNamed('answer'),
-      ));
-  void mockSaveSurveyResult(SurveyResultEntity mockedSurveyResult) {
-    saveResult = mockedSurveyResult;
-    mockSaveSurveyResultCall().thenAnswer((_) async => saveResult);
-  }
-
-  void mockSaveSurveyResultError(DomainError error) => mockSaveSurveyResultCall().thenThrow(error);
-
-  PostExpectation mockLoadSurveyResultCall() => when(loadSurveyResult.loadBySurvey(
-        surveyId: anyNamed('surveyId'),
-      ));
-  void mockLoadSurveyResult(SurveyResultEntity mockedSurveyResult) {
-    loadResult = mockedSurveyResult;
-    mockLoadSurveyResultCall().thenAnswer((_) async => loadResult);
-  }
-
-  void mockLoadSurveyResultError(DomainError error) => mockLoadSurveyResultCall().thenThrow(error);
 
   setUp(() {
     answer = faker.randomGenerator.string(50);
@@ -76,15 +50,17 @@ void main() {
       saveSurveyResult: saveSurveyResult,
       surveyId: surveyId,
     );
-    mockLoadSurveyResult(FakeSurveyResultFactory.makeEntity());
-    mockSaveSurveyResult(FakeSurveyResultFactory.makeEntity());
+    loadResult = EntityFactory.makeSurveyResult();
+    loadSurveyResult.mockLoad(loadResult);
+    saveResult = EntityFactory.makeSurveyResult();
+    saveSurveyResult.mockSave(saveResult);
   });
 
   group('load data', () {
     test('Should call load surveys usecase when sut call load data', () async {
       await sut.loadData();
 
-      verify(loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
+      verify(() => loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
     });
 
     test('Should emit correct events on success', () async {
@@ -117,7 +93,7 @@ void main() {
     });
 
     test('Should thorws error if load survey result throws', () async {
-      mockLoadSurveyResultError(DomainError.unexpected);
+      loadSurveyResult.mockLoadError(DomainError.unexpected);
 
       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
       sut.surveyResultStream.listen(
@@ -134,7 +110,7 @@ void main() {
     });
 
     test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
-      mockLoadSurveyResultError(DomainError.accessDenied);
+      loadSurveyResult.mockLoadError(DomainError.accessDenied);
 
       expectLater(
         sut.isLoadingStream,
@@ -153,7 +129,7 @@ void main() {
     test('Should call save surveys result on save', () async {
       await sut.save(answer: answer);
 
-      verify(saveSurveyResult.save(answer: answer)).called(1);
+      verify(() => saveSurveyResult.save(answer: answer)).called(1);
     });
 
     test('Should emit correct events on success', () async {
@@ -171,7 +147,7 @@ void main() {
     });
 
     test('Should thorws error if load survey result throws', () async {
-      mockSaveSurveyResultError(DomainError.unexpected);
+      saveSurveyResult.mockSaveError(DomainError.unexpected);
 
       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
       sut.surveyResultStream.listen(
@@ -188,7 +164,7 @@ void main() {
     });
 
     test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
-      mockSaveSurveyResultError(DomainError.accessDenied);
+      saveSurveyResult.mockSaveError(DomainError.accessDenied);
       expectLater(
         sut.isLoadingStream,
         emitsInOrder([true, false]),

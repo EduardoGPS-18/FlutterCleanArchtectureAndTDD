@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 import '../../domain/entities/entities.dart';
 
 import 'models.dart';
@@ -10,9 +8,9 @@ class LocalSurveyResultModel {
   final List<LocalSurveyAnswerModel> answers;
 
   LocalSurveyResultModel({
-    @required this.surveyId,
-    @required this.question,
-    @required this.answers,
+    required this.surveyId,
+    required this.question,
+    required this.answers,
   });
 
   factory LocalSurveyResultModel.fromEntity(SurveyResultEntity entity) => LocalSurveyResultModel(

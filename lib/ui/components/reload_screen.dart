@@ -7,8 +7,8 @@ class ReloadScreen extends StatelessWidget {
   final Future<void> Function() reload;
 
   const ReloadScreen({
-    @required this.error,
-    @required this.reload,
+    required this.error,
+    required this.reload,
   });
 
   @override
@@ -25,7 +25,7 @@ class ReloadScreen extends StatelessWidget {
         ),
         SizedBox(height: 15),
         Center(
-          child: RaisedButton(
+          child: ElevatedButton(
             onPressed: reload,
             child: Text(R.strings.reload),
           ),

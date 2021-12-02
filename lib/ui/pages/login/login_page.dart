@@ -27,7 +27,8 @@ class _LoginPageState extends State<LoginPage> with KeyboardManager, LoadingMana
         builder: (context) {
           handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
           handleLoading(context: context, stream: widget.presenter.isLoadingStream);
-          handleMainError(stream: widget.presenter.mainErrorStream, scaffoldKey: scaffoldKey);
+          handleMainError(stream: widget.presenter.mainErrorStream, context: context);
+
           return GestureDetector(
             onTap: () => hideKeyboard(context),
             child: SingleChildScrollView(
@@ -40,7 +41,7 @@ class _LoginPageState extends State<LoginPage> with KeyboardManager, LoadingMana
                   ),
                   Padding(
                     padding: const EdgeInsets.all(32),
-                    child: Provider.value(
+                    child: ListenableProvider.value(
                       value: widget.presenter,
                       child: Form(
                         child: Column(
@@ -54,7 +55,7 @@ class _LoginPageState extends State<LoginPage> with KeyboardManager, LoadingMana
                               child: PasswordInput(),
                             ),
                             LoginButton(),
-                            FlatButton.icon(
+                            ElevatedButton.icon(
                               onPressed: widget.presenter.goToSignUp,
                               icon: Icon(Icons.person),
                               label: Text(R.strings.goToSignUp),

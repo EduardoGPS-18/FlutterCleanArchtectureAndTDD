@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 import '../../domain/usecases/usecases.dart';
 
@@ -11,18 +10,17 @@ class GetxSplashPresenter extends GetxController with NavigateManager implements
   final LoadCurrentAccount loadCurrentAccount;
 
   GetxSplashPresenter({
-    @required this.loadCurrentAccount,
+    required this.loadCurrentAccount,
   });
 
   @override
-  Future<void> checkCurrentAccount({int durationInSeconds = 2}) async {
+  Future<void> checkCurrentAccount({required int durationInSeconds}) async {
     await Future.delayed(Duration(seconds: durationInSeconds));
     try {
-      final account = await loadCurrentAccount.load();
-
-      return navigateTo = account?.token == null ? '/login' : '/surveys';
+      await loadCurrentAccount.load();
+      navigateTo = '/surveys';
     } on Exception {
-      return navigateTo = '/login';
+      navigateTo = '/login';
     }
   }
 }

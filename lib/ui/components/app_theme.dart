@@ -43,10 +43,10 @@ ThemeData makeAppTheme() {
     primaryColorDark: primaryColorDark,
     primaryColorLight: primaryColorLight,
     highlightColor: secondaryColor,
-    accentColor: primaryColor,
     backgroundColor: Colors.white,
     secondaryHeaderColor: secondaryColorDark,
     disabledColor: disabledColor,
     dividerColor: dividerColor,
+    colorScheme: ColorScheme.fromSwatch().copyWith(primary: primaryColor),
   );
 }

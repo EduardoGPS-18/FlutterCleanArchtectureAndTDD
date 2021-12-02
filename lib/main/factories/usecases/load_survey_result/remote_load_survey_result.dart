@@ -6,12 +6,12 @@ import '../../factories.dart';
 import '../../../composites/composites.dart';
 import '../../http/authorized_http_client_decorator_factory.dart';
 
-LoadSurveyResult makeRemoteLoadSurveyResult(String surveyId) => RemoteLoadSurveyResult(
+RemoteLoadSurveyResult makeRemoteLoadSurveyResult(String surveyId) => RemoteLoadSurveyResult(
       httpClient: makeAuthorizedHttpClientDecoratorAdapter(),
       url: makeApiUrl('/surveys/$surveyId/results'),
     );
 
-LoadSurveyResult makeLocalLoadSurveyResult(String surveyId) => LocalLoadSurveyResult(
+LocalLoadSurveyResult makeLocalLoadSurveyResult(String surveyId) => LocalLoadSurveyResult(
       cacheStorage: makeLocalStorageAdapter(),
     );
 

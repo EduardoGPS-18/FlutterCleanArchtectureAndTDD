@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 mixin NavigateManager on GetxController {
-  var _navigateTo = Rx<String>();
+  var _navigateTo = Rx<String>('');
 
   Stream<String> get navigateToStream => _navigateTo.stream;
 

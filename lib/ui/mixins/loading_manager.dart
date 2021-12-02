@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../components/components.dart';
 
 mixin LoadingManager {
-  void handleLoading({@required BuildContext context, @required Stream<bool> stream}) {
+  void handleLoading({required BuildContext context, required Stream<bool> stream}) {
     stream.listen(
-      (isLoading) {
+      (isLoading) async {
         if (isLoading == true) {
-          showLoading(context);
+          await showLoading(context);
         } else {
           hideLoading(context);
         }

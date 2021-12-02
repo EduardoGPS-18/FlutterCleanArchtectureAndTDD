@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/usecases.dart';
@@ -12,8 +10,8 @@ class RemoteLoadSurveys implements LoadSurveys {
   final String url;
 
   RemoteLoadSurveys({
-    @required this.httpClient,
-    @required this.url,
+    required this.httpClient,
+    required this.url,
   });
 
   Future<List<SurveyEntity>> load() async {

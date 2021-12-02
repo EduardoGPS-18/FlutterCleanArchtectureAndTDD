@@ -1,4 +1,4 @@
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
@@ -8,26 +8,14 @@ import 'package:app_curso_manguinho/domain/entities/entities.dart';
 
 import 'package:app_curso_manguinho/data/http/http.dart';
 
-import '../../../mocks/mocks.dart';
-
-class HttpClientSpy extends Mock implements HttpClient {}
+import '../../../infra/mocks/mocks.dart';
+import '../../mocks/mocks.dart';
 
 void main() {
-  HttpClient httpClient;
-  String url;
-  RemoteLoadSurveyResult sut;
-  Map<String, dynamic> surveyResult;
-
-  PostExpectation mockHttpRequestCall() => when(httpClient.request(
-        url: anyNamed('url'),
-        method: anyNamed('method'),
-      ));
-  void mockHttpResponseData(Map<String, dynamic> data) {
-    surveyResult = data;
-    mockHttpRequestCall().thenAnswer((_) async => data);
-  }
-
-  void mockHttpResponseError(HttpError httpError) => mockHttpRequestCall().thenThrow(httpError);
+  late String url;
+  late HttpClientSpy httpClient;
+  late RemoteLoadSurveyResult sut;
+  late Map<String, dynamic> surveyResult;
 
   setUp(() {
     httpClient = HttpClientSpy();
@@ -37,13 +25,14 @@ void main() {
       httpClient: httpClient,
       url: url,
     );
-    mockHttpResponseData(FakeSurveyResultFactory.makeApiJson());
+    surveyResult = ApiFactory.makeSurveyResultJson();
+    httpClient.mockRequest(surveyResult);
   });
 
   test('Should call httpClient with correct values', () async {
     await sut.loadBySurvey();
 
-    verify(httpClient.request(url: url, method: 'get')).called(1);
+    verify(() => httpClient.request(url: url, method: 'get')).called(1);
   });
 
   test('Should return surveys on 200', () async {
@@ -71,7 +60,7 @@ void main() {
   });
 
   test('Should throw unexpected error if http client returns 200 with invalid data', () async {
-    mockHttpResponseData(FakeSurveyResultFactory.makeInvalidApiJson());
+    httpClient.mockRequest(ApiFactory.makeInvalidJson());
 
     final future = sut.loadBySurvey();
 
@@ -79,7 +68,7 @@ void main() {
   });
 
   test('Should throw unexpected error if http client returns 404', () async {
-    mockHttpResponseError(HttpError.notFound);
+    httpClient.mockRequestError(HttpError.notFound);
 
     final future = sut.loadBySurvey();
 
@@ -87,7 +76,7 @@ void main() {
   });
 
   test('Should throw unexpected error if http client returns 500', () async {
-    mockHttpResponseError(HttpError.serverError);
+    httpClient.mockRequestError(HttpError.serverError);
 
     final future = sut.loadBySurvey();
 
@@ -95,7 +84,7 @@ void main() {
   });
 
   test('Should throw unexpected error if http client returns 403', () async {
-    mockHttpResponseError(HttpError.forbidden);
+    httpClient.mockRequestError(HttpError.forbidden);
 
     final future = sut.loadBySurvey();
 

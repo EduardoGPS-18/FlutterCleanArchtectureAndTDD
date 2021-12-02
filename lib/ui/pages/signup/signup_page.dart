@@ -11,7 +11,7 @@ import '../../../ui/components/components.dart';
 class SignUpPage extends StatefulWidget {
   final SignUpPresenter presenter;
 
-  const SignUpPage({this.presenter});
+  const SignUpPage({required this.presenter});
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -22,7 +22,7 @@ class _SignUpPageState extends State<SignUpPage> with KeyboardManager, LoadingMa
   @override
   void initState() {
     handleLoading(context: context, stream: widget.presenter.isLoadingStream);
-    handleMainError(stream: widget.presenter.mainErrorStream, scaffoldKey: scaffoldKey);
+    handleMainError(stream: widget.presenter.mainErrorStream, context: context);
     handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
     super.initState();
   }
@@ -41,7 +41,7 @@ class _SignUpPageState extends State<SignUpPage> with KeyboardManager, LoadingMa
               Headline1(
                 text: R.strings.addAccount,
               ),
-              Provider.value(
+              ListenableProvider.value(
                 value: widget.presenter,
                 child: Form(
                   child: Column(
@@ -57,7 +57,7 @@ class _SignUpPageState extends State<SignUpPage> with KeyboardManager, LoadingMa
                         child: PasswordConfirmationInput(),
                       ),
                       SignUpButton(),
-                      FlatButton.icon(
+                      ElevatedButton.icon(
                         onPressed: widget.presenter.goToLogin,
                         icon: Icon(Icons.exit_to_app),
                         label: Text(R.strings.goToLogin),

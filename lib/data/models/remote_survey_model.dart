@@ -1,20 +1,18 @@
-import 'package:meta/meta.dart';
-
 import '../../domain/entities/entities.dart';
 
 import '../http/http.dart';
 
 class RemoteSurveyModel {
   final String id;
-  final String question;
   final String date;
   final bool didAnswer;
+  final String question;
 
   RemoteSurveyModel({
-    @required this.id,
-    @required this.question,
-    @required this.date,
-    @required this.didAnswer,
+    required this.id,
+    required this.question,
+    required this.date,
+    required this.didAnswer,
   });
 
   SurveyEntity toEntity() => SurveyEntity(

@@ -4,9 +4,8 @@ class Headline1 extends StatelessWidget {
   final String text;
 
   const Headline1({
-    Key key,
-    this.text,
-  }) : super(key: key);
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:get/get.dart';
 
 import '../../domain/helpers/helpers.dart';
@@ -18,33 +17,33 @@ class GetxSignUpPresenter extends GetxController
   final SaveCurrentAccount saveCurrentAccount;
   final AddAccount addAccount;
 
-  String _email, _name, _password, _confirmPassword;
+  String? _email, _name, _password, _confirmPassword;
 
-  var _emailError = Rx<UIError>();
-  var _nameError = Rx<UIError>();
-  var _passwordError = Rx<UIError>();
-  var _confirmPasswordError = Rx<UIError>();
+  var _nameError = Rx<UIError?>(null);
+  var _emailError = Rx<UIError?>(null);
+  var _passwordError = Rx<UIError?>(null);
+  var _confirmPasswordError = Rx<UIError?>(null);
 
-  Stream<UIError> get emailErrorStream => _emailError.stream;
-  Stream<UIError> get nameErrorStream => _nameError.stream;
-  Stream<UIError> get passwordErrorStream => _passwordError.stream;
-  Stream<UIError> get confirmPasswordErrorStream => _confirmPasswordError.stream;
+  Stream<UIError?> get emailErrorStream => _emailError.stream;
+  Stream<UIError?> get nameErrorStream => _nameError.stream;
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?> get confirmPasswordErrorStream => _confirmPasswordError.stream;
 
   GetxSignUpPresenter({
-    @required this.validation,
-    @required this.addAccount,
-    @required this.saveCurrentAccount,
+    required this.validation,
+    required this.addAccount,
+    required this.saveCurrentAccount,
   });
 
-  Future<AccountEntity> signUp() async {
+  Future<AccountEntity?> signUp() async {
     try {
       isLoading = true;
       final account = await addAccount.add(
         params: AddAccountParams(
-          name: _name,
-          email: _email,
-          password: _password,
-          passwordConfirmation: _confirmPassword,
+          name: _name!,
+          email: _email!,
+          password: _password!,
+          passwordConfirmation: _confirmPassword!,
         ),
       );
       await saveCurrentAccount.save(account);
@@ -81,7 +80,7 @@ class GetxSignUpPresenter extends GetxController
     validateForm();
   }
 
-  UIError _validateField({String field, String value}) {
+  UIError? _validateField({required String field, required String value}) {
     final formData = {
       'name': _name,
       'email': _email,

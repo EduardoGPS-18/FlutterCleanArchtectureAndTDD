@@ -2,18 +2,15 @@ import '../../validation/validators/validators.dart';
 import '../../validation/protocols/protocols.dart';
 
 class ValidationBuilder {
-  List<FieldValidation> _validations = [];
   String fieldName;
+  List<FieldValidation> _validations = [];
 
-  ValidationBuilder._();
+  ValidationBuilder._(this.fieldName);
 
-  static ValidationBuilder _instance;
+  static ValidationBuilder? _instance;
   static ValidationBuilder field(String fieldName) {
-    if (_instance == null) {
-      _instance = ValidationBuilder._();
-    }
-    _instance.fieldName = fieldName;
-    return _instance;
+    _instance = ValidationBuilder._(fieldName);
+    return _instance!;
   }
 
   ValidationBuilder required() {

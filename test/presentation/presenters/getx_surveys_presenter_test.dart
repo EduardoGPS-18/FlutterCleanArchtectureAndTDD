@@ -1,44 +1,32 @@
-import 'package:mockito/mockito.dart';
-import 'package:intl/intl.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:app_curso_manguinho/domain/entities/entities.dart';
 import 'package:app_curso_manguinho/domain/helpers/domain_error.dart';
-import 'package:app_curso_manguinho/domain/usecases/load_surveys.dart';
 
 import 'package:app_curso_manguinho/presentation/presenters/presenters.dart';
 
 import 'package:app_curso_manguinho/ui/pages/pages.dart';
 import 'package:app_curso_manguinho/ui/helpers/errors/errors.dart';
 
-import '../../mocks/mocks.dart';
-
-class LoadSurveysSpy extends Mock implements LoadSurveys {}
+import '../../domain/mocks/mocks.dart';
 
 void main() {
-  GetxSurveysPresenter sut;
-  LoadSurveys loadSurveys;
-  List<SurveyEntity> surveys;
-
-  PostExpectation mockSurveysLoadCall() => when(loadSurveys.load());
-  void mockLoadSurveysData(List<SurveyEntity> list) {
-    surveys = list;
-    mockSurveysLoadCall().thenAnswer((_) async => surveys);
-  }
-
-  void mockLoadSurveysError() => mockSurveysLoadCall().thenThrow(DomainError.unexpected);
-  void mockAccessDeniedError() => mockSurveysLoadCall().thenThrow(DomainError.accessDenied);
+  late LoadSurveysSpy loadSurveys;
+  late GetxSurveysPresenter sut;
+  late List<SurveyEntity> surveys;
 
   setUp(() {
     loadSurveys = LoadSurveysSpy();
     sut = GetxSurveysPresenter(loadSurveys: loadSurveys);
-    mockLoadSurveysData(FakeSurveysFactory.makeEntities());
+    surveys = EntityFactory.makeSurveys();
+    loadSurveys.mockLoadSurveys(surveys);
   });
 
   test('Should call load surveys usecase when sut call load data', () async {
     await sut.loadData();
 
-    verify(loadSurveys.load()).called(1);
+    verify(() => loadSurveys.load()).called(1);
   });
 
   test('Is loading controller should emits true before call usecase method and hide on method end', () async {
@@ -71,7 +59,7 @@ void main() {
   });
 
   test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
-    mockLoadSurveysError();
+    loadSurveys.mockLoadSurveysError(DomainError.unexpected);
 
     expectLater(
       sut.surveysDataStream,
@@ -82,7 +70,7 @@ void main() {
   });
 
   test('Should notify surveysData with converted to viewmodel data when usecase has valid data', () async {
-    mockAccessDeniedError();
+    loadSurveys.mockLoadSurveysError(DomainError.accessDenied);
 
     expectLater(
       sut.isLoadingStream,

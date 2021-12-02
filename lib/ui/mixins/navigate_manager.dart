@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 mixin NavigateManager {
-  void handleNavigate({@required Stream<String> stream, bool clear = false}) {
+  void handleNavigate({required Stream<String?> stream, bool clear = false}) {
     stream.listen((page) {
-      if (page?.isNotEmpty == true) {
+      if (page != null && page.isNotEmpty) {
         if (clear == true) {
           Get.offAllNamed(page);
         } else {

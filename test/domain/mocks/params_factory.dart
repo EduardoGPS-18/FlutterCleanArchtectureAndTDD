@@ -1,7 +1,8 @@
-import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
 import 'package:faker/faker.dart';
 
-class FakeParamsFactory {
+import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
+
+class ParamsFactory {
   static AddAccountParams makeAddAccount() => AddAccountParams(
         name: faker.person.name(),
         email: faker.internet.email(),

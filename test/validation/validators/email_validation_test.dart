@@ -6,7 +6,7 @@ import 'package:app_curso_manguinho/validation/validators/validators.dart';
 import 'package:app_curso_manguinho/validation/protocols/field_validation.dart';
 
 void main() {
-  FieldValidation sut;
+  late FieldValidation sut;
   setUp(() {
     sut = EmailValidation('email');
   });

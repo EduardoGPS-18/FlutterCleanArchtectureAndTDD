@@ -1,19 +1,17 @@
-import 'package:meta/meta.dart';
-
 import '../http/http.dart';
 import '../../domain/entities/entities.dart';
 
 class LocalSurveyModel {
   final String id;
-  final String question;
   final DateTime date;
   final bool didAnswer;
+  final String question;
 
   LocalSurveyModel({
-    @required this.id,
-    @required this.question,
-    @required this.date,
-    @required this.didAnswer,
+    required this.id,
+    required this.question,
+    required this.date,
+    required this.didAnswer,
   });
 
   SurveyEntity toEntity() => SurveyEntity(

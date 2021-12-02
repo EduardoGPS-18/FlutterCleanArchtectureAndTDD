@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
@@ -9,10 +8,10 @@ class HttpAdapter implements HttpClient {
 
   HttpAdapter(this.client);
   Future<dynamic> request({
-    @required String url,
-    @required String method,
-    Map headers,
-    Map body,
+    required String url,
+    required String method,
+    Map? headers,
+    Map? body,
   }) async {
     final defaultheaders = headers?.cast<String, String>() ?? {}
       ..addAll({
@@ -21,14 +20,15 @@ class HttpAdapter implements HttpClient {
       });
     final jsonBody = body != null ? jsonEncode(body) : null;
     var response = Response('', 500);
-    Future<Response> futureResponse;
+    Future<Response>? futureResponse;
+    final requestUrl = Uri.parse(url);
     try {
       if (method == 'post') {
-        futureResponse = client.post(url, headers: defaultheaders, body: jsonBody);
+        futureResponse = client.post(requestUrl, headers: defaultheaders, body: jsonBody);
       } else if (method == 'get') {
-        futureResponse = client.get(url, headers: defaultheaders);
+        futureResponse = client.get(requestUrl, headers: defaultheaders);
       } else if (method == 'put') {
-        futureResponse = client.put(url, headers: defaultheaders, body: jsonBody);
+        futureResponse = client.put(requestUrl, headers: defaultheaders, body: jsonBody);
       }
       if (futureResponse != null) {
         response = await futureResponse.timeout(Duration(seconds: 5));

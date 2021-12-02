@@ -1,5 +1,4 @@
 import 'package:app_curso_manguinho/domain/usecases/usecases.dart';
-import 'package:meta/meta.dart';
 
 import '../../../domain/entities/entities.dart';
 import '../../http/http.dart';
@@ -12,11 +11,11 @@ class RemoteSaveSurveyResult implements SaveSurveyResult {
   final String url;
 
   RemoteSaveSurveyResult({
-    @required this.httpClient,
-    @required this.url,
+    required this.httpClient,
+    required this.url,
   });
 
-  Future<SurveyResultEntity> save({@required String answer}) async {
+  Future<SurveyResultEntity> save({required String answer}) async {
     try {
       final json = await httpClient.request(url: url, method: 'put', body: {'answer': answer});
       return RemoteSurveyResultModel.fromJson(json).toEntity();

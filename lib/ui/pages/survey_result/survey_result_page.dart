@@ -11,7 +11,7 @@ class SurveyResultPage extends StatefulWidget {
   final SurveyResultPresenter presenter;
 
   const SurveyResultPage({
-    @required this.presenter,
+    required this.presenter,
   });
 
   @override
@@ -36,17 +36,17 @@ class _SurveyResultPageState extends State<SurveyResultPage> with LoadingManager
       body: Builder(
         builder: (_) {
           widget.presenter.loadData();
-          return StreamBuilder<SurveyResultViewModel>(
+          return StreamBuilder<SurveyResultViewModel?>(
             stream: widget.presenter.surveyResultStream,
             builder: (ctx, snapshot) {
               if (snapshot.hasError) {
                 return ReloadScreen(
-                  error: snapshot.error,
+                  error: "${snapshot.error}",
                   reload: widget.presenter.loadData,
                 );
               }
               if (snapshot.hasData) {
-                return SurveyResult(viewModel: snapshot.data, onTap: widget.presenter.save);
+                return SurveyResult(viewModel: snapshot.data!, onTap: widget.presenter.save);
               }
               return Center();
             },

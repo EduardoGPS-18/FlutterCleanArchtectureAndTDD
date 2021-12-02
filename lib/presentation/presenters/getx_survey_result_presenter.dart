@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:get/get.dart';
 
 import '../../domain/entities/entities.dart';
@@ -16,13 +15,13 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
   final SaveSurveyResult saveSurveyResult;
   final String surveyId;
 
-  Rx<SurveyResultViewModel> _surveyResultController = Rx();
-  Stream<SurveyResultViewModel> get surveyResultStream => _surveyResultController.stream;
+  Rx<SurveyResultViewModel?> _surveyResultController = Rx(null);
+  Stream<SurveyResultViewModel?> get surveyResultStream => _surveyResultController.stream;
 
   GetxSurveyResultPresenter({
-    @required this.saveSurveyResult,
-    @required this.surveyId,
-    @required this.loadSurveyResult,
+    required this.surveyId,
+    required this.saveSurveyResult,
+    required this.loadSurveyResult,
   });
 
   Future<void> loadData() async {
@@ -30,7 +29,7 @@ class GetxSurveyResultPresenter extends GetxController with SessionManager, Load
   }
 
   @override
-  Future<void> save({@required String answer}) async {
+  Future<void> save({required String answer}) async {
     await _showResultOnAction(() async => await saveSurveyResult.save(answer: answer));
   }
 

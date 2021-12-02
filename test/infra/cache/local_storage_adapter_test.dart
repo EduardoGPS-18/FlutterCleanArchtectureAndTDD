@@ -1,41 +1,39 @@
-import 'package:localstorage/localstorage.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
 import 'package:app_curso_manguinho/infra/cache/cache.dart';
 
-class LocalStorageSpy extends Mock implements LocalStorage {}
+import '../mocks/mocks.dart';
 
 void main() {
-  String key;
-  dynamic value;
-  LocalStorage localStorageSpy;
-  LocalStorageAdapter sut;
-
-  void mockDeleteCacheError() => when(localStorageSpy.deleteItem(any)).thenThrow(Exception());
-  void mockSaveError() => when(localStorageSpy.setItem(any, any)).thenThrow(Exception());
-
-  PostExpectation mockFetchCall() => when(localStorageSpy.getItem(any));
-  void mockFetchError() => mockFetchCall().thenThrow(Exception());
+  late String key;
+  late String result;
+  late dynamic value;
+  late LocalStorageSpy localStorageSpy;
+  late LocalStorageAdapter sut;
 
   setUp(() {
     key = faker.randomGenerator.string(5);
     value = faker.randomGenerator.string(50);
     localStorageSpy = LocalStorageSpy();
+
+    result = faker.randomGenerator.string(50);
+    localStorageSpy.mockFetch(result);
+
     sut = LocalStorageAdapter(localStorage: localStorageSpy);
   });
 
-  group('move save test to a group', () {
+  group('save', () {
     test('Should call local storage with correct values', () async {
       await sut.save(key: key, value: value);
 
-      verify(localStorageSpy.deleteItem(key)).called(1);
-      verify(localStorageSpy.setItem(key, value)).called(1);
+      verify(() => localStorageSpy.deleteItem(key)).called(1);
+      verify(() => localStorageSpy.setItem(key, value)).called(1);
     });
 
     test('Should throws if delete item throws', () async {
-      mockDeleteCacheError();
+      localStorageSpy.mockDeleteError();
 
       final future = sut.save(key: key, value: value);
 
@@ -43,7 +41,7 @@ void main() {
     });
 
     test('Should throws if delete item throws', () async {
-      mockSaveError();
+      localStorageSpy.mockSaveError();
 
       final future = sut.save(key: key, value: value);
 
@@ -55,11 +53,11 @@ void main() {
     test('Should call local storage with correct values', () async {
       await sut.delete(key);
 
-      verify(localStorageSpy.deleteItem(key)).called(1);
+      verify(() => localStorageSpy.deleteItem(key)).called(1);
     });
 
     test('Should throws if delete item throws', () async {
-      mockDeleteCacheError();
+      localStorageSpy.mockDeleteError();
 
       final future = sut.delete(key);
 
@@ -68,24 +66,14 @@ void main() {
   });
 
   group('fetch', () {
-    String result;
-    void mockFetchData() {
-      result = faker.randomGenerator.string(50);
-      mockFetchCall().thenAnswer((_) => result);
-    }
-
-    setUp(() {
-      mockFetchData();
-    });
-
     test('Should call local storage with correct values', () async {
       await sut.fetch(key);
 
-      verify(localStorageSpy.getItem(key)).called(1);
+      verify(() => localStorageSpy.getItem(key)).called(1);
     });
 
     test('Should rethrows if fetch throw exceptions', () async {
-      mockFetchError();
+      localStorageSpy.mockFetchError();
 
       final future = sut.fetch(key);
 

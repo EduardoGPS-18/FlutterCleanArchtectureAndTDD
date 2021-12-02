@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/usecases.dart';
 import '../../../domain/entities/entities.dart';
@@ -11,7 +9,7 @@ class LocalLoadSurveys implements LoadSurveys {
   final CacheStorage cacheStorage;
 
   LocalLoadSurveys({
-    @required this.cacheStorage,
+    required this.cacheStorage,
   });
 
   Future<List<SurveyEntity>> load() async {

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 
 import '../../../domain/entities/entities.dart';
 
@@ -11,10 +10,10 @@ class SurveyViewModel extends Equatable {
   final bool didAnswer;
 
   SurveyViewModel({
-    @required this.id,
-    @required this.question,
-    @required this.date,
-    @required this.didAnswer,
+    required this.id,
+    required this.question,
+    required this.date,
+    required this.didAnswer,
   });
 
   factory SurveyViewModel.fromEntity(SurveyEntity entity) {

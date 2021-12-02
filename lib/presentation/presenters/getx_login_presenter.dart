@@ -1,7 +1,3 @@
-import 'package:app_curso_manguinho/presentation/mixins/form_manager.dart';
-import 'package:app_curso_manguinho/presentation/mixins/main_error_manager.dart';
-import 'package:app_curso_manguinho/presentation/mixins/navigate_manager.dart';
-import 'package:meta/meta.dart';
 import 'package:get/get.dart';
 
 import '../../domain/usecases/usecases.dart';
@@ -20,25 +16,25 @@ class GetxLoginPresenter extends GetxController
   final Authentication authenticationUsecase;
   final SaveCurrentAccount saveCurrentAccount;
 
-  String _email;
-  String _password;
-  var _emailError = Rx<UIError>();
-  var _passwordError = Rx<UIError>();
+  String? _email;
+  String? _password;
+  var _emailError = Rx<UIError?>(null);
+  var _passwordError = Rx<UIError?>(null);
 
-  Stream<UIError> get emailErrorStream => _emailError.stream;
-  Stream<UIError> get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?> get emailErrorStream => _emailError.stream;
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
 
   GetxLoginPresenter({
-    @required this.validation,
-    @required this.authenticationUsecase,
-    @required this.saveCurrentAccount,
+    required this.validation,
+    required this.authenticationUsecase,
+    required this.saveCurrentAccount,
   });
 
   Future<void> auth() async {
     try {
       isLoading = true;
       final account = await authenticationUsecase.auth(
-        params: AuthenticationParams(email: _email, password: _password),
+        params: AuthenticationParams(email: _email!, password: _password!),
       );
       await saveCurrentAccount.save(account);
       navigateTo = '/surveys';
@@ -71,7 +67,7 @@ class GetxLoginPresenter extends GetxController
     validateForm();
   }
 
-  UIError _validateField({String field}) {
+  UIError? _validateField({required String field}) {
     final formData = {
       'email': _email,
       'password': _password,

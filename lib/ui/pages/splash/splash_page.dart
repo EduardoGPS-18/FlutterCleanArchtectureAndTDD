@@ -6,22 +6,22 @@ import '../../mixins/mixins.dart';
 class SplashPage extends StatefulWidget {
   final SplashPresenter presenter;
 
-  const SplashPage({@required this.presenter});
+  const SplashPage({required this.presenter});
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> with NavigateManager {
   @override
   void initState() {
     handleNavigate(stream: widget.presenter.navigateToStream, clear: true);
+    widget.presenter.checkCurrentAccount(durationInSeconds: 2);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    widget.presenter.checkCurrentAccount();
     return Scaffold(
       appBar: AppBar(
         title: Text('4Dev'),

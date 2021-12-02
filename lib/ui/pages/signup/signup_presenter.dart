@@ -1,13 +1,16 @@
+import 'package:flutter/foundation.dart';
+
 import '../../helpers/errors/errors.dart';
 
-abstract class SignUpPresenter {
-  Stream<UIError> get nameErrorStream;
-  Stream<UIError> get emailErrorStream;
-  Stream<UIError> get passwordErrorStream;
-  Stream<UIError> get confirmPasswordErrorStream;
+abstract class SignUpPresenter extends Listenable {
+  Stream<UIError?> get nameErrorStream;
+  Stream<UIError?> get emailErrorStream;
+  Stream<UIError?> get passwordErrorStream;
+  Stream<UIError?> get confirmPasswordErrorStream;
+  Stream<UIError?> get mainErrorStream;
 
-  Stream<UIError> get mainErrorStream;
-  Stream<String> get navigateToStream;
+  Stream<String?> get navigateToStream;
+
   Stream<bool> get isFormValidStream;
   Stream<bool> get isLoadingStream;
 

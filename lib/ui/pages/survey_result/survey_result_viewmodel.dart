@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../pages.dart';
 import 'survey_answer_view_model.dart';
@@ -10,9 +9,9 @@ class SurveyResultViewModel extends Equatable {
   final List<SurveyAnswerViewModel> answers;
 
   SurveyResultViewModel({
-    @required this.surveyId,
-    @required this.question,
-    @required this.answers,
+    required this.surveyId,
+    required this.question,
+    required this.answers,
   });
 
   @override
