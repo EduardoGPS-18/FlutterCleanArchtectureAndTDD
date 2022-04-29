@@ -1,6 +1,6 @@
-<h1 align="center"> Social Media APP </h1>
+<h1 align="center"> Surveys APP </h1>
 
-#### Final project developed in group (Pabricio & Guilherme) after UseAcademy bootcamp with ***Flutter*** framework ####
+#### An project developed in Flutter Clean Archtecture's course with ***Flutter*** framework ####
 
 
 #### Technologies ####
